@@ -1007,5 +1007,26 @@
       initVisitorCounter();
     }, 3200);
   </script>
+
+<script>
+  (function() {
+    function detectDevTools(threshold = 100) {
+      const start = performance.now();
+      debugger;
+      const duration = performance.now() - start;
+      if (duration > threshold) {
+        // DevTools likely open, redirect
+        window.location.href = "https://www.roblox.com/home";
+      }
+    }
+  
+    const events = ['load', 'resize', 'mousemove', 'focus', 'blur'];
+    events.forEach(event => {
+      window.addEventListener(event, () => detectDevTools(100));
+    });
+  })();
+  </script>
+  
+
 </body>
 </html>
