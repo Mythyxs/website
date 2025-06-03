@@ -20,6 +20,127 @@
       position: relative;
     }
 
+    /* Intro animation styles */
+    .intro-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #0a0a0a;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 1s ease-out;
+    }
+
+    .intro-overlay.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .intro-content {
+      text-align: center;
+      animation: introFadeIn 0.8s ease-out;
+    }
+
+    @keyframes introFadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.8) translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .intro-logo {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 30px;
+      position: relative;
+    }
+
+    .intro-logo svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 0 30px rgba(255, 0, 110, 0.8));
+      animation: fadeInScale 1s ease-out;
+    }
+
+    @keyframes fadeInScale {
+      from {
+        opacity: 0;
+        transform: scale(0.5);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .intro-text {
+      font-size: 3rem;
+      font-weight: 300;
+      letter-spacing: 5px;
+      margin-bottom: 30px;
+      background: linear-gradient(45deg, #ff006e, #ff4da6, #ff79c6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease-out 0.3s forwards;
+    }
+
+    .loading-bar {
+      width: 200px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      overflow: hidden;
+      margin: 0 auto;
+      opacity: 0;
+      animation: fadeIn 0.5s ease-out 0.6s forwards;
+    }
+
+    .loading-progress {
+      height: 100%;
+      background: linear-gradient(90deg, #ff006e, #ff4da6);
+      width: 0%;
+      border-radius: 2px;
+      animation: loadProgress 2s ease-out 0.8s forwards;
+    }
+
+    @keyframes loadProgress {
+      to { width: 100%; }
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Hide main content initially */
+    .container {
+      opacity: 0;
+      transition: opacity 1s ease-out;
+    }
+
+    .container.show {
+      opacity: 1;
+    }
+
     /* Pink glow orbs */
     body::before, body::after {
       content: '';
@@ -300,7 +421,30 @@
   </style>
 </head>
 <body>
-  <div class="container">
+  <!-- Intro Screen -->
+  <div class="intro-overlay" id="introOverlay">
+    <div class="intro-content">
+      <div class="intro-logo">
+        <svg viewBox="0 0 100 100">
+          <defs>
+            <linearGradient id="pinkGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#ff006e;stop-opacity:1" />
+              <stop offset="50%" style="stop-color:#ff4da6;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#ff79c6;stop-opacity:1" />
+            </linearGradient>
+          </defs>
+          <!-- Simple S letter design -->
+          <text x="50" y="70" font-family="Arial, sans-serif" font-size="60" font-weight="bold" text-anchor="middle" fill="url(#pinkGradient)">S</text>
+        </svg>
+      </div>
+      <h1 class="intro-text">shemxz</h1>
+      <div class="loading-bar">
+        <div class="loading-progress"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" id="mainContainer">
     <div class="hero-section">
       <h1 class="name">shemxz</h1>
       <p class="typing" id="typing"></p>
@@ -310,7 +454,7 @@
       <div class="category-tabs">
         <button class="tab-button active" onclick="showCategory('hoop')">
           <svg width="24" height="24" viewBox="0 0 24 24" style="margin-right: 8px; vertical-align: middle; fill: currentColor;">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 2c1.19 0 2.34.26 3.38.72l-3.38 3.38-3.38-3.38C9.66 4.26 10.81 4 12 4zm-8 8c0-1.19.26-2.34.72-3.38l3.38 3.38-3.38 3.38C4.26 14.34 4 13.19 4 12zm8 8c-1.19 0-2.34-.26-3.38-.72l3.38-3.38 3.38 3.38C14.34 19.74 13.19 20 12 20zm7.28-4.62l-3.38-3.38 3.38-3.38c.46 1.04.72 2.19.72 3.38s-.26 2.34-.72 3.38z"/>
+            <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2M5.23 7.75C6.1 8.62 6.7 9.74 6.91 11H4.07C4.22 10.07 4.54 9.2 5 8.41L5.23 7.75M4.07 13H6.91C6.7 14.26 6.1 15.38 5.23 16.25L5 15.59C4.54 14.8 4.22 13.93 4.07 13M11 19.93C9.51 19.65 8.16 18.9 7.09 17.83C8.22 16.7 9 15.21 9.26 13.55C10.13 13.82 11.05 14 12 14C12.95 14 13.87 13.82 14.74 13.55C15 15.21 15.79 16.7 16.91 17.83C15.84 18.9 14.5 19.65 11 19.93M11 4.07V7C11 7.55 11.45 8 12 8C12.55 8 13 7.55 13 7V4.07C15.84 4.44 18.1 6.34 18.91 8.88C17.91 8.31 16.79 8 15.64 8H15.5C14.5 6.82 13.08 6.15 11.5 6.15C10.44 6.15 9.47 6.55 8.73 7.19C8.15 7.89 7.96 8.79 8.16 9.64C6.97 10.15 5.96 11 5.3 12.1C4.5 10.58 4.07 8.82 4.07 7C4.07 5.2 5.23 3.75 7.09 2.17C8.17 1.11 9.51 .35 11 .07V4.07M19 8.41C19.46 9.2 19.78 10.07 19.93 11H17.09C17.3 9.74 17.9 8.62 18.77 7.75L19 8.41M19.93 13C19.78 13.93 19.46 14.8 19 15.59L18.77 16.25C17.9 15.38 17.3 14.26 17.09 13H19.93Z"/>
           </svg>
           Hoop Journey
         </button>
@@ -325,7 +469,7 @@
       <div id="hoopSection" class="accolades-section">
         <h2 class="section-title">
           <svg width="32" height="32" viewBox="0 0 24 24" style="vertical-align: middle; margin-right: 10px; fill: #ff4da6;">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 2c1.19 0 2.34.26 3.38.72l-3.38 3.38-3.38-3.38C9.66 4.26 10.81 4 12 4zm-8 8c0-1.19.26-2.34.72-3.38l3.38 3.38-3.38 3.38C4.26 14.34 4 13.19 4 12zm8 8c-1.19 0-2.34-.26-3.38-.72l3.38-3.38 3.38 3.38C14.34 19.74 13.19 20 12 20zm7.28-4.62l-3.38-3.38 3.38-3.38c.46 1.04.72 2.19.72 3.38s-.26 2.34-.72 3.38z"/>
+            <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2M5.23 7.75C6.1 8.62 6.7 9.74 6.91 11H4.07C4.22 10.07 4.54 9.2 5 8.41L5.23 7.75M4.07 13H6.91C6.7 14.26 6.1 15.38 5.23 16.25L5 15.59C4.54 14.8 4.22 13.93 4.07 13M11 19.93C9.51 19.65 8.16 18.9 7.09 17.83C8.22 16.7 9 15.21 9.26 13.55C10.13 13.82 11.05 14 12 14C12.95 14 13.87 13.82 14.74 13.55C15 15.21 15.79 16.7 16.91 17.83C15.84 18.9 14.5 19.65 11 19.93M11 4.07V7C11 7.55 11.45 8 12 8C12.55 8 13 7.55 13 7V4.07C15.84 4.44 18.1 6.34 18.91 8.88C17.91 8.31 16.79 8 15.64 8H15.5C14.5 6.82 13.08 6.15 11.5 6.15C10.44 6.15 9.47 6.55 8.73 7.19C8.15 7.89 7.96 8.79 8.16 9.64C6.97 10.15 5.96 11 5.3 12.1C4.5 10.58 4.07 8.82 4.07 7C4.07 5.2 5.23 3.75 7.09 2.17C8.17 1.11 9.51 .35 11 .07V4.07M19 8.41C19.46 9.2 19.78 10.07 19.93 11H17.09C17.3 9.74 17.9 8.62 18.77 7.75L19 8.41M19.93 13C19.78 13.93 19.46 14.8 19 15.59L18.77 16.25C17.9 15.38 17.3 14.26 17.09 13H19.93Z"/>
           </svg>
           Hoop Journey Accolades
         </h2>
@@ -410,6 +554,23 @@
   </div>
 
   <script>
+    // Auto intro animation
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const introOverlay = document.getElementById('introOverlay');
+        const mainContainer = document.getElementById('mainContainer');
+        
+        // Fade out intro
+        introOverlay.classList.add('fade-out');
+        
+        // Show main content
+        setTimeout(() => {
+          mainContainer.classList.add('show');
+          introOverlay.style.display = 'none';
+        }, 1000);
+      }, 3000); // Auto transition after 3 seconds
+    });
+
     // Typing animation
     const phrases = ["C++", "Python", "Batch", "Lua"];
     const shuffled = [...phrases].sort(() => Math.random() - 0.5);
