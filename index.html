@@ -877,31 +877,45 @@
       const realCount = data.record.visits + 1;
       const paddedCount = realCount + 146;
 
-      // Update JSONBin with the new real count
+      // Update backend count
       fetch(url, {
         method: 'PUT',
         headers,
         body: JSON.stringify({ visits: realCount })
       });
 
-      // Animate the padded number
+      // Animate using requestAnimationFrame
       const el = document.getElementById('visitorCount');
-      let display = 0;
-      const inc = Math.ceil(paddedCount / 30);
-      const timer = setInterval(() => {
-        display += inc;
-        if (display >= paddedCount) {
-          display = paddedCount;
-          clearInterval(timer);
+      const duration = 1500; // 1.5 seconds
+      const start = performance.now();
+      const startValue = 0;
+
+      function animate(currentTime) {
+        const elapsed = currentTime - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = easeOutCubic(progress);
+        const currentValue = Math.floor(startValue + (paddedCount - startValue) * eased);
+
+        el.textContent = currentValue.toLocaleString();
+
+        if (progress < 1) {
+          requestAnimationFrame(animate);
         }
-        el.textContent = display.toLocaleString();
-      }, 50);
+      }
+
+      requestAnimationFrame(animate);
     })
     .catch(err => {
       console.error("Visitor counter failed:", err);
       document.getElementById('visitorCount').textContent = 'N/A';
     });
 }
+
+// Cubic easing function (smooth and satisfying)
+function easeOutCubic(t) {
+  return 1 - Math.pow(1 - t, 3);
+}
+
 
 
 
