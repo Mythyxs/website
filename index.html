@@ -861,8 +861,7 @@
       }
     }
 
-    // Initialize visitor counter
-    function initVisitorCounter() {
+    // Initialize visitor counterfunction initVisitorCounter() {
   const binId = '683f4c3f8561e97a501f44c4';
   const apiKey = '$2a$10$NwYMNtIZx5ag/xokwHWN4.1u.yOLzNxLLroIP/IBcjJBEi0YiB81e';
   const url = `https://api.jsonbin.io/v3/b/${binId}`;
@@ -874,33 +873,35 @@
   fetch(url, { headers })
     .then(res => res.json())
     .then(data => {
-      const current = data.record.visits + 1;
+      const realCount = data.record.visits + 1;
+      const paddedCount = realCount + 146;
 
-      // Update bin with new count
+      // Update JSONBin with the new real count
       fetch(url, {
         method: 'PUT',
         headers,
-        body: JSON.stringify({ visits: current })
+        body: JSON.stringify({ visits: realCount })
       });
 
-      // Animate display
+      // Animate the padded number
       const el = document.getElementById('visitorCount');
-      let count = 0;
-      const inc = Math.ceil(current / 30);
+      let display = 0;
+      const inc = Math.ceil(paddedCount / 30);
       const timer = setInterval(() => {
-        count += inc;
-        if (count >= current) {
-          count = current;
+        display += inc;
+        if (display >= paddedCount) {
+          display = paddedCount;
           clearInterval(timer);
         }
-        el.textContent = count.toLocaleString();
+        el.textContent = display.toLocaleString();
       }, 50);
     })
     .catch(err => {
       console.error("Visitor counter failed:", err);
       document.getElementById('visitorCount').textContent = 'N/A';
     });
-}
+
+
 
 
 
