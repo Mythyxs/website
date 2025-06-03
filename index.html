@@ -863,24 +863,45 @@
 
     // Initialize visitor counter
     function initVisitorCounter() {
-  const url = "https://api.countapi.store/hit/shemxz/visits";
-  fetch(url)
+  const binId = '683f4c3f8561e97a501f44c4';
+  const apiKey = '$2a$10$NwYMNtIZx5ag/xokwHWN4.1u.yOLzNxLLroIP/IBcjJBEi0YiB81e';
+  const url = `https://api.jsonbin.io/v3/b/${binId}`;
+  const headers = {
+    'Content-Type': 'application/json',
+    'X-Master-Key': apiKey
+  };
+
+  fetch(url, { headers })
     .then(res => res.json())
     .then(data => {
-      const counterElement = document.getElementById('visitorCount');
-      let currentCount = 0;
-      const target = data.value;
-      const increment = Math.ceil(target / 30);
+      const current = data.record.visits + 1;
+
+      // Update bin with new count
+      fetch(url, {
+        method: 'PUT',
+        headers,
+        body: JSON.stringify({ visits: current })
+      });
+
+      // Animate display
+      const el = document.getElementById('visitorCount');
+      let count = 0;
+      const inc = Math.ceil(current / 30);
       const timer = setInterval(() => {
-        currentCount += increment;
-        if (currentCount >= target) {
-          currentCount = target;
+        count += inc;
+        if (count >= current) {
+          count = current;
           clearInterval(timer);
         }
-        counterElement.textContent = currentCount.toLocaleString();
+        el.textContent = count.toLocaleString();
       }, 50);
+    })
+    .catch(err => {
+      console.error("Visitor counter failed:", err);
+      document.getElementById('visitorCount').textContent = 'N/A';
     });
 }
+
 
 
 
