@@ -404,6 +404,126 @@
       border-radius: 50%;
     }
 
+    /* Social links styles */
+    .social-links-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      margin-top: 30px;
+    }
+
+    .social-card {
+      background: linear-gradient(135deg, rgba(255, 0, 110, 0.1) 0%, rgba(255, 77, 166, 0.05) 100%);
+      border: 1px solid rgba(255, 0, 110, 0.3);
+      border-radius: 15px;
+      padding: 25px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      text-decoration: none;
+      color: white;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.6s ease forwards;
+    }
+
+    .social-card:nth-child(1) { animation-delay: 0.1s; }
+    .social-card:nth-child(2) { animation-delay: 0.2s; }
+
+    .social-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 0, 110, 0.2), transparent);
+      transition: left 0.6s;
+    }
+
+    .social-card:hover::before {
+      left: 100%;
+    }
+
+    .social-card:hover {
+      transform: translateY(-5px);
+      border-color: #ff4da6;
+      box-shadow: 0 15px 30px rgba(255, 0, 110, 0.3);
+    }
+
+    .social-icon {
+      width: 60px;
+      height: 60px;
+      background: rgba(255, 0, 110, 0.15);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .social-icon svg {
+      width: 35px;
+      height: 35px;
+      fill: #ff4da6;
+      transition: all 0.3s ease;
+    }
+
+    .social-card:hover .social-icon svg {
+      fill: #ff79c6;
+      transform: scale(1.1);
+    }
+
+    .social-info {
+      flex: 1;
+    }
+
+    .social-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #ff79c6;
+      margin-bottom: 5px;
+    }
+
+    .social-desc {
+      font-size: 0.95rem;
+      color: #ddd;
+      opacity: 0.8;
+    }
+
+    /* Visitor counter */
+    .visitor-counter {
+      text-align: center;
+      margin-top: 40px;
+      padding: 20px;
+      background: rgba(255, 0, 110, 0.05);
+      border-radius: 15px;
+      border: 1px solid rgba(255, 0, 110, 0.2);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.6s ease 0.3s forwards;
+    }
+
+    .visitor-label {
+      font-size: 0.9rem;
+      color: #ff79c6;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .visitor-count {
+      font-size: 2.5rem;
+      font-weight: 300;
+      background: linear-gradient(45deg, #ff006e, #ff4da6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 20px rgba(255, 0, 110, 0.3);
+    }
+
     /* Mobile responsiveness */
     @media (max-width: 768px) {
       .container {
@@ -452,7 +572,13 @@
 
     <div class="main-content">
       <div class="category-tabs">
-        <button class="tab-button active" onclick="showCategory('hoop')">
+        <button class="tab-button active" onclick="showCategory('home')">
+          <svg width="24" height="24" viewBox="0 0 24 24" style="margin-right: 8px; vertical-align: middle; fill: currentColor;">
+            <path d="M10 20V14H14V20H19V12H22L12 3L2 12H5V20H10Z"/>
+          </svg>
+          Home
+        </button>
+        <button class="tab-button" onclick="showCategory('hoop')">
           <svg width="24" height="24" viewBox="0 0 24 24" style="margin-right: 8px; vertical-align: middle; fill: currentColor;">
             <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2M5.23 7.75C6.1 8.62 6.7 9.74 6.91 11H4.07C4.22 10.07 4.54 9.2 5 8.41L5.23 7.75M4.07 13H6.91C6.7 14.26 6.1 15.38 5.23 16.25L5 15.59C4.54 14.8 4.22 13.93 4.07 13M11 19.93C9.51 19.65 8.16 18.9 7.09 17.83C8.22 16.7 9 15.21 9.26 13.55C10.13 13.82 11.05 14 12 14C12.95 14 13.87 13.82 14.74 13.55C15 15.21 15.79 16.7 16.91 17.83C15.84 18.9 14.5 19.65 11 19.93M11 4.07V7C11 7.55 11.45 8 12 8C12.55 8 13 7.55 13 7V4.07C15.84 4.44 18.1 6.34 18.91 8.88C17.91 8.31 16.79 8 15.64 8H15.5C14.5 6.82 13.08 6.15 11.5 6.15C10.44 6.15 9.47 6.55 8.73 7.19C8.15 7.89 7.96 8.79 8.16 9.64C6.97 10.15 5.96 11 5.3 12.1C4.5 10.58 4.07 8.82 4.07 7C4.07 5.2 5.23 3.75 7.09 2.17C8.17 1.11 9.51 .35 11 .07V4.07M19 8.41C19.46 9.2 19.78 10.07 19.93 11H17.09C17.3 9.74 17.9 8.62 18.77 7.75L19 8.41M19.93 13C19.78 13.93 19.46 14.8 19 15.59L18.77 16.25C17.9 15.38 17.3 14.26 17.09 13H19.93Z"/>
           </svg>
@@ -466,7 +592,52 @@
         </button>
       </div>
 
-      <div id="hoopSection" class="accolades-section">
+      <div id="homeSection" class="accolades-section">
+        <h2 class="section-title">
+          <svg width="32" height="32" viewBox="0 0 24 24" style="vertical-align: middle; margin-right: 10px; fill: #ff4da6;">
+            <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2M8 17.5C6.62 17.5 5.5 16.38 5.5 15C5.5 13.62 6.62 12.5 8 12.5S10.5 13.62 10.5 15C10.5 16.38 9.38 17.5 8 17.5M9.5 8C9.5 6.62 10.62 5.5 12 5.5S14.5 6.62 14.5 8 13.38 10.5 12 10.5 9.5 9.38 9.5 8M16 17.5C14.62 17.5 13.5 16.38 13.5 15C13.5 13.62 14.62 12.5 16 12.5S18.5 13.62 18.5 15C18.5 16.38 17.38 17.5 16 17.5Z"/>
+          </svg>
+          Connect With Me
+        </h2>
+        <div class="social-links-container">
+          <a href="https://www.roblox.com/users/7208356029/profile" target="_blank" class="social-card">
+            <div class="social-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="36" height="36">
+                <defs>
+                  <linearGradient id="robloxPinkGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#ff006e"/>
+                    <stop offset="50%" stop-color="#ff4da6"/>
+                    <stop offset="100%" stop-color="#ff79c6"/>
+                  </linearGradient>
+                </defs>
+                <path d="M 12.125 1.9980469 A 1.0001 1.0001 0 0 0 11.199219 2.7441406 L 2.0332031 37.576172 A 1.0001 1.0001 0 0 0 2.7460938 38.798828 L 37.580078 47.966797 A 1.0001 1.0001 0 0 0 38.802734 47.253906 L 47.96875 12.419922 A 1.0001 1.0001 0 0 0 47.255859 11.197266 L 12.421875 2.03125 A 1.0001 1.0001 0 0 0 12.125 1.9980469 z M 21.5 19 L 31 21.5 L 28.5 31 L 19 28.5 L 21.5 19 z"
+                  fill="url(#robloxPinkGradient)"/>
+              </svg>
+            </div>
+            <div class="social-info">
+              <div class="social-title">Roblox</div>
+              <div class="social-desc">Check out my profile</div>
+            </div>
+          </a>
+          <a href="http://discordapp.com/users/1236388693510721568" target="_blank" class="social-card">
+            <div class="social-icon">
+              <svg viewBox="0 0 24 24">
+                <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z"/>
+              </svg>
+            </div>
+            <div class="social-info">
+              <div class="social-title">Discord</div>
+              <div class="social-desc">Let's chat!</div>
+            </div>
+          </a>
+        </div>
+        <div class="visitor-counter">
+          <div class="visitor-label">Total Visitors</div>
+          <div class="visitor-count" id="visitorCount">0</div>
+        </div>
+      </div>
+
+      <div id="hoopSection" class="accolades-section hidden">
         <h2 class="section-title">
           <svg width="32" height="32" viewBox="0 0 24 24" style="vertical-align: middle; margin-right: 10px; fill: #ff4da6;">
             <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2M5.23 7.75C6.1 8.62 6.7 9.74 6.91 11H4.07C4.22 10.07 4.54 9.2 5 8.41L5.23 7.75M4.07 13H6.91C6.7 14.26 6.1 15.38 5.23 16.25L5 15.59C4.54 14.8 4.22 13.93 4.07 13M11 19.93C9.51 19.65 8.16 18.9 7.09 17.83C8.22 16.7 9 15.21 9.26 13.55C10.13 13.82 11.05 14 12 14C12.95 14 13.87 13.82 14.74 13.55C15 15.21 15.79 16.7 16.91 17.83C15.84 18.9 14.5 19.65 11 19.93M11 4.07V7C11 7.55 11.45 8 12 8C12.55 8 13 7.55 13 7V4.07C15.84 4.44 18.1 6.34 18.91 8.88C17.91 8.31 16.79 8 15.64 8H15.5C14.5 6.82 13.08 6.15 11.5 6.15C10.44 6.15 9.47 6.55 8.73 7.19C8.15 7.89 7.96 8.79 8.16 9.64C6.97 10.15 5.96 11 5.3 12.1C4.5 10.58 4.07 8.82 4.07 7C4.07 5.2 5.23 3.75 7.09 2.17C8.17 1.11 9.51 .35 11 .07V4.07M19 8.41C19.46 9.2 19.78 10.07 19.93 11H17.09C17.3 9.74 17.9 8.62 18.77 7.75L19 8.41M19.93 13C19.78 13.93 19.46 14.8 19 15.59L18.77 16.25C17.9 15.38 17.3 14.26 17.09 13H19.93Z"/>
@@ -600,7 +771,14 @@
     }
 
     // Category switching
+    let currentCategory = 'home';
+    
     function showCategory(category) {
+      // Don't re-animate if already on this category
+      if (currentCategory === category) return;
+      
+      currentCategory = category;
+      
       // Update active tab
       document.querySelectorAll('.tab-button').forEach(btn => {
         btn.classList.remove('active');
@@ -615,12 +793,35 @@
       const targetSection = document.getElementById(category + 'Section');
       targetSection.classList.remove('hidden');
       
-      // Re-trigger animation
-      const container = targetSection.querySelector('.accolades-container');
-      container.style.animation = 'none';
-      setTimeout(() => {
-        container.style.animation = 'fadeInUp 0.6s ease forwards';
-      }, 10);
+      // Re-trigger animations based on section type
+      if (category === 'home') {
+        // Animate social cards
+        const cards = targetSection.querySelectorAll('.social-card');
+        cards.forEach((card, index) => {
+          card.style.animation = 'none';
+          setTimeout(() => {
+            card.style.animation = `fadeInUp 0.6s ease ${index * 0.1}s forwards`;
+          }, 10);
+        });
+        
+        // Animate visitor counter
+        const counter = targetSection.querySelector('.visitor-counter');
+        if (counter) {
+          counter.style.animation = 'none';
+          setTimeout(() => {
+            counter.style.animation = 'fadeInUp 0.6s ease 0.3s forwards';
+          }, 10);
+        }
+      } else {
+        // Animate accolades container
+        const container = targetSection.querySelector('.accolades-container');
+        if (container) {
+          container.style.animation = 'none';
+          setTimeout(() => {
+            container.style.animation = 'fadeInUp 0.6s ease forwards';
+          }, 10);
+        }
+      }
     }
 
     // Mouse tracking for cards
@@ -660,8 +861,41 @@
       }
     }
 
+    // Initialize visitor counter
+    function initVisitorCounter() {
+      // Get current count from localStorage or start at 0
+      let visitorCount = parseInt(localStorage.getItem('shemxzVisitorCount') || '0');
+      
+      // Check if this is a new visit (using session storage)
+      if (!sessionStorage.getItem('shemxzVisited')) {
+        visitorCount++;
+        localStorage.setItem('shemxzVisitorCount', visitorCount.toString());
+        sessionStorage.setItem('shemxzVisited', 'true');
+      }
+      
+      // Animate counter
+      const counterElement = document.getElementById('visitorCount');
+      if (counterElement) {
+        let currentCount = 0;
+        const increment = Math.ceil(visitorCount / 30);
+        const timer = setInterval(() => {
+          currentCount += increment;
+          if (currentCount >= visitorCount) {
+            currentCount = visitorCount;
+            clearInterval(timer);
+          }
+          counterElement.textContent = currentCount.toLocaleString();
+        }, 50);
+      }
+    }
+
     // Initialize
     type();
+    
+    // Initialize visitor counter after main content loads
+    setTimeout(() => {
+      initVisitorCounter();
+    }, 3500);
   </script>
 </body>
 </html>
