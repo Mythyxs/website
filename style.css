@@ -1,100 +1,11 @@
-body {
-  margin: 0;
-  padding: 0;
-  background: radial-gradient(ellipse at center, #111 0%, #000 100%);
-  color: white;
-  font-family: "Segoe UI", sans-serif;
-  height: 100vh;
-  overflow: hidden;
-}
-
-.hero {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  text-align: center;
-  animation: fadeIn 2s ease-in;
-}
-
-.name {
-  font-size: 4rem;
-  margin-bottom: 10px;
-  letter-spacing: 2px;
-}
-
-.typing {
-  font-size: 1.5rem;
+#visitorCount {
+  font-size: 2rem;
+  font-weight: bold;
   color: #00f0ff;
-  font-family: monospace;
-  min-height: 1.5em;
+  animation: popFade 0.5s ease-in;
 }
 
-button {
-  margin-top: 40px;
-  padding: 12px 24px;
-  background: #00f0ff;
-  color: #000;
-  border: none;
-  border-radius: 8px;
-  font-size: 1.2rem;
-  cursor: pointer;
-  transition: box-shadow 0.3s;
-}
-
-button:hover {
-  box-shadow: 0 0 20px #00f0ff;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.panel {
-  background-color: #0a0a0a;
-  padding: 40px;
-  text-align: center;
-  animation: fadeIn 0.6s ease-out;
-}
-
-.category-buttons {
-  margin: 20px 0;
-}
-
-.category-buttons button {
-  margin: 0 10px;
-  padding: 10px 20px;
-  background: #00f0ff;
-  color: black;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.category-buttons button:hover {
-  background: #0ff;
-}
-
-.accolades {
-  text-align: left;
-  max-width: 600px;
-  margin: 30px auto;
-}
-
-.accolades ul {
-  list-style: none;
-  padding: 0;
-}
-
-.accolades li {
-  padding: 6px 0;
-  border-bottom: 1px solid #222;
-}
-
-.hidden {
-  display: none;
+@keyframes popFade {
+  0% { opacity: 0; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1); }
 }
