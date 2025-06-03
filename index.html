@@ -1009,28 +1009,24 @@
   </script>
 
 <script>
-  (function () {
-    let devtoolsOpen = false;
-  
-    const element = new Image();
-    Object.defineProperty(element, 'id', {
-      get: function () {
-        devtoolsOpen = true;
-        // Trigger redirect if DevTools is open
+  (function() {
+    function balls(threshold = 100) {
+      const start = performance.now();
+      debugger;
+      const duration = performance.now() - start;
+      if (duration > threshold) {
+        // DevTools likely open, redirect
         window.location.href = "https://www.roblox.com/home";
       }
+    }
+  
+    const events = ['load', 'resize', 'mousemove', 'focus', 'blur'];
+    events.forEach(event => {
+      window.addEventListener(event, () => balls(100));
     });
-  
-    setInterval(() => {
-      devtoolsOpen = false;
-      console.log(element);
-      if (devtoolsOpen) {
-        // fallback redirect if console.log doesn't trigger get()
-        window.location.href = "https://www.roblox.com/home";
-      }
-    }, 1000);
   })();
-  </script>  
+  </script>
+  
 
 </body>
 </html>
