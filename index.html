@@ -1010,27 +1010,27 @@
 
 <script>
   (function () {
-    function detectDevTools(threshold = 100) {
-      const start = performance.now();
-
-      // No debugger; — we just test execution delay
-      for (let i = 0; i < 1000000; i++) {
-        // dummy loop to increase baseline delay if DevTools is open
-        Math.random();
-      }
-
-      const duration = performance.now() - start;
-
-      if (duration > threshold) {
+    let devtoolsOpen = false;
+  
+    const element = new Image();
+    Object.defineProperty(element, 'id', {
+      get: function () {
+        devtoolsOpen = true;
+        // Trigger redirect if DevTools is open
         window.location.href = "https://www.roblox.com/home";
       }
-    }
-
-    setInterval(() => detectDevTools(), 1000);
-  })();
-</script>
-
+    });
   
+    setInterval(() => {
+      devtoolsOpen = false;
+      console.log(element);
+      if (devtoolsOpen) {
+        // fallback redirect if console.log doesn't trigger get()
+        window.location.href = "https://www.roblox.com/home";
+      }
+    }, 1000);
+  })();
+  </script>  
 
 </body>
 </html>
