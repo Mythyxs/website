@@ -861,7 +861,8 @@
       }
     }
 
-    // Initialize visitor counterfunction initVisitorCounter() {
+    // Initialize visitor counter
+    function initVisitorCounter() {
   const binId = '683f4c3f8561e97a501f44c4';
   const apiKey = '$2a$10$NwYMNtIZx5ag/xokwHWN4.1u.yOLzNxLLroIP/IBcjJBEi0YiB81e';
   const url = `https://api.jsonbin.io/v3/b/${binId}`;
@@ -900,7 +901,7 @@
       console.error("Visitor counter failed:", err);
       document.getElementById('visitorCount').textContent = 'N/A';
     });
-
+}
 
 
 
