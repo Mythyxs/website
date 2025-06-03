@@ -863,31 +863,25 @@
 
     // Initialize visitor counter
     function initVisitorCounter() {
-      // Get current count from localStorage or start at 0
-      let visitorCount = parseInt(localStorage.getItem('shemxzVisitorCount') || '0');
-      
-      // Check if this is a new visit (using session storage)
-      if (!sessionStorage.getItem('shemxzVisited')) {
-        visitorCount++;
-        localStorage.setItem('shemxzVisitorCount', visitorCount.toString());
-        sessionStorage.setItem('shemxzVisited', 'true');
-      }
-      
-      // Animate counter
+  const url = "https://api.countapi.xyz/hit/shemxz/visits";
+  fetch(url)
+    .then(res => res.json())
+    .then(data => {
       const counterElement = document.getElementById('visitorCount');
-      if (counterElement) {
-        let currentCount = 0;
-        const increment = Math.ceil(visitorCount / 30);
-        const timer = setInterval(() => {
-          currentCount += increment;
-          if (currentCount >= visitorCount) {
-            currentCount = visitorCount;
-            clearInterval(timer);
-          }
-          counterElement.textContent = currentCount.toLocaleString();
-        }, 50);
-      }
-    }
+      let currentCount = 0;
+      const target = data.value;
+      const increment = Math.ceil(target / 30);
+      const timer = setInterval(() => {
+        currentCount += increment;
+        if (currentCount >= target) {
+          currentCount = target;
+          clearInterval(timer);
+        }
+        counterElement.textContent = currentCount.toLocaleString();
+      }, 50);
+    });
+}
+
 
     // Initialize
     type();
