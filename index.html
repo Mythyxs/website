@@ -396,13 +396,42 @@
     }
 
     .sparkle {
-      position: absolute;
-      width: 4px;
-      height: 4px;
-      background: #ff79c6;
-      pointer-events: none;
-      border-radius: 50%;
-    }
+  width: 6px;
+  height: 6px;
+  background: #ff79c6;
+  border-radius: 50%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translate(-50%, -50%);
+  animation: sparkle-burst 0.8s ease-out forwards;
+  filter: drop-shadow(0 0 6px rgba(255, 121, 198, 0.8));
+  opacity: 0.9;
+}
+
+@keyframes sparkle-burst {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(var(--angle)) translate(var(--distance)) scale(0.5);
+    opacity: 0;
+  }
+}
+
+
+@keyframes sparkle-burst {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(var(--angle)) translate(var(--distance)) scale(0.5);
+    opacity: 0;
+  }
+}
+
 
     /* Social links styles */
     .social-links-container {
@@ -921,28 +950,45 @@
 
     // Create sparkles on click
     document.addEventListener('click', (e) => {
-      if (e.target.closest('.tab-button') || e.target.closest('.accolade-card')) {
-        createSparkle(e.clientX, e.clientY);
-      }
+  const tab = e.target.closest('.tab-button');
+  if (tab) {
+    createSparkleFromElement(tab);
+  }
+
     });
 
-    function createSparkle(x, y) {
-      for (let i = 0; i < 6; i++) {
-        const sparkle = document.createElement('div');
-        sparkle.className = 'sparkle';
-        sparkle.style.left = x + 'px';
-        sparkle.style.top = y + 'px';
-        sparkle.style.animation = `sparkle 0.6s ease-out forwards`;
-        sparkle.style.animationDelay = (i * 0.05) + 's';
-        
-        const angle = (360 / 6) * i;
-        const distance = 30 + Math.random() * 20;
-        sparkle.style.transform = `translate(-50%, -50%) rotate(${angle}deg) translateY(-${distance}px)`;
-        
-        document.body.appendChild(sparkle);
-        setTimeout(() => sparkle.remove(), 600);
-      }
-    }
+    function createSparkleFromElement(element) {
+  const rect = element.getBoundingClientRect();
+  const centerX = rect.left + rect.width / 2;
+  const centerY = rect.top + rect.height / 2;
+
+  const sparkleContainer = document.createElement('div');
+  sparkleContainer.style.position = 'fixed';
+  sparkleContainer.style.left = `${centerX}px`;
+  sparkleContainer.style.top = `${centerY}px`;
+  sparkleContainer.style.pointerEvents = 'none';
+  sparkleContainer.style.zIndex = 9999;
+  document.body.appendChild(sparkleContainer);
+
+  const count = 10;
+  for (let i = 0; i < count; i++) {
+    const sparkle = document.createElement('div');
+    sparkle.className = 'sparkle';
+
+    const angle = (360 / count) * i + Math.random() * 10 - 5;
+    const distance = 30 + Math.random() * 10;
+    sparkle.style.setProperty('--angle', angle + 'deg');
+    sparkle.style.setProperty('--distance', distance + 'px');
+
+    sparkleContainer.appendChild(sparkle);
+
+    setTimeout(() => sparkle.remove(), 800);
+  }
+
+  setTimeout(() => sparkleContainer.remove(), 800);
+}
+
+
 
     // Initialize visitor counter
     function initVisitorCounter() {
@@ -1007,26 +1053,5 @@
       initVisitorCounter();
     }, 3200);
   </script>
-
-<script>
-  (function() {
-    function balls(threshold = 100) {
-      const start = performance.now();
-      debugger;
-      const duration = performance.now() - start;
-      if (duration > threshold) {
-        // DevTools likely open, redirect
-        window.location.href = "https://www.roblox.com/home";
-      }
-    }
-  
-    const events = ['load', 'resize', 'mousemove', 'focus', 'blur'];
-    events.forEach(event => {
-      window.addEventListener(event, () => balls(100));
-    });
-  })();
-  </script>
-  
-
 </body>
 </html>
