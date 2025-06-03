@@ -19,7 +19,20 @@ function type() {
 }
 
 function glowButtonClick() {
-  document.getElementById("accolades").scrollIntoView({ behavior: "smooth" });
+  const panel = document.getElementById("learnMorePanel");
+  panel.classList.remove("hidden");
+  panel.scrollIntoView({ behavior: "smooth" });
+}
+
+function showAccolades(type) {
+  document.getElementById("hoopAccolades").classList.add("hidden");
+  document.getElementById("otherAccolades").classList.add("hidden");
+
+  if (type === "hoop") {
+    document.getElementById("hoopAccolades").classList.remove("hidden");
+  } else if (type === "other") {
+    document.getElementById("otherAccolades").classList.remove("hidden");
+  }
 }
 
 type();

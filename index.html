@@ -12,16 +12,32 @@
     <p class="typing" id="typing"></p>
     <button onclick="glowButtonClick()">Learn More ↓</button>
 
-    <div id="accolades" class="accolades">
-      <h2>🏆 My Hoop Journey Accolades</h2>
-      <ul>
-        <li>🔶 S2 Finals Appearance</li>
-        <li>🔷 S3 All-Star Starters | EC</li>
-        <li>🌟 S2 | COTY</li>
-        <li>🛡 1x All-Defensive First Team</li>
-        <li>🏅 S2 Champions [Nashville Anthem]</li>
-        <!-- Add more based on the image -->
-      </ul>
+
+    <div id="learnMorePanel" class="panel hidden">
+      <h2>Select a Category</h2>
+      <div class="category-buttons">
+        <button onclick="showAccolades('hoop')">🏀 Hoop Journey</button>
+        <button onclick="showAccolades('other')">🎮 Other Games</button>
+      </div>
+    
+      <div id="hoopAccolades" class="accolades hidden">
+        <h3>🏀 Hoop Journey Accolades</h3>
+        <ul>
+          <li>🔶 S2 Finals Appearance</li>
+          <li>🔷 S3 All-Star Starters | EC</li>
+          <li>🌟 S2 | COTY</li>
+          <li>🛡 1x All-Defensive First Team</li>
+          <li>🏅 S2 Champions [Nashville Anthem]</li>
+        </ul>
+      </div>
+    
+      <div id="otherAccolades" class="accolades hidden">
+        <h3>🎮 Other Accolades</h3>
+        <ul>
+          <li>⚔️ Top 100 in XYZ Game</li>
+          <li>💡 Lua scripting master</li>
+        </ul>
+      </div>
     </div>
     
   </div>
