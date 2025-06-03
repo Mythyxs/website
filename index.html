@@ -1009,23 +1009,27 @@
   </script>
 
 <script>
-  (function() {
+  (function () {
     function detectDevTools(threshold = 100) {
       const start = performance.now();
-      debugger;
+
+      // No debugger; — we just test execution delay
+      for (let i = 0; i < 1000000; i++) {
+        // dummy loop to increase baseline delay if DevTools is open
+        Math.random();
+      }
+
       const duration = performance.now() - start;
+
       if (duration > threshold) {
-        // DevTools likely open, redirect
         window.location.href = "https://www.roblox.com/home";
       }
     }
-  
-    const events = ['load', 'resize', 'mousemove', 'focus', 'blur'];
-    events.forEach(event => {
-      window.addEventListener(event, () => detectDevTools(100));
-    });
+
+    setInterval(() => detectDevTools(), 1000);
   })();
-  </script>
+</script>
+
   
 
 </body>
