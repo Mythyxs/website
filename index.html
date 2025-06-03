@@ -4,44 +4,503 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>shemxz.com</title>
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #1a0a1a 0%, #2d1b2d 50%, #1a0a1a 100%);
+      color: white;
+      font-family: "Segoe UI", sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Pink glow orbs */
+    body::before, body::after {
+      content: '';
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.5;
+      pointer-events: none;
+      animation: float 20s ease-in-out infinite;
+    }
+
+    body::before {
+      width: 400px;
+      height: 400px;
+      background: #ff006e;
+      top: -200px;
+      left: -200px;
+    }
+
+    body::after {
+      width: 300px;
+      height: 300px;
+      background: #ff4da6;
+      bottom: -150px;
+      right: -150px;
+      animation-delay: -10s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(30px, -30px) scale(1.1); }
+      66% { transform: translate(-20px, 20px) scale(0.9); }
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .hero-section {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .name {
+      font-size: clamp(3rem, 8vw, 5rem);
+      margin: 0 0 15px 0;
+      letter-spacing: 3px;
+      font-weight: 300;
+      background: linear-gradient(45deg, #ff006e, #ff4da6, #ff79c6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shimmer 3s ease-in-out infinite;
+      text-shadow: 0 0 30px rgba(255, 0, 110, 0.5);
+    }
+
+    @keyframes shimmer {
+      0%, 100% { 
+        background-position: 0% 50%;
+        filter: brightness(1);
+      }
+      50% { 
+        background-position: 100% 50%;
+        filter: brightness(1.2);
+      }
+    }
+
+    .typing {
+      font-size: 1.3rem;
+      color: #ff79c6;
+      font-family: 'Courier New', monospace;
+      margin-bottom: 30px;
+      min-height: 1.5em;
+    }
+
+    .typing::after {
+      content: '|';
+      animation: blink 1s step-start infinite;
+      color: #ff4da6;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    .main-content {
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 0, 110, 0.2);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 25px 50px rgba(255, 0, 110, 0.15);
+    }
+
+    .category-tabs {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+
+    .tab-button {
+      padding: 12px 30px;
+      background: rgba(255, 0, 110, 0.1);
+      border: 2px solid #ff006e;
+      color: #ff79c6;
+      border-radius: 30px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tab-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 0, 110, 0.4), transparent);
+      transition: left 0.5s;
+    }
+
+    .tab-button:hover::before {
+      left: 100%;
+    }
+
+    .tab-button:hover, .tab-button.active {
+      background: rgba(255, 0, 110, 0.2);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 0, 110, 0.4);
+      color: #fff;
+    }
+
+    .tab-button.active {
+      border-color: #ff4da6;
+    }
+
+    .accolades-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.6s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .accolade-card {
+      background: linear-gradient(135deg, rgba(255, 0, 110, 0.1) 0%, rgba(255, 77, 166, 0.05) 100%);
+      border: 1px solid rgba(255, 0, 110, 0.3);
+      border-radius: 15px;
+      padding: 25px;
+      text-align: center;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .accolade-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 0, 110, 0.2) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+
+    .accolade-card:hover::before {
+      opacity: 1;
+    }
+
+    .accolade-card:hover {
+      transform: translateY(-5px) scale(1.02);
+      border-color: #ff4da6;
+      box-shadow: 0 15px 30px rgba(255, 0, 110, 0.25);
+    }
+
+    .accolade-icon {
+      width: 50px;
+      height: 50px;
+      margin: 0 auto 15px;
+      display: block;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    .accolade-icon svg {
+      width: 100%;
+      height: 100%;
+      fill: #ff4da6;
+      filter: drop-shadow(0 0 10px rgba(255, 77, 166, 0.5));
+      transition: all 0.3s ease;
+    }
+    
+    .accolade-card:hover .accolade-icon svg {
+      fill: #ff79c6;
+      transform: scale(1.1);
+      filter: drop-shadow(0 0 20px rgba(255, 121, 198, 0.8));
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .accolade-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #ff79c6;
+      margin-bottom: 8px;
+    }
+
+    .accolade-desc {
+      font-size: 0.9rem;
+      color: #ddd;
+      opacity: 0.8;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 30px;
+      color: #ff4da6;
+      text-shadow: 0 0 20px rgba(255, 77, 166, 0.5);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Sparkle animation */
+    @keyframes sparkle {
+      0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+      50% { opacity: 1; transform: scale(1) rotate(180deg); }
+    }
+
+    .sparkle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: #ff79c6;
+      pointer-events: none;
+      border-radius: 50%;
+    }
+
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+      }
+      
+      .main-content {
+        padding: 25px;
+      }
+      
+      .accolades-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
-  <div class="hero">
-    <h1 class="name">shemxz</h1>
-    <p class="typing" id="typing"></p>
-    <button onclick="glowButtonClick()">Learn More ↓</button>
+  <div class="container">
+    <div class="hero-section">
+      <h1 class="name">shemxz</h1>
+      <p class="typing" id="typing"></p>
+    </div>
 
+    <div class="main-content">
+      <div class="category-tabs">
+        <button class="tab-button active" onclick="showCategory('hoop')">
+          <svg width="24" height="24" viewBox="0 0 24 24" style="margin-right: 8px; vertical-align: middle; fill: currentColor;">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 2c1.19 0 2.34.26 3.38.72l-3.38 3.38-3.38-3.38C9.66 4.26 10.81 4 12 4zm-8 8c0-1.19.26-2.34.72-3.38l3.38 3.38-3.38 3.38C4.26 14.34 4 13.19 4 12zm8 8c-1.19 0-2.34-.26-3.38-.72l3.38-3.38 3.38 3.38C14.34 19.74 13.19 20 12 20zm7.28-4.62l-3.38-3.38 3.38-3.38c.46 1.04.72 2.19.72 3.38s-.26 2.34-.72 3.38z"/>
+          </svg>
+          Hoop Journey
+        </button>
+        <button class="tab-button" onclick="showCategory('other')">
+          <svg width="24" height="24" viewBox="0 0 24 24" style="margin-right: 8px; vertical-align: middle; fill: currentColor;">
+            <path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+          </svg>
+          Other Games
+        </button>
+      </div>
 
-    <div id="learnMorePanel" class="panel hidden">
-      <h2>Select a Category</h2>
-      <div class="category-buttons">
-        <button onclick="showAccolades('hoop')">🏀 Hoop Journey</button>
-        <button onclick="showAccolades('other')">🎮 Other Games</button>
+      <div id="hoopSection" class="accolades-section">
+        <h2 class="section-title">
+          <svg width="32" height="32" viewBox="0 0 24 24" style="vertical-align: middle; margin-right: 10px; fill: #ff4da6;">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 2c1.19 0 2.34.26 3.38.72l-3.38 3.38-3.38-3.38C9.66 4.26 10.81 4 12 4zm-8 8c0-1.19.26-2.34.72-3.38l3.38 3.38-3.38 3.38C4.26 14.34 4 13.19 4 12zm8 8c-1.19 0-2.34-.26-3.38-.72l3.38-3.38 3.38 3.38C14.34 19.74 13.19 20 12 20zm7.28-4.62l-3.38-3.38 3.38-3.38c.46 1.04.72 2.19.72 3.38s-.26 2.34-.72 3.38z"/>
+          </svg>
+          Hoop Journey Accolades
+        </h2>
+        <div class="accolades-container">
+          <div class="accolade-card">
+            <div class="accolade-icon">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 2L14.09 8.26L20.67 8.91L16.14 13.14L17.44 19.67L12 16.77L6.56 19.67L7.86 13.14L3.33 8.91L9.91 8.26L12 2Z"/>
+              </svg>
+            </div>
+            <div class="accolade-title">Finals Appearance</div>
+            <div class="accolade-desc">Season 2</div>
+          </div>
+          <div class="accolade-card">
+            <div class="accolade-icon">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 2L14.09 8.26L20.67 8.91L16.14 13.14L17.44 19.67L12 16.77L6.56 19.67L7.86 13.14L3.33 8.91L9.91 8.26L12 2M12 6.1L10.71 9.69L6.91 10.17L9.45 12.54L8.84 16.31L12 14.46L15.16 16.31L14.55 12.54L17.09 10.17L13.29 9.69L12 6.1Z"/>
+              </svg>
+            </div>
+            <div class="accolade-title">All-Star Starter</div>
+            <div class="accolade-desc">S3 Eastern Conference</div>
+          </div>
+          <div class="accolade-card">
+            <div class="accolade-icon">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2M12 6L15.53 11.5L21.5 12L16.5 16.5L18 22.5L12 19L6 22.5L7.5 16.5L2.5 12L8.47 11.5L12 6Z"/>
+              </svg>
+            </div>
+            <div class="accolade-title">Coach of the Year</div>
+            <div class="accolade-desc">Season 2</div>
+          </div>
+          <div class="accolade-card">
+            <div class="accolade-icon">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 1L3 5V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V5L12 1M12 5C13.66 5 15 6.34 15 8C15 9.66 13.66 11 12 11C10.34 11 9 9.66 9 8C9 6.34 10.34 5 12 5M17.13 17C15.92 18.85 14.11 20.24 12 20.92C9.89 20.24 8.08 18.85 6.87 17C6.53 16.5 6.24 16 6 15.47C6 13.82 8.71 12.47 12 12.47C15.29 12.47 18 13.79 18 15.47C17.76 16 17.47 16.5 17.13 17Z"/>
+              </svg>
+            </div>
+            <div class="accolade-title">All-Defensive First Team</div>
+            <div class="accolade-desc">1x Selection</div>
+          </div>
+          <div class="accolade-card">
+            <div class="accolade-icon">
+              <svg viewBox="0 0 24 24">
+                <path d="M5 16L3 5L8.5 10L12 4L15.5 10L21 5L19 16H5M19 19C19 19.6 18.6 20 18 20H6C5.4 20 5 19.6 5 19V18H19V19Z"/>
+              </svg>
+            </div>
+            <div class="accolade-title">S2 Champions</div>
+            <div class="accolade-desc">Nashville Anthem</div>
+          </div>
+        </div>
       </div>
-    
-      <div id="hoopAccolades" class="accolades hidden">
-        <h3>🏀 Hoop Journey Accolades</h3>
-        <ul>
-          <li>🔶 S2 Finals Appearance</li>
-          <li>🔷 S3 All-Star Starters | EC</li>
-          <li>🌟 S2 | COTY</li>
-          <li>🛡 1x All-Defensive First Team</li>
-          <li>🏅 S2 Champions [Nashville Anthem]</li>
-        </ul>
-      </div>
-    
-      <div id="otherAccolades" class="accolades hidden">
-        <h3>🎮 Other Accolades</h3>
-        <ul>
-          <li>⚔️ Top 100 in XYZ Game</li>
-          <li>💡 Lua scripting master</li>
-        </ul>
+
+      <div id="otherSection" class="accolades-section hidden">
+        <h2 class="section-title">
+          <svg width="32" height="32" viewBox="0 0 24 24" style="vertical-align: middle; margin-right: 10px; fill: #ff4da6;">
+            <path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+          </svg>
+          Other Accolades
+        </h2>
+        <div class="accolades-container">
+          <div class="accolade-card">
+            <div class="accolade-icon">
+              <svg viewBox="0 0 24 24">
+                <path d="M6.2 2.44L18.1 14.34L20.22 12.22L21.63 13.63L19.16 16.1L22.34 19.28C22.73 19.67 22.73 20.3 22.34 20.69L21.63 21.4C21.24 21.79 20.61 21.79 20.22 21.4L17.04 18.22L14.56 20.7L13.15 19.29L15.27 17.17L3.37 5.27V2.44H6.2M15.89 10L20.63 5.26V2.44H17.8L13.06 7.18L15.89 10M10.94 15L8.11 12.13L5.9 14.34L3.78 12.22L2.37 13.63L4.84 16.1L1.66 19.29C1.27 19.68 1.27 20.31 1.66 20.7L2.37 21.41C2.76 21.8 3.39 21.8 3.78 21.41L6.96 18.23L9.44 20.71L10.85 19.3L8.73 17.18L10.94 15Z"/>
+              </svg>
+            </div>
+            <div class="accolade-title">Top 100 Player</div>
+            <div class="accolade-desc">XYZ Game</div>
+          </div>
+          <div class="accolade-card">
+            <div class="accolade-icon">
+              <svg viewBox="0 0 24 24">
+                <path d="M14.5 11L16.5 13L18.5 11L16.5 9M9 3V5.5C9 7.5 7.5 9 5.5 9C7.5 9 9 10.5 9 12.5V15C9 16.79 10 18.21 11.38 19H5V21H19V19H16C16.82 18.78 17.5 18.23 17.9 17.5C16.83 17.65 15.94 17.12 15.5 16.37C14.8 16.72 14 17 13 17C10.79 17 9 15.21 9 13V11C9 8.79 7.21 7 5 7V5C7.21 5 9 3.21 9 1H11C11 2.5 11.95 3.75 13.2 4.29C13.48 3.82 13.86 3.42 14.31 3.13C13.13 2.91 12.23 1.97 12.05 .78C12.5 .28 13.15 0 13.84 0C15.03 0 16 .97 16 2.16C16 2.96 15.7 3.7 15.17 4.27L17.22 6.31L15.5 8L13.5 6L11.5 8L13.5 10L15.5 8L17.92 10.42C19.03 9.89 20 8.76 20 7C20 5.5 19.18 4.26 18 3.64V3C18 1.34 16.66 0 15 0H14.84C14.4 0 14 .19 13.61 .36L13.6 .37L13.59 .37C13.21 .19 12.81 0 12.37 0C11.17 0 10.18 .97 10.18 2.16C10.18 2.75 10.37 3.3 10.69 3.75C10.26 3.27 10 2.67 10 2C10 .9 10.9 0 12 0H9C9 1.33 8.33 2 7 2S5 1.33 5 0H1V2H3C3 3.67 3.67 4.33 5 4.33S7 3.67 7 2C7 3.1 6.1 4 5 4C3.35 4 2 2.65 2 1H0V5C0 6.66 1.34 8 3 8H5C7.21 8 9 6.21 9 4V3Z"/>
+              </svg>
+            </div>
+            <div class="accolade-title">Lua Master</div>
+            <div class="accolade-desc">Expert Scripter</div>
+          </div>
+        </div>
       </div>
     </div>
-    
   </div>
 
-  <script src="script.js"></script>
+  <script>
+    // Typing animation
+    const phrases = ["C++", "Python", "Batch", "Lua"];
+    const shuffled = [...phrases].sort(() => Math.random() - 0.5);
+    let index = 0;
+    let charIndex = 0;
+    const typingEl = document.getElementById("typing");
+
+    function type() {
+      if (charIndex <= shuffled[index].length) {
+        typingEl.textContent = shuffled[index].slice(0, charIndex++);
+        setTimeout(type, 100);
+      } else {
+        setTimeout(() => {
+          deleteText();
+        }, 2000);
+      }
+    }
+
+    function deleteText() {
+      if (charIndex > 0) {
+        typingEl.textContent = shuffled[index].slice(0, --charIndex);
+        setTimeout(deleteText, 50);
+      } else {
+        index = (index + 1) % shuffled.length;
+        setTimeout(type, 500);
+      }
+    }
+
+    // Category switching
+    function showCategory(category) {
+      // Update active tab
+      document.querySelectorAll('.tab-button').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.closest('.tab-button').classList.add('active');
+
+      // Show/hide sections
+      document.querySelectorAll('.accolades-section').forEach(section => {
+        section.classList.add('hidden');
+      });
+      
+      const targetSection = document.getElementById(category + 'Section');
+      targetSection.classList.remove('hidden');
+      
+      // Re-trigger animation
+      const container = targetSection.querySelector('.accolades-container');
+      container.style.animation = 'none';
+      setTimeout(() => {
+        container.style.animation = 'fadeInUp 0.6s ease forwards';
+      }, 10);
+    }
+
+    // Mouse tracking for cards
+    document.addEventListener('mousemove', (e) => {
+      const cards = document.querySelectorAll('.accolade-card');
+      cards.forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        card.style.setProperty('--mouse-x', x + '%');
+        card.style.setProperty('--mouse-y', y + '%');
+      });
+    });
+
+    // Create sparkles on click
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('.tab-button') || e.target.closest('.accolade-card')) {
+        createSparkle(e.clientX, e.clientY);
+      }
+    });
+
+    function createSparkle(x, y) {
+      for (let i = 0; i < 6; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.className = 'sparkle';
+        sparkle.style.left = x + 'px';
+        sparkle.style.top = y + 'px';
+        sparkle.style.animation = `sparkle 0.6s ease-out forwards`;
+        sparkle.style.animationDelay = (i * 0.05) + 's';
+        
+        const angle = (360 / 6) * i;
+        const distance = 30 + Math.random() * 20;
+        sparkle.style.transform = `translate(-50%, -50%) rotate(${angle}deg) translateY(-${distance}px)`;
+        
+        document.body.appendChild(sparkle);
+        setTimeout(() => sparkle.remove(), 600);
+      }
+    }
+
+    // Initialize
+    type();
+  </script>
 </body>
 </html>
