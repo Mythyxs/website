@@ -1015,7 +1015,7 @@
                         if (animeDataCache.scheduleData.length === 0) {
                              container.innerHTML = `<div class="empty-state">No upcoming or recently aired episodes found.</div>`;
                         } else {
-                            animeDataCache.scheduleData.forEach(item => {
+                            animeDataCache.scheduleData.forEach(item => { /* ... recreate and append scheduleDiv ... */ 
                                 const scheduleDiv = document.createElement('div');
                                 scheduleDiv.className = 'schedule-item';
                                 const { userEntry, apiData } = item;
