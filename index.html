@@ -913,76 +913,67 @@
     
     // --- UPDATED: Use cache for schedule rendering ---
     async function loadAndRenderSchedule(forceRefresh = false) {
-      const container = document.getElementById('scheduleItemsContainer');
-      const loadingIndicator = document.getElementById('scheduleLoading');
-      if (loadingIndicator) loadingIndicator.style.display = 'block';
-      container.innerHTML = '';
+        const container = document.getElementById('scheduleItemsContainer');
+        const loadingIndicator = document.getElementById('scheduleLoading');
+        if (loadingIndicator) loadingIndicator.style.display = 'block';
+        container.innerHTML = '';
 
-      try {
-        const response = await fetch("https://anilist-proxy.onrender.com/cached-schedule");
-        const json = await response.json();
-        const results = json.schedule;
-
-        if (loadingIndicator) loadingIndicator.style.display = 'none';
-
-        if (!results || results.length === 0) {
-          container.innerHTML = `<div class="empty-state">No upcoming or recently aired episodes found for your 'Planned to Watch' or 'Unfinished' anime.</div>`;
-          return;
+        if (animeDataCache.scheduleData.length === 0 || forceRefresh) {
+            await loadAndCacheScheduleData(forceRefresh);
         }
 
-        results.sort((a, b) => a.airingAt - b.airingAt);
-
-        results.forEach(anime => {
-          const airingDate = new Date(anime.airingAt * 1000);
-          const now = new Date();
-
-          let statusText = '';
-          let statusClass = 'status-past';
-
-          const diff = airingDate - now;
-          const diffDays = Math.ceil(diff / (1000 * 60 * 60 * 24));
-
-          if (diff > 0) {
-            if (diffDays === 0) {
-              statusText = 'Airs Today';
-              statusClass = 'status-today';
-            } else if (diffDays === 1) {
-              statusText = 'Airs Tomorrow';
-              statusClass = 'status-tomorrow';
-            } else {
-              statusText = `In ${diffDays} days`;
-              statusClass = 'status-soon';
-            }
-          } else {
-            statusText = 'Aired';
-            statusClass = 'status-aired';
-          }
-
-          const formattedTime = airingDate.toLocaleString(undefined, {
-            weekday: 'long', month: 'long', day: 'numeric',
-            hour: 'numeric', minute: '2-digit', timeZoneName: 'short'
-          });
-
-          const item = document.createElement('div');
-          item.className = 'schedule-item';
-          item.innerHTML = `
-            <img src="${anime.cover}" alt="${anime.title}" class="schedule-item-cover"
-              onerror="this.src='https://via.placeholder.com/60x85/1A1A1A/4A4A4A?text=N/A';">
-            <div class="schedule-item-details">
-              <div class="schedule-item-title">${anime.title}</div>
-              <div class="schedule-item-ep">EP ${anime.episode}${anime.episodesTotal ? `/${anime.episodesTotal}` : ''}</div>
-              <div class="schedule-item-time">${formattedTime}</div>
-              <div class="schedule-item-status ${statusClass}">${statusText}</div>
-            </div>
-          `;
-          container.appendChild(item);
-        });
-
-      } catch (err) {
-        console.error('Failed to load schedule:', err);
         if (loadingIndicator) loadingIndicator.style.display = 'none';
-        container.innerHTML = `<div class="empty-state">Failed to load schedule. Try again later.</div>`;
-      }
+        if (animeDataCache.scheduleData.length === 0) {
+            container.innerHTML = `<div class="empty-state">No upcoming or recently aired episodes found for your 'Planned to Watch' or 'Unfinished' anime.</div>`;
+            return;
+        }
+
+        animeDataCache.scheduleData.forEach(item => {
+            const scheduleDiv = document.createElement('div');
+            scheduleDiv.className = 'schedule-item';
+
+            const { userEntry, apiData } = item;
+            const ep = apiData.nextAiringEpisode;
+            const officialTitle = apiData.title?.english || apiData.title?.romaji || userEntry.title;
+            const coverUrl = apiData.coverImage?.medium || apiData.coverImage?.large || userEntry.coverImageUrl;
+            
+            const formattedTime = formatAiringTimeLocal(ep.airingAt);
+            const airingLocal = new Date(ep.airingAt * 1000);
+            const nowLocal = new Date();
+            
+            let statusText = "";
+            let statusClass = "status-past";
+
+            if (ep.recentlyAired) {
+                const diffMs = nowLocal.getTime() - airingLocal.getTime();
+                const diffMins = Math.floor(diffMs / (1000 * 60));
+                const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+                if (diffHours < 1) statusText = `Aired ${diffMins} min ago`;
+                else if (diffHours < 24) statusText = `Aired ${diffHours} hr ago`;
+                else statusText = "Aired Recently";
+                statusClass = "status-aired";
+            } else if (airingLocal > nowLocal) {
+                const days = calculateDaysUntil(ep.airingAt);
+                if (days === 0) { statusText = "Airs Today"; statusClass = "status-today"; }
+                else if (days === 1) { statusText = "Airs Tomorrow"; statusClass = "status-tomorrow"; }
+                else { statusText = `In ${days} days`; statusClass = "status-soon"; }
+            } else { // Fallback for past, non-recent
+                 statusText = "Aired"; statusClass = "status-past";
+            }
+            
+            const episodeProgressText = `EP ${ep.episode}${apiData.episodes ? `/${apiData.episodes}` : ''}`;
+
+            scheduleDiv.innerHTML = `
+                <img src="${coverUrl || 'placeholder.png'}" alt="${officialTitle}" class="schedule-item-cover" onerror="this.src='https://via.placeholder.com/60x85/1A1A1A/4A4A4A?text=N/A';">
+                <div class="schedule-item-details">
+                    <div class="schedule-item-title">${officialTitle}</div>
+                    <div class="schedule-item-ep">${episodeProgressText}</div>
+                    <div class="schedule-item-time">${formattedTime}</div>
+                    <div class="schedule-item-status ${statusClass}">${statusText}</div>
+                </div>
+            `;
+            container.appendChild(scheduleDiv);
+        });
     }
     // --- END UPDATED ---
 
