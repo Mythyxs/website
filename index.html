@@ -802,27 +802,26 @@
         }
       }`;
 
-      async function fetchAnilistApiData(title) {
-  console.log("Fetching:", title); // ADD THIS
+    async function fetchAnilistApiData(title) {
+      console.log("Fetching:", title); // ADD THIS
 
-  try {
-    const response = await fetch(ANILIST_GRAPHQL_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({ query: ANILIST_QUERY, variables: { search: title } })
-    });
+      try {
+        const response = await fetch(ANILIST_GRAPHQL_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ query: ANILIST_QUERY, variables: { search: title } })
+        });
 
-    const jsonResponse = await response.json();
-    console.log("AniList response for", title, jsonResponse); // ADD THIS
+        const jsonResponse = await response.json();
+        console.log("AniList response for", title, jsonResponse); // ADD THIS
 
-    return jsonResponse.data && jsonResponse.data.Media ? jsonResponse.data.Media : null;
-  } catch (error) {
-    console.error(`Failed to fetch from AniList for ${title}:`, error);
-    return null;
-  }
-}
+        return jsonResponse.data && jsonResponse.data.Media ? jsonResponse.data.Media : null;
+      } catch (error) {
+        console.error(`Failed to fetch from AniList for ${title}:`, error);
+        return null;
+      }
+    }
 
-    
     async function fetchAnimeDataWithCache(title, forceRefresh = false) {
         const now = new Date();
         if (!forceRefresh && animeDataCache.scheduleCache[title]) {
@@ -837,6 +836,64 @@
         }
         return data;
     }
+
+    // --- NEW: Extracted schedule data fetching logic ---
+    async function loadAndCacheScheduleData(forceRefresh = false) {
+        if (animeDataCache.scheduleRelevant.length === 0) return;
+
+        const results = [];
+        for (const entry of animeDataCache.scheduleRelevant) {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            const apiData = await fetchAnimeDataWithCache(entry.title, forceRefresh);
+            if (apiData && apiData.nextAiringEpisode) {
+                let nextEpData = { ...apiData.nextAiringEpisode };
+                const nextEpTime = new Date(nextEpData.airingAt * 1000);
+                const now = new Date();
+
+                const airedEpTime = new Date(nextEpTime.getTime() - (7 * 24 * 60 * 60 * 1000));
+                if (nextEpData.episode > 1 && airedEpTime < now && now < nextEpTime) {
+                    if (now.getTime() - nextEpTime.getTime() < (24 * 60 * 60 * 1000) && nextEpTime < now) {
+                        nextEpData.recentlyAired = true;
+                    } else {
+                        const airedEpNum = nextEpData.episode - 1;
+                        if (now.getTime() - airedEpTime.getTime() < (24 * 60 * 60 * 1000)) {
+                            nextEpData = {
+                                airingAt: airedEpTime.getTime() / 1000,
+                                episode: airedEpNum,
+                                recentlyAired: true
+                            };
+                        }
+                    }
+                }
+
+                const airingLocal = new Date(nextEpData.airingAt * 1000);
+                const isFuture = airingLocal > now;
+                const isWithin24hPast = now < new Date(airingLocal.getTime() + (24 * 60 * 60 * 1000));
+
+                if (isFuture || (nextEpData.recentlyAired && isWithin24hPast)) {
+                    results.push({
+                        userEntry: entry,
+                        apiData: { ...apiData, nextAiringEpisode: nextEpData }
+                    });
+                }
+            }
+        }
+
+        results.sort((a, b) => {
+            const aTime = a.apiData.nextAiringEpisode.airingAt;
+            const bTime = b.apiData.nextAiringEpisode.airingAt;
+            const aRecentlyAired = a.apiData.nextAiringEpisode.recentlyAired === true;
+            const bRecentlyAired = b.apiData.nextAiringEpisode.recentlyAired === true;
+            if (aRecentlyAired && !bRecentlyAired) return -1;
+            if (!aRecentlyAired && bRecentlyAired) return 1;
+            if (aRecentlyAired && bRecentlyAired) return bTime - aTime;
+            return aTime - bTime;
+        });
+
+        animeDataCache.scheduleData = results;
+        animeDataCache.scheduleLastFetched = new Date();
+    }
+    // --- END NEW ---
 
     function formatAiringTimeLocal(timestamp) {
         const localDate = new Date(timestamp * 1000);
@@ -854,80 +911,24 @@
         return Math.ceil((targetDay - today) / (1000 * 60 * 60 * 24));
     }
     
+    // --- UPDATED: Use cache for schedule rendering ---
     async function loadAndRenderSchedule(forceRefresh = false) {
         const container = document.getElementById('scheduleItemsContainer');
         const loadingIndicator = document.getElementById('scheduleLoading');
-        
         if (loadingIndicator) loadingIndicator.style.display = 'block';
-        container.innerHTML = ''; // Clear previous items
+        container.innerHTML = '';
 
-        const results = [];
-        for (const entry of animeDataCache.scheduleRelevant) {
-            // Add a small delay between API calls to be polite
-            await new Promise(resolve => setTimeout(resolve, 100));
-            const apiData = await fetchAnimeDataWithCache(entry.title, forceRefresh);
-            if (apiData && apiData.nextAiringEpisode) {
-                let nextEpData = { ...apiData.nextAiringEpisode };
-                const nextEpTime = new Date(nextEpData.airingAt * 1000);
-                const now = new Date();
-
-                // Recently aired logic (within last 7 days, before next episode)
-                const airedEpTime = new Date(nextEpTime.getTime() - (7 * 24 * 60 * 60 * 1000));
-                if (nextEpData.episode > 1 && airedEpTime < now && now < nextEpTime) {
-                     // If API already shows current ep as next, but it aired < 24h ago, mark as recentlyAired
-                    if (now.getTime() - nextEpTime.getTime() < (24 * 60 * 60 * 1000) && nextEpTime < now) {
-                         nextEpData.recentlyAired = true;
-                    } else { // Otherwise, an older episode just aired
-                        const airedEpNum = nextEpData.episode -1;
-                         // Check if this "previous" episode aired within the last 24 hours
-                        if (now.getTime() - airedEpTime.getTime() < (24 * 60 * 60 * 1000)) {
-                            nextEpData = {
-                                airingAt: airedEpTime.getTime() / 1000,
-                                episode: airedEpNum,
-                                recentlyAired: true
-                            };
-                        }
-                    }
-                }
-                
-                const airingLocal = new Date(nextEpData.airingAt * 1000);
-                const isFuture = airingLocal > now;
-                const isWithin24hPast = now < new Date(airingLocal.getTime() + (24 * 60 * 60 * 1000));
-
-                if (isFuture || (nextEpData.recentlyAired && isWithin24hPast)) {
-                     results.push({
-                        userEntry: entry,
-                        apiData: { ...apiData, nextAiringEpisode: nextEpData } // use potentially modified nextEpData
-                    });
-                }
-            }
+        if (animeDataCache.scheduleData.length === 0 || forceRefresh) {
+            await loadAndCacheScheduleData(forceRefresh);
         }
 
-        
-
-        results.sort((a, b) => {
-            const aTime = a.apiData.nextAiringEpisode.airingAt;
-            const bTime = b.apiData.nextAiringEpisode.airingAt;
-            const aRecentlyAired = a.apiData.nextAiringEpisode.recentlyAired === true;
-            const bRecentlyAired = b.apiData.nextAiringEpisode.recentlyAired === true;
-
-            if (aRecentlyAired && !bRecentlyAired) return -1; // a (aired) comes before b (upcoming)
-            if (!aRecentlyAired && bRecentlyAired) return 1;  // b (aired) comes before a (upcoming)
-            if (aRecentlyAired && bRecentlyAired) return bTime - aTime; // both aired, sort by most recent first
-            return aTime - bTime; // both upcoming, sort by soonest first
-        });
-        
-        animeDataCache.scheduleData = results;
-        animeDataCache.scheduleLastFetched = new Date();
-
         if (loadingIndicator) loadingIndicator.style.display = 'none';
-
-        if (results.length === 0) {
+        if (animeDataCache.scheduleData.length === 0) {
             container.innerHTML = `<div class="empty-state">No upcoming or recently aired episodes found for your 'Planned to Watch' or 'Unfinished' anime.</div>`;
             return;
         }
 
-        results.forEach(item => {
+        animeDataCache.scheduleData.forEach(item => {
             const scheduleDiv = document.createElement('div');
             scheduleDiv.className = 'schedule-item';
 
@@ -974,7 +975,7 @@
             container.appendChild(scheduleDiv);
         });
     }
-
+    // --- END UPDATED ---
 
     function showCategory(catId, buttonElement) {
         if (currentCategory === catId) return;
@@ -1086,6 +1087,9 @@
 
       // Initial data load for anime list (even if tab is not active, to populate filters etc.)
       loadAndPrepareAnimeData();
+
+      // Trigger schedule data fetch in background
+      loadAndCacheScheduleData();
 
       // Setup event listeners for anime list controls
       document.getElementById('categoryFilter').addEventListener('change', renderAnimeList);
