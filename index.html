@@ -802,24 +802,26 @@
         }
       }`;
 
-    async function fetchAnilistApiData(title) {
-        try {
-            const response = await fetch(ANILIST_GRAPHQL_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                body: JSON.stringify({ query: ANILIST_QUERY, variables: { search: title } })
-            });
-            if (!response.ok) {
-                console.error(`AniList API error for ${title}: ${response.status}`);
-                return null;
-            }
-            const jsonResponse = await response.json();
-            return jsonResponse.data && jsonResponse.data.Media ? jsonResponse.data.Media : null;
-        } catch (error) {
-            console.error(`Failed to fetch from AniList for ${title}:`, error);
-            return null;
-        }
-    }
+      async function fetchAnilistApiData(title) {
+  console.log("Fetching:", title); // ADD THIS
+
+  try {
+    const response = await fetch(ANILIST_GRAPHQL_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ query: ANILIST_QUERY, variables: { search: title } })
+    });
+
+    const jsonResponse = await response.json();
+    console.log("AniList response for", title, jsonResponse); // ADD THIS
+
+    return jsonResponse.data && jsonResponse.data.Media ? jsonResponse.data.Media : null;
+  } catch (error) {
+    console.error(`Failed to fetch from AniList for ${title}:`, error);
+    return null;
+  }
+}
+
     
     async function fetchAnimeDataWithCache(title, forceRefresh = false) {
         const now = new Date();
