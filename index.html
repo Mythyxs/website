@@ -839,59 +839,17 @@
 
     // --- NEW: Extracted schedule data fetching logic ---
     async function loadAndCacheScheduleData(forceRefresh = false) {
-        if (animeDataCache.scheduleRelevant.length === 0) return;
-
-        const results = [];
-        for (const entry of animeDataCache.scheduleRelevant) {
-            await new Promise(resolve => setTimeout(resolve, 200));
-            const apiData = await fetchAnimeDataWithCache(entry.title, forceRefresh);
-            if (apiData && apiData.nextAiringEpisode) {
-                let nextEpData = { ...apiData.nextAiringEpisode };
-                const nextEpTime = new Date(nextEpData.airingAt * 1000);
-                const now = new Date();
-
-                const airedEpTime = new Date(nextEpTime.getTime() - (7 * 24 * 60 * 60 * 1000));
-                if (nextEpData.episode > 1 && airedEpTime < now && now < nextEpTime) {
-                    if (now.getTime() - nextEpTime.getTime() < (24 * 60 * 60 * 1000) && nextEpTime < now) {
-                        nextEpData.recentlyAired = true;
-                    } else {
-                        const airedEpNum = nextEpData.episode - 1;
-                        if (now.getTime() - airedEpTime.getTime() < (24 * 60 * 60 * 1000)) {
-                            nextEpData = {
-                                airingAt: airedEpTime.getTime() / 1000,
-                                episode: airedEpNum,
-                                recentlyAired: true
-                            };
-                        }
-                    }
-                }
-
-                const airingLocal = new Date(nextEpData.airingAt * 1000);
-                const isFuture = airingLocal > now;
-                const isWithin24hPast = now < new Date(airingLocal.getTime() + (24 * 60 * 60 * 1000));
-
-                if (isFuture || (nextEpData.recentlyAired && isWithin24hPast)) {
-                    results.push({
-                        userEntry: entry,
-                        apiData: { ...apiData, nextAiringEpisode: nextEpData }
-                    });
-                }
-            }
+        try {
+            const response = await fetch("https://anilist-proxy.onrender.com/cached-schedule");
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const data = await response.json();
+            console.log("Schedule:", data);
+            animeDataCache.scheduleData = Array.isArray(data) ? data : [];
+            animeDataCache.scheduleLastFetched = new Date();
+        } catch (error) {
+            console.error("Failed to load schedule:", error);
+            animeDataCache.scheduleData = [];
         }
-
-        results.sort((a, b) => {
-            const aTime = a.apiData.nextAiringEpisode.airingAt;
-            const bTime = b.apiData.nextAiringEpisode.airingAt;
-            const aRecentlyAired = a.apiData.nextAiringEpisode.recentlyAired === true;
-            const bRecentlyAired = b.apiData.nextAiringEpisode.recentlyAired === true;
-            if (aRecentlyAired && !bRecentlyAired) return -1;
-            if (!aRecentlyAired && bRecentlyAired) return 1;
-            if (aRecentlyAired && bRecentlyAired) return bTime - aTime;
-            return aTime - bTime;
-        });
-
-        animeDataCache.scheduleData = results;
-        animeDataCache.scheduleLastFetched = new Date();
     }
     // --- END NEW ---
 
