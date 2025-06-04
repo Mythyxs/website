@@ -880,25 +880,6 @@
             await loadAndCacheScheduleData(forceRefresh);
         }
 
-        // --- SORTING LOGIC INSERTED HERE ---
-        animeDataCache.scheduleData.sort((a, b) => {
-          const now = Date.now();
-          const aTime = a.nextEpisode && a.nextEpisode.airingAt ? a.nextEpisode.airingAt * 1000 : 0;
-          const bTime = b.nextEpisode && b.nextEpisode.airingAt ? b.nextEpisode.airingAt * 1000 : 0;
-
-          const aDiff = aTime - now;
-          const bDiff = bTime - now;
-
-          const aIsPast = aDiff < 0;
-          const bIsPast = bDiff < 0;
-
-          if (aIsPast && bIsPast) return aTime - bTime; // both aired → longest ago first
-          if (aIsPast && !bIsPast) return -1;           // aired above upcoming
-          if (!aIsPast && bIsPast) return 1;            // upcoming below aired
-          return aTime - bTime;                         // both upcoming → soonest first
-        });
-        // --- END SORTING LOGIC ---
-
         if (loadingIndicator) loadingIndicator.style.display = 'none';
         if (animeDataCache.scheduleData.length === 0) {
             container.innerHTML = `<div class="empty-state">No upcoming or recently aired episodes found for your 'Planned to Watch' or 'Unfinished' anime.</div>`;
