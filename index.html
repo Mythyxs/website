@@ -843,7 +843,7 @@
 
         const results = [];
         for (const entry of animeDataCache.scheduleRelevant) {
-            await new Promise(resolve => setTimeout(resolve, 100));
+            await new Promise(resolve => setTimeout(resolve, 200));
             const apiData = await fetchAnimeDataWithCache(entry.title, forceRefresh);
             if (apiData && apiData.nextAiringEpisode) {
                 let nextEpData = { ...apiData.nextAiringEpisode };
@@ -1085,11 +1085,10 @@
         icon.style.animationDelay = `${delay}s`;
       });
 
-      // Initial data load for anime list (even if tab is not active, to populate filters etc.)
-      loadAndPrepareAnimeData();
-
-      // Trigger schedule data fetch in background
-      loadAndCacheScheduleData();
+      // Initial data load for anime list, then schedule
+      loadAndPrepareAnimeData().then(() => {
+        loadAndCacheScheduleData();
+      });
 
       // Setup event listeners for anime list controls
       document.getElementById('categoryFilter').addEventListener('change', renderAnimeList);
