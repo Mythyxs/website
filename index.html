@@ -903,14 +903,7 @@
             }
         }
 
-        for (const result of results) {
-  const { apiData } = result;
-  const card = createScheduleCard(apiData); // returns HTML string
-  container.innerHTML += card;
-}
-
-if (loadingIndicator) loadingIndicator.style.display = 'none';
-
+        
 
         results.sort((a, b) => {
             const aTime = a.apiData.nextAiringEpisode.airingAt;
@@ -1022,7 +1015,7 @@ if (loadingIndicator) loadingIndicator.style.display = 'none';
                         if (animeDataCache.scheduleData.length === 0) {
                              container.innerHTML = `<div class="empty-state">No upcoming or recently aired episodes found.</div>`;
                         } else {
-                            animeDataCache.scheduleData.forEach(item => { /* ... recreate and append scheduleDiv ... */ 
+                            animeDataCache.scheduleData.forEach(item => {
                                 const scheduleDiv = document.createElement('div');
                                 scheduleDiv.className = 'schedule-item';
                                 const { userEntry, apiData } = item;
