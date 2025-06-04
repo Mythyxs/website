@@ -903,6 +903,15 @@
             }
         }
 
+        for (const result of results) {
+  const { apiData } = result;
+  const card = createScheduleCard(apiData); // returns HTML string
+  container.innerHTML += card;
+}
+
+if (loadingIndicator) loadingIndicator.style.display = 'none';
+
+
         results.sort((a, b) => {
             const aTime = a.apiData.nextAiringEpisode.airingAt;
             const bTime = b.apiData.nextAiringEpisode.airingAt;
