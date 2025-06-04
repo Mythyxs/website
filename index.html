@@ -992,67 +992,7 @@
                     renderAnimeList(); // Just re-render if data is already there
                 }
             } else if (catId === 'schedule') {
-                 if (animeDataCache.scheduleRelevant.length > 0 && animeDataCache.scheduleData.length === 0) { // Load only if relevant items exist and not yet loaded
-                    loadAndRenderSchedule();
-                } else if (animeDataCache.scheduleData.length > 0) {
-                    // Optionally re-render or check cache validity
-                    const now = new Date();
-                    if (!animeDataCache.scheduleLastFetched || (now.getTime() - animeDataCache.scheduleLastFetched.getTime() > 5 * 60 * 1000)) { // 5 min old
-                        loadAndRenderSchedule(); // Refresh if older than 5 mins
-                    } else {
-                         // Re-render from cache if fresh enough (already handled by loadAndRenderSchedule if it does nothing)
-                         // but to be explicit if container is cleared:
-                        const container = document.getElementById('scheduleItemsContainer');
-                        const loadingIndicator = document.getElementById('scheduleLoading');
-                        if(loadingIndicator) loadingIndicator.style.display = 'none';
-                        container.innerHTML = '';
-                        if (animeDataCache.scheduleData.length === 0) {
-                             container.innerHTML = `<div class="empty-state">No upcoming or recently aired episodes found.</div>`;
-                        } else {
-                            animeDataCache.scheduleData.forEach(anime => { /* ... recreate and append scheduleDiv ... */ 
-                                const scheduleDiv = document.createElement('div');
-                                scheduleDiv.className = 'schedule-item';
-                                const nextEp = anime.nextEpisode;
-                                const officialTitle = anime.title || anime.romajiTitle || anime.englishTitle || 'Unknown Title';
-                                const coverUrl = anime.coverImage || 'placeholder.png';
-                                const totalEpisodes = anime.totalEpisodes;
-                                const formattedTime = nextEp && nextEp.airingAt ? formatAiringTimeLocal(nextEp.airingAt) : 'N/A';
-                                const airingLocal = nextEp && nextEp.airingAt ? new Date(nextEp.airingAt * 1000) : null;
-                                const nowLocal = new Date();
-                                let statusText = "";
-                                let statusClass = "status-past";
-
-                                if (nextEp && nextEp.recentlyAired) {
-                                    const diffMs = nowLocal.getTime() - airingLocal.getTime();
-                                    const diffMins = Math.floor(diffMs / (1000 * 60));
-                                    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-                                    if (diffHours < 1) statusText = `Aired ${diffMins} min ago`;
-                                    else if (diffHours < 24) statusText = `Aired ${diffHours} hr ago`;
-                                    else statusText = "Aired Recently";
-                                    statusClass = "status-aired";
-                                } else if (airingLocal && airingLocal > nowLocal) {
-                                    const days = calculateDaysUntil(nextEp.airingAt);
-                                    if (days === 0) { statusText = "Airs Today"; statusClass = "status-today"; }
-                                    else if (days === 1) { statusText = "Airs Tomorrow"; statusClass = "status-tomorrow"; }
-                                    else { statusText = `In ${days} days`; statusClass = "status-soon"; }
-                                } else {
-                                     statusText = "Aired"; statusClass = "status-past";
-                                }
-                                const episodeProgressText = nextEp ? `EP ${nextEp.episode}${totalEpisodes ? `/${totalEpisodes}` : ''}` : '';
-                                scheduleDiv.innerHTML = `
-                                    <img src="${coverUrl}" alt="${officialTitle}" class="schedule-item-cover" onerror="this.src='https://via.placeholder.com/60x85/1A1A1A/4A4A4A?text=N/A';">
-                                    <div class="schedule-item-details">
-                                        <div class="schedule-item-title">${officialTitle}</div>
-                                        <div class="schedule-item-ep">${episodeProgressText}</div>
-                                        <div class="schedule-item-time">${formattedTime}</div>
-                                        <div class="schedule-item-status ${statusClass}">${statusText}</div>
-                                    </div>
-                                `;
-                                container.appendChild(scheduleDiv);
-                            });
-                        }
-                    }
-                }
+                loadAndRenderSchedule(); // Always use the main function for rendering schedule
             } else if (catId === 'home') {
                  // Existing home logic for social cards and visitor counter
                 targetSection.querySelectorAll('.social-card').forEach((c,i)=>{c.style.animation='none';setTimeout(()=>c.style.animation=`fadeInUp .6s ease ${i*.1}s forwards`,10);});
