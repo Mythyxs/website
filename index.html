@@ -1527,13 +1527,10 @@
 
         // Animate heroHomeWrapper in sync with tab content
         const heroHome = document.getElementById('heroHomeWrapper');
+        const isHome = catId === 'home';
         if (heroHome) {
-          if (catId === 'home') {
+          if (isHome) {
             heroHome.classList.remove('hidden');
-            requestAnimationFrame(() => heroHome.classList.add('show'));
-          } else {
-            heroHome.classList.remove('show');
-            setTimeout(() => heroHome.classList.add('hidden'), 600);
           }
         }
 
@@ -1543,43 +1540,35 @@
 
         if (!wrapper || !nextVisible) return;
 
-        const startHeight = currentVisible ? currentVisible.offsetHeight : 0;
-        nextVisible.classList.remove('hidden');
-        nextVisible.classList.remove('show');
-        nextVisible.style.position = '';
-        nextVisible.style.visibility = '';
-        nextVisible.style.pointerEvents = '';
-        nextVisible.style.zIndex = '';
-        // Prepare for fade in
-        const endHeight = nextVisible.offsetHeight;
-
-        // Animate height
-        wrapper.style.height = startHeight + 'px';
-
-        // Fade out current, fade in next
+        // Step 1: Fade out current
         if (currentVisible) {
           currentVisible.classList.remove('show');
-          setTimeout(() => {
-            currentVisible.classList.add('hidden');
-            nextVisible.classList.remove('hidden');
-            requestAnimationFrame(() => nextVisible.classList.add('show'));
-            wrapper.style.height = endHeight + 'px';
-            setTimeout(() => {
-              document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
-              if (buttonElement) buttonElement.classList.add('active');
-              wrapper.style.height = '';
-            }, 600);
-          }, 600);
-        } else {
+          if (prevCategory === 'home' && heroHome) heroHome.classList.remove('show');
+        }
+        if (!isHome && heroHome) heroHome.classList.remove('show');
+
+        setTimeout(() => {
+          // Step 2: Animate height to new tab
+          if (currentVisible) currentVisible.classList.add('hidden');
           nextVisible.classList.remove('hidden');
-          requestAnimationFrame(() => nextVisible.classList.add('show'));
+          // For hero section
+          if (isHome && heroHome) {
+            heroHome.classList.remove('hidden');
+          }
+          // Measure new height
+          const endHeight = nextVisible.offsetHeight;
           wrapper.style.height = endHeight + 'px';
           setTimeout(() => {
-            document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
-            if (buttonElement) buttonElement.classList.add('active');
-            wrapper.style.height = '';
-          }, 600);
-        }
+            // Step 3: Fade in new tab
+            nextVisible.classList.add('show');
+            if (isHome && heroHome) heroHome.classList.add('show');
+            setTimeout(() => {
+              wrapper.style.height = '';
+              document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+              if (buttonElement) buttonElement.classList.add('active');
+            }, 600);
+          }, 40); // Small delay to allow height to animate
+        }, 600);
 
         // Trigger tab-specific logic
         if (catId === 'animeList') {
@@ -1587,15 +1576,17 @@
         } else if (catId === 'schedule') {
           loadAndRenderSchedule();
         } else if (catId === 'home') {
-          nextVisible.querySelectorAll('.social-card').forEach((c, i) => {
-            c.style.animation = 'none';
-            setTimeout(() => c.style.animation = `fadeInUp .6s ease ${i * .1}s forwards`, 10);
-          });
-          const counter = nextVisible.querySelector('.visitor-counter');
-          if (counter) {
-            counter.style.animation = 'none';
-            setTimeout(() => counter.style.animation = 'fadeInUp .6s ease .3s forwards', 10);
-          }
+          setTimeout(() => {
+            nextVisible.querySelectorAll('.social-card').forEach((c, i) => {
+              c.style.animation = 'none';
+              setTimeout(() => c.style.animation = `fadeInUp .6s ease ${i * .1}s forwards`, 10);
+            });
+            const counter = nextVisible.querySelector('.visitor-counter');
+            if (counter) {
+              counter.style.animation = 'none';
+              setTimeout(() => counter.style.animation = 'fadeInUp .6s ease .3s forwards', 10);
+            }
+          }, 650);
         }
     }
 
