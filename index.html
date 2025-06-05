@@ -228,21 +228,24 @@
         word-break: break-word;
     }
     .anime-card-category {
-        font-size: 0.75rem;
-        padding: 4px 10px;
-        border-radius: 12px;
-        color: black;
-        align-self: flex-start;
-        margin-bottom: 8px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        white-space: nowrap;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        border: 1px solid rgba(255,255,255,0.1);
-        width: fit-content;
-        min-width: max-content;
-    }
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 12px;
+    color: black;
+    align-self: flex-start;
+    margin-bottom: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap; /* Ensures it stays on one line */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border: 1px solid rgba(255,255,255,0.1);
+    width: auto; /* Let the content define the width */
+    max-width: 100%; /* Optional: Prevent overflow from parent */
+    overflow: visible; /* Ensure nothing gets cut off */
+    text-overflow: unset; /* Prevent clipping */
+}
+
     .anime-card-rating-note-wrapper {
         margin-top: auto; /* Pushes this to the bottom of the flex column */
     }
