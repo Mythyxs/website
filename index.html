@@ -95,7 +95,7 @@
     /* ─── Accolades grid / Anime Grid ─── */
     .accolades-container, .anime-grid-container {display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;opacity:0;transform:translateY(20px);animation:fadeInUp .6s ease forwards;}
 
-    .accolade-card, .anime-card {background:linear-gradient(135deg,rgba(103,84,133,.1) 0%,rgba(201,179,195,.05) 100%);border:1px solid rgba(103,84,133,.3);border-radius:15px;padding:20px; text-align:left; transition:all .3s ease;position:relative;overflow:hidden; display: flex; flex-direction: column;}
+    .accolade-card, .anime-card {background:linear-gradient(135deg,rgba(103,84,133,.1) 0%,rgba(201,179,195,.05) 100%);border:1px solid rgba(103,84,133,.3);border-radius:15px;padding:20px; text-align:left; transition:all .3s ease;position:relative;overflow:hidden; display: flex; flex-direction: column;overflow:visible;}
     .accolade-card::before, .anime-card::before {content:'';position:absolute;inset:0;background:radial-gradient(circle at var(--mouse-x,50%) var(--mouse-y,50%),rgba(103,84,133,.25) 0%,transparent 50%);opacity:0;transition:opacity .3s;pointer-events:none;}
     .accolade-card:hover::before, .anime-card:hover::before {opacity:1;}
     .accolade-card:hover, .anime-card:hover {transform:translateY(-5px) scale(1.02);border-color:var(--primary);box-shadow:0 15px 30px rgba(103,84,133,.25);}
