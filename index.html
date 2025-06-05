@@ -296,59 +296,180 @@
         flex-direction: column;
         gap: 15px;
     }
+    /* --- NEW SCHEDULE CARD DESIGN --- */
     .schedule-item {
-        background: linear-gradient(135deg,rgba(103,84,133,.1) 0%,rgba(201,179,195,.05) 100%);
-        border: 1px solid rgba(103,84,133,.3);
-        border-radius: 12px;
-        padding: 15px;
-        display: flex;
-        gap: 15px;
-        align-items: center;
-        transition: all .3s ease;
+      background: linear-gradient(135deg, rgba(103,84,133,.08) 0%, rgba(201,179,195,.04) 100%);
+      border: 1px solid rgba(103, 84, 133, 0.2);
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .schedule-item::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+        circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        rgba(103, 84, 133, 0.15) 0%,
+        transparent 60%
+      );
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    .schedule-item:hover::before {
+      opacity: 1;
     }
     .schedule-item:hover {
-        transform: translateY(-3px);
-        border-color: var(--primary);
-        box-shadow: 0 8px 20px rgba(103,84,133,.2);
+      transform: translateY(-4px);
+      border-color: var(--primary);
+      box-shadow: 
+        0 12px 24px rgba(103, 84, 133, 0.15),
+        0 4px 8px rgba(103, 84, 133, 0.1);
+      background: linear-gradient(135deg, rgba(103,84,133,.12) 0%, rgba(201,179,195,.06) 100%);
     }
     .schedule-item-cover {
-        width: 60px;
-        height: 85px;
-        object-fit: cover;
-        border-radius: 6px;
-        flex-shrink: 0;
-        background-color: rgba(255,255,255,0.05); /* Placeholder bg */
+      width: 70px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 8px;
+      flex-shrink: 0;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s;
     }
-    .schedule-item-details { flex-grow: 1; }
+    .schedule-item:hover .schedule-item-cover {
+      transform: scale(1.05);
+    }
+    .schedule-item-details {
+      flex-grow: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
     .schedule-item-title {
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: #fff;
-        margin-bottom: 5px;
-    }
-    .schedule-item-ep {
-        font-size: 0.9rem;
-        color: var(--accent-bright);
-        margin-bottom: 3px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 6px;
+      line-height: 1.3;
     }
     .schedule-item-time {
-        font-size: 0.85rem;
-        color: var(--accent);
-        margin-bottom: 5px;
+      font-size: 0.8rem;
+      color: var(--accent);
+      opacity: 0.8;
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
+    .schedule-item-time::before {
+      content: "🕐";
+      font-size: 0.9rem;
+      opacity: 0.6;
+    }
+    /* --- STATUS BADGES --- */
     .schedule-item-status {
-        font-size: 0.85rem;
-        font-weight: bold;
-        padding: 3px 8px;
-        border-radius: 5px;
-        display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border: 1.5px solid;
+      background: transparent;
+      letter-spacing: 0.3px;
+      transition: all 0.2s;
     }
-    /* Status colors will be applied via JS based on logic */
-    .status-today { background-color: var(--cat-platinum); color: black; }
-    .status-tomorrow { background-color: var(--cat-average); color: black; }
-    .status-soon { background-color: var(--cat-overaverage); color: black; }
-    .status-aired { background-color: #8BC34A; color: white; } /* Light Green */
-    .status-past { background-color: #757575; color: white; } /* Grey */
+    .status-aired {
+      border-color: #4CAF50;
+      color: #4CAF50;
+      background: rgba(76, 175, 80, 0.08);
+    }
+    .status-today {
+      border-color: var(--cat-platinum);
+      color: var(--cat-platinum);
+      background: rgba(0, 229, 255, 0.08);
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+    .status-tomorrow {
+      border-color: var(--cat-average);
+      color: var(--cat-average);
+      background: rgba(255, 235, 59, 0.08);
+    }
+    .status-soon {
+      border-color: var(--cat-overaverage);
+      color: var(--cat-overaverage);
+      background: rgba(255, 165, 0, 0.08);
+    }
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(0, 229, 255, 0); }
+      50% { box-shadow: 0 0 8px 2px rgba(0, 229, 255, 0.3); }
+    }
+    /* --- EPISODE CHIP --- */
+    .schedule-item-ep {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      background: rgba(103, 84, 133, 0.15);
+      border: 1.5px solid rgba(103, 84, 133, 0.3);
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--accent-bright);
+      margin-bottom: 6px;
+    }
+    .schedule-item-ep::before {
+      content: "\25B6";
+      font-size: 0.6rem;
+      color: var(--primary);
+    }
+    /* --- AIRING TODAY ANIMATION --- */
+    .schedule-item.airing-today {
+      background: linear-gradient(135deg, rgba(0, 229, 255, 0.05) 0%, rgba(103,84,133,.08) 100%);
+      border-color: rgba(0, 229, 255, 0.3);
+    }
+    .schedule-item.airing-today::after {
+      content: '';
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      width: 12px;
+      height: 12px;
+      background: var(--cat-platinum);
+      border-radius: 50%;
+      animation: blink-dot 2s ease-in-out infinite;
+    }
+    @keyframes blink-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.3; transform: scale(0.8); }
+    }
+    /* --- MOBILE RESPONSIVENESS --- */
+    @media (max-width: 768px) {
+      .schedule-item {
+        padding: 14px;
+        gap: 12px;
+      }
+      .schedule-item-cover {
+        width: 60px;
+        height: 85px;
+      }
+      .schedule-item-title {
+        font-size: 1rem;
+      }
+      .schedule-item-status,
+      .schedule-item-ep {
+        font-size: 0.7rem;
+        padding: 2px 8px;
+      }
+    }
 
     .loading-indicator, .empty-state {
       text-align: center;
@@ -1122,8 +1243,7 @@
 
         animeDataCache.scheduleData.forEach(anime => {
             const scheduleDiv = document.createElement('div');
-            scheduleDiv.className = 'schedule-item';
-
+            // --- NEW: Add 'airing-today' class if statusClass is status-today ---
             const nextEp = anime.nextEpisode;
             const officialTitle = anime.title || anime.romajiTitle || anime.englishTitle || 'Unknown Title';
             const coverUrl = anime.coverImage || 'placeholder.png';
@@ -1171,11 +1291,13 @@
 
             const episodeProgressText = nextEp ? `EP ${nextEp.episode}${totalEpisodes ? `/${totalEpisodes}` : ''}` : '';
 
+            // --- NEW: Use new HTML structure and classes ---
+            scheduleDiv.className = `schedule-item${statusClass === 'status-today' ? ' airing-today' : ''}`;
             scheduleDiv.innerHTML = `
-                <img src="${coverUrl}" alt="${officialTitle}" class="schedule-item-cover" onerror="this.src='https://via.placeholder.com/60x85/1A1A1A/4A4A4A?text=N/A';">
+                <img src="${coverUrl}" alt="${officialTitle}" class="schedule-item-cover" onerror="this.src='https://via.placeholder.com/70x100/1A1A1A/4A4A4A?text=N/A';">
                 <div class="schedule-item-details">
                     <div class="schedule-item-title">${officialTitle}</div>
-                    <div class="schedule-item-ep">${episodeProgressText}</div>
+                    ${episodeProgressText ? `<div class="schedule-item-ep">${episodeProgressText}</div>` : ''}
                     <div class="schedule-item-time">${formattedTime}</div>
                     <div class="schedule-item-status ${statusClass}">${statusText}</div>
                 </div>
