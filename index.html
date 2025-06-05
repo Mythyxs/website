@@ -564,106 +564,422 @@
       }
     }
 
-    /* ─── Category/Status Chips (Anime & Schedule) - Shared Styles ─── */
-    .anime-card-category, .schedule-item-status { /* Shared base style */
-      display: inline-flex;
-      align-items: center;
-      font-size: 0.82rem; /* Base size */
-      font-weight: 600;
-      padding: 2px 10px 2px 8px;
-      border-radius: 999px;
-      border: 1.5px solid var(--primary); /* Default border */
-      background: rgba(103,84,133,0.10); /* Default background */
-      color: #fff; /* Default text color */
-      white-space: nowrap; /* For anime-card-category, this is overridden by more specific rule if needed */
-      overflow: hidden;    /* For anime-card-category, this is overridden by more specific rule if needed */
-      text-overflow: ellipsis;
-      min-width: 0;
-      max-width: 100%; /* For anime-card-category, this is overridden by more specific rule if needed */
-      box-shadow: none;
-      letter-spacing: 0.5px;
-      margin-bottom: 6px;
-      margin-top: 2px;
-      gap: 3px;
-      transition: background 0.2s, color 0.2s, border 0.2s;
-    }
-    /* Category color overrides - only border/background color changes, not style */
-    .anime-card-category.cat-platinum-masterpiece { background: rgba(0,229,255,0.10); border-color: var(--cat-platinum); }
-    .anime-card-category.cat-overaveragely-enjoyable { background: rgba(255,165,0,0.10); border-color: var(--cat-overaverage); }
-    .anime-card-category.cat-average-enjoyability { background: rgba(255,235,59,0.10); border-color: var(--cat-average); }
-    .anime-card-category.cat-unfinished-disinterested { background: rgba(255,0,0,0.5); border-color: var(--cat-unfinished); }
-    .anime-card-category.cat-planned-to-watch { background: rgba(234,128,252,0.10); border-color: var(--cat-planned); }
+    /* ═══════════════════════════════════════════════════════════════════════════════
+   ENHANCED ANIME CARD DESIGN SYSTEM
+   Premium quality with refined shadows, typography, and micro-interactions
+   ═══════════════════════════════════════════════════════════════════════════════ */
 
-    /* Schedule status color overrides - more specific selectors */
-    .schedule-item-status.status-today { background: rgba(0,229,255,0.13); border-color: var(--cat-platinum); color: #fff; font-size: 0.75rem; /* Resetting from shared if different */ }
-    .schedule-item-status.status-tomorrow { background: rgba(255,235,59,0.13); border-color: var(--cat-average); color: #fff; font-size: 0.75rem; }
-    .schedule-item-status.status-soon { background: rgba(255,165,0,0.13); border-color: var(--cat-overaverage); color: #fff; font-size: 0.75rem; }
-    .schedule-item-status.status-aired { background: rgba(139,195,74,0.13); border-color: #8BC34A; color: #fff; font-size: 0.75rem; }
-    .schedule-item-status.status-past { background: rgba(117,117,117,0.13); border-color: #757575; color: #fff; font-size: 0.75rem; }
+/* ─── Enhanced Category/Status Chips ─── */
+.anime-card-category, 
+.schedule-item-status {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 4px 14px 4px 12px;
+  border-radius: 999px;
+  border: 1.5px solid;
+  background: rgba(103, 84, 133, 0.08);
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  max-width: 100%;
+  letter-spacing: 0.4px;
+  margin-bottom: 8px;
+  margin-top: 2px;
+  gap: 4px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  position: relative;
+  isolation: isolate;
+  box-shadow: 
+    0 1px 3px rgba(0, 0, 0, 0.12),
+    0 1px 2px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
 
-    /* ─── Anime Card Compact Layout ─── */
-    .anime-card {
-      padding: 14px 16px;
-      min-height: unset;
-      border-radius: 12px;
-      position: relative;
-      /* ADDED for filter/sort animations */
-      animation: cardEntry 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-      opacity: 0;
-    }
-    /* .anime-card-content defined above with common styles */
-    /* .anime-card-cover defined above with common styles */
-    /* .anime-card-details defined above with common styles */
-    /* .anime-card-title defined above with common styles */
-    /* .anime-card-rating defined above with common styles */
-    /* .anime-card-note defined above with common styles */
-    /* .anime-card-episodes defined above with common styles */
+.anime-card-category::before,
+.schedule-item-status::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(255, 255, 255, 0) 60%
+  );
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
 
-    .anime-card-score-topright {
-      position:absolute; /* From quick card-layout fixes */
-      top:14px;          /* From quick card-layout fixes - sit under the card border */
-      right:16px;        /* From quick card-layout fixes */
-      transform:none;    /* From quick card-layout fixes - kill the 50%-centre transform */
-      z-index: 2;
-    }
+.anime-card-category:hover::before,
+.schedule-item-status:hover::before {
+  opacity: 1;
+}
 
-    /* ─── "episodes" chip ─── */
-    .episodes-chip{
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 12px;
-      background: rgba(44,130,127,.25);          /* teal-ish fill */
-      border: 1px solid rgba(44,130,127,.6);
-      border-radius: 8px;
-      font-size: .8rem;
-      font-weight: 600;
-      white-space: nowrap;
-      color: var(--accent-bright);
-      flex-shrink:0; /* From quick card-layout fixes - stop the new episodes-chip from shrinking */
-    }
-    .episodes-chip svg{
-      width: 14px;
-      height: 14px;
-      fill: currentColor;
-    }
+/* Enhanced Category Colors with Gradients */
+.anime-card-category.cat-platinum-masterpiece {
+  background: linear-gradient(135deg, rgba(0, 229, 255, 0.15) 0%, rgba(0, 229, 255, 0.08) 100%);
+  border-color: var(--cat-platinum);
+  box-shadow: 
+    0 2px 4px rgba(0, 229, 255, 0.2),
+    0 1px 2px rgba(0, 229, 255, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
 
-    /* ADDED Keyframes and Stagger for Anime Cards */
-    @keyframes cardEntry {
-      from {
-        opacity: 0;
-        transform: translateY(20px) scale(0.95);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-    }
+.anime-card-category.cat-overaveragely-enjoyable {
+  background: linear-gradient(135deg, rgba(255, 165, 0, 0.15) 0%, rgba(255, 165, 0, 0.08) 100%);
+  border-color: var(--cat-overaverage);
+  box-shadow: 
+    0 2px 4px rgba(255, 165, 0, 0.2),
+    0 1px 2px rgba(255, 165, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
 
-    /* Stagger animation */
-    .anime-card:nth-child(n) { /* Applies to all anime-card elements */
-      animation-delay: calc(0.05s * var(--card-index, 1));
-    }
+.anime-card-category.cat-average-enjoyability {
+  background: linear-gradient(135deg, rgba(255, 235, 59, 0.15) 0%, rgba(255, 235, 59, 0.08) 100%);
+  border-color: var(--cat-average);
+  box-shadow: 
+    0 2px 4px rgba(255, 235, 59, 0.2),
+    0 1px 2px rgba(255, 235, 59, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.anime-card-category.cat-unfinished-disinterested {
+  background: linear-gradient(135deg, rgba(255, 82, 82, 0.15) 0%, rgba(255, 82, 82, 0.08) 100%);
+  border-color: var(--cat-unfinished);
+  box-shadow: 
+    0 2px 4px rgba(255, 82, 82, 0.2),
+    0 1px 2px rgba(255, 82, 82, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.anime-card-category.cat-planned-to-watch {
+  background: linear-gradient(135deg, rgba(234, 128, 252, 0.15) 0%, rgba(234, 128, 252, 0.08) 100%);
+  border-color: var(--cat-planned);
+  box-shadow: 
+    0 2px 4px rgba(234, 128, 252, 0.2),
+    0 1px 2px rgba(234, 128, 252, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Enhanced Schedule Status Colors */
+.schedule-item-status {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.schedule-item-status.status-today {
+  background: linear-gradient(135deg, rgba(0, 229, 255, 0.18) 0%, rgba(0, 229, 255, 0.1) 100%);
+  border-color: var(--cat-platinum);
+  animation: pulse-today 2s ease-in-out infinite;
+}
+
+.schedule-item-status.status-tomorrow {
+  background: linear-gradient(135deg, rgba(255, 235, 59, 0.18) 0%, rgba(255, 235, 59, 0.1) 100%);
+  border-color: var(--cat-average);
+}
+
+.schedule-item-status.status-soon {
+  background: linear-gradient(135deg, rgba(255, 165, 0, 0.18) 0%, rgba(255, 165, 0, 0.1) 100%);
+  border-color: var(--cat-overaverage);
+}
+
+.schedule-item-status.status-aired {
+  background: linear-gradient(135deg, rgba(139, 195, 74, 0.18) 0%, rgba(139, 195, 74, 0.1) 100%);
+  border-color: #8BC34A;
+}
+
+.schedule-item-status.status-past {
+  background: linear-gradient(135deg, rgba(117, 117, 117, 0.18) 0%, rgba(117, 117, 117, 0.1) 100%);
+  border-color: #757575;
+  opacity: 0.8;
+}
+
+/* ─── Enhanced Anime Card Design ─── */
+.anime-card {
+  padding: 16px 18px;
+  min-height: unset;
+  border-radius: 16px;
+  position: relative;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06),
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  animation: cardEntry 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+/* Gradient overlay for depth */
+.anime-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0) 50%,
+    rgba(0, 0, 0, 0.05) 100%
+  );
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.anime-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 10px 15px -3px rgba(0, 0, 0, 0.15),
+    0 4px 6px -2px rgba(0, 0, 0, 0.08),
+    0 25px 35px -5px rgba(0, 0, 0, 0.15),
+    0 15px 15px -5px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.anime-card:hover::before {
+  opacity: 1;
+}
+
+/* Enhanced Score Badge */
+.anime-card-score-topright {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  transform: none;
+  z-index: 3;
+  padding: 6px 12px;
+  background: linear-gradient(135deg, rgba(103, 84, 133, 0.9) 0%, rgba(103, 84, 133, 0.8) 100%);
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: #fff;
+  box-shadow: 
+    0 4px 6px -1px rgba(103, 84, 133, 0.3),
+    0 2px 4px -1px rgba(103, 84, 133, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  letter-spacing: 0.5px;
+  transition: all 0.2s ease;
+}
+
+.anime-card-score-topright:hover {
+  transform: scale(1.05);
+  box-shadow: 
+    0 6px 8px -1px rgba(103, 84, 133, 0.4),
+    0 3px 5px -1px rgba(103, 84, 133, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* ─── Enhanced Episodes Chip ─── */
+.episodes-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  background: linear-gradient(135deg, rgba(44, 130, 127, 0.3) 0%, rgba(44, 130, 127, 0.2) 100%);
+  border: 1.5px solid rgba(44, 130, 127, 0.6);
+  border-radius: 10px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--accent-bright);
+  flex-shrink: 0;
+  box-shadow: 
+    0 2px 4px rgba(44, 130, 127, 0.2),
+    0 1px 2px rgba(44, 130, 127, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.episodes-chip::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0) 60%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.episodes-chip:hover::before {
+  opacity: 1;
+}
+
+.episodes-chip:hover {
+  transform: translateY(-1px);
+  box-shadow: 
+    0 4px 6px rgba(44, 130, 127, 0.3),
+    0 2px 3px rgba(44, 130, 127, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  border-color: rgba(44, 130, 127, 0.8);
+}
+
+.episodes-chip svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+}
+
+/* ─── Enhanced Animations ─── */
+@keyframes cardEntry {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.9) rotateX(10deg);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translateY(-5px) scale(1.02) rotateX(-2deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotateX(0);
+  }
+}
+
+@keyframes pulse-today {
+  0%, 100% {
+    box-shadow: 
+      0 2px 4px rgba(0, 229, 255, 0.2),
+      0 1px 2px rgba(0, 229, 255, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+  50% {
+    box-shadow: 
+      0 2px 8px rgba(0, 229, 255, 0.4),
+      0 1px 4px rgba(0, 229, 255, 0.5),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3),
+      0 0 20px rgba(0, 229, 255, 0.2);
+  }
+}
+
+/* Enhanced Stagger Animation with Easing */
+.anime-card:nth-child(1) { animation-delay: calc(0.05s * 1); }
+.anime-card:nth-child(2) { animation-delay: calc(0.05s * 2); }
+.anime-card:nth-child(3) { animation-delay: calc(0.05s * 3); }
+.anime-card:nth-child(4) { animation-delay: calc(0.05s * 4); }
+.anime-card:nth-child(5) { animation-delay: calc(0.05s * 5); }
+.anime-card:nth-child(6) { animation-delay: calc(0.05s * 6); }
+.anime-card:nth-child(7) { animation-delay: calc(0.05s * 7); }
+.anime-card:nth-child(8) { animation-delay: calc(0.05s * 8); }
+.anime-card:nth-child(9) { animation-delay: calc(0.05s * 9); }
+.anime-card:nth-child(10) { animation-delay: calc(0.05s * 10); }
+.anime-card:nth-child(n + 11) { animation-delay: calc(0.05s * 11); }
+
+/* ─── Interaction States ─── */
+.anime-card:active {
+  transform: scale(0.98);
+  transition: transform 0.1s ease;
+}
+
+.anime-card-category:active,
+.schedule-item-status:active,
+.episodes-chip:active {
+  transform: scale(0.95);
+  transition: transform 0.1s ease;
+}
+
+/* ─── Focus States for Accessibility ─── */
+.anime-card:focus-visible,
+.anime-card-category:focus-visible,
+.schedule-item-status:focus-visible,
+.episodes-chip:focus-visible {
+  outline: 2px solid var(--primary, #6754b9);
+  outline-offset: 2px;
+}
+
+/* ─── Dark Mode Enhancements ─── */
+@media (prefers-color-scheme: dark) {
+  .anime-card {
+    background: rgba(255, 255, 255, 0.02);
+    border-color: rgba(255, 255, 255, 0.06);
+  }
+  
+  .anime-card:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* ─── Performance Optimizations ─── */
+.anime-card,
+.anime-card-category,
+.schedule-item-status,
+.episodes-chip,
+.anime-card-score-topright {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* ─── Typography Enhancements ─── */
+.anime-card-title {
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.anime-card-note {
+  font-weight: 400;
+  line-height: 1.5;
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
+}
+
+.anime-card:hover .anime-card-note {
+  opacity: 1;
+}
+
+/* ─── Loading Shimmer Effect ─── */
+@keyframes shimmer {
+  0% {
+    background-position: -468px 0;
+  }
+  100% {
+    background-position: 468px 0;
+  }
+}
+
+.anime-card.loading {
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.05) 8%,
+    rgba(255, 255, 255, 0.1) 18%,
+    rgba(255, 255, 255, 0.05) 33%
+  );
+  background-size: 936px 100%;
+  animation: shimmer 1.5s linear infinite;
+}
 
     .anime-faq {
       text-align: center;
