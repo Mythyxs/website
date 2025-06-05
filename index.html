@@ -140,7 +140,18 @@
     }
 
     /* ─── Accolades grid / Anime Grid ─── */
-    .accolades-container {display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;opacity:0;transform:translateY(20px);animation:fadeInUp .6s ease forwards;}
+    .accolades-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp .6s ease forwards;
+      margin-top: 0;
+    }
+    .top-bar-stack.compact-top + .tab-sections-wrapper .accolades-section > .accolades-container {
+      margin-top: 0 !important;
+    }
 
     .anime-grid-container {
       display: grid;
@@ -843,6 +854,18 @@
     }
     .hero-home-wrapper {
       margin-bottom: 18px;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 30px;
+      color: var(--primary);
+      text-shadow: 0 0 20px rgba(103,84,133,.5);
+      margin-top: 0;
+    }
+    .top-bar-stack.compact-top + .tab-sections-wrapper .section-title {
+      margin-top: 0 !important;
     }
 
   </style>
