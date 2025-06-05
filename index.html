@@ -806,6 +806,15 @@
       opacity: 1;
     }
 
+    .fade-section {
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      will-change: opacity;
+    }
+    .fade-section.show {
+      opacity: 1;
+    }
+
   </style>
 </head>
 <body>
@@ -834,7 +843,7 @@
 
   <!-- ───────────  MAIN  ─────────── -->
   <div class="container" id="mainContainer">
-    <div id="heroHomeWrapper" class="hero-home-wrapper hidden">
+    <div id="heroHomeWrapper" class="hero-home-wrapper fade-section hidden">
       <div class="hero-section">
         <h1 class="name">shemxz</h1>
         <p class="typing" id="typing"></p>
@@ -1501,15 +1510,18 @@
 
     function showCategory(catId, buttonElement) {
         if (currentCategory === catId) return;
+        const prevCategory = currentCategory;
         currentCategory = catId;
 
-        // Toggle heroHomeWrapper visibility
+        // Animate heroHomeWrapper in sync with tab content
         const heroHome = document.getElementById('heroHomeWrapper');
         if (heroHome) {
           if (catId === 'home') {
+            heroHome.classList.add('show');
             heroHome.classList.remove('hidden');
           } else {
-            heroHome.classList.add('hidden');
+            heroHome.classList.remove('show');
+            setTimeout(() => heroHome.classList.add('hidden'), 600);
           }
         }
 
@@ -1581,6 +1593,7 @@
       // Show heroHomeWrapper if Home is active on load
       const heroHome = document.getElementById('heroHomeWrapper');
       if (heroHome && currentCategory === 'home') {
+        heroHome.classList.add('show');
         heroHome.classList.remove('hidden');
       }
       // Typing effect
