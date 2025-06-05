@@ -1102,8 +1102,27 @@
 
     function updateAnimeTotalCount() {
         const total = animeDataCache.all.length;
+        const categories = [
+            'Platinum Masterpiece',
+            'Overaveragely Enjoyable',
+            'Average Enjoyability',
+            'Unfinished / Disinterested',
+            'Planned to Watch'
+        ];
+        const counts = {};
+        categories.forEach(cat => {
+            counts[cat] = animeDataCache.all.filter(anime => anime.category === cat).length;
+        });
         const el = document.getElementById('animeTotalCount');
-        if (el) el.textContent = `Total Anime: ${total}`;
+        if (el) {
+            el.textContent =
+                `Total Anime: ${total}` +
+                ' | Platinum Masterpiece: ' + counts['Platinum Masterpiece'] +
+                ' | Overaveragely Enjoyable: ' + counts['Overaveragely Enjoyable'] +
+                ' | Average Enjoyability: ' + counts['Average Enjoyability'] +
+                ' | Unfinished / Disinterested: ' + counts['Unfinished / Disinterested'] +
+                ' | Planned to Watch: ' + counts['Planned to Watch'];
+        }
     }
 
     // Call this after loading anime data
