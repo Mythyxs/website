@@ -140,18 +140,7 @@
     }
 
     /* ─── Accolades grid / Anime Grid ─── */
-    .accolades-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeInUp .6s ease forwards;
-      margin-top: 0;
-    }
-    .top-bar-stack.compact-top + .tab-sections-wrapper .accolades-section > .accolades-container {
-      margin-top: 0 !important;
-    }
+    .accolades-container {display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;opacity:0;transform:translateY(20px);animation:fadeInUp .6s ease forwards;}
 
     .anime-grid-container {
       display: grid;
@@ -839,51 +828,6 @@
       z-index: 1;
     }
 
-    .top-bar-stack {
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      width: 100%;
-      margin-bottom: 0;
-    }
-    .top-bar-stack.compact-top .hero-home-wrapper {
-      display: none !important;
-    }
-    .top-bar-stack.compact-top .category-tabs {
-      margin-top: 0 !important;
-      margin-bottom: 0 !important;
-    }
-    .hero-home-wrapper {
-      margin-bottom: 18px;
-    }
-
-    .section-title {
-      text-align: center;
-      font-size: 2rem;
-      margin-bottom: 30px;
-      color: var(--primary);
-      text-shadow: 0 0 20px rgba(103,84,133,.5);
-      margin-top: 0;
-    }
-    .top-bar-stack.compact-top + .tab-sections-wrapper .section-title {
-      margin-top: 0 !important;
-    }
-
-    .top-bar-stack.compact-top + .tab-sections-wrapper,
-    .top-bar-stack.compact-top + .tab-sections-wrapper .accolades-section,
-    .top-bar-stack.compact-top + .tab-sections-wrapper .section-title {
-      margin-top: 0 !important;
-      padding-top: 0 !important;
-    }
-
-    .top-bar-stack.compact-top {
-      margin-top: 0 !important;
-      padding-top: 0 !important;
-    }
-    .top-bar-stack.compact-top ~ .container {
-      padding-top: 0 !important;
-    }
-
   </style>
 </head>
 <body>
@@ -912,6 +856,13 @@
 
   <!-- ───────────  MAIN  ─────────── -->
   <div class="container" id="mainContainer">
+    <div id="heroHomeWrapper" class="hero-home-wrapper fade-section hidden">
+      <div class="hero-section">
+        <h1 class="name">shemxz</h1>
+        <p class="typing" id="typing"></p>
+      </div>
+    </div>
+    <!-- TABS -->
     <div class="category-tabs">
       <button class="tab-button active" data-category="home">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48">
@@ -959,12 +910,6 @@
         <svg width="24" height="24" viewBox="0 0 24 24"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
         Other Games
       </button>
-    </div>
-    <div id="heroHomeWrapper" class="hero-home-wrapper fade-section hidden">
-      <div class="hero-section">
-        <h1 class="name">shemxz</h1>
-        <p class="typing" id="typing"></p>
-      </div>
     </div>
     <div class="tab-sections-wrapper" id="tabSectionsWrapper">
       <!-- ───────────  HOME  ─────────── -->
@@ -1672,15 +1617,6 @@
       } else if (heroHome) {
         heroHome.classList.remove('show');
         heroHome.classList.add('hidden');
-      }
-      // Set compact-top on load if not home
-      const topBar = document.querySelector('.top-bar-stack');
-      if (topBar) {
-        if (currentCategory === 'home') {
-          topBar.classList.remove('compact-top');
-        } else {
-          topBar.classList.add('compact-top');
-        }
       }
       // Show only the active tab section with fade
       document.querySelectorAll('.accolades-section.fade-section').forEach(section => {
