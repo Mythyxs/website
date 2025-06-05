@@ -812,6 +812,20 @@
     .fade-section.show {
       opacity: 1;
     }
+    .hidden {
+      position: absolute !important;
+      left: 0;
+      width: 100%;
+      visibility: hidden !important;
+      pointer-events: none !important;
+      z-index: 0;
+    }
+    .fade-section.show {
+      position: static !important;
+      visibility: visible !important;
+      pointer-events: auto !important;
+      z-index: 1;
+    }
 
   </style>
 </head>
@@ -1531,14 +1545,13 @@
 
         const startHeight = currentVisible ? currentVisible.offsetHeight : 0;
         nextVisible.classList.remove('hidden');
-        nextVisible.style.position = 'absolute';
-        nextVisible.style.visibility = 'hidden';
-        nextVisible.classList.add('show'); // Prepare for fade in
-        const endHeight = nextVisible.offsetHeight;
         nextVisible.classList.remove('show');
         nextVisible.style.position = '';
         nextVisible.style.visibility = '';
-        nextVisible.classList.add('hidden');
+        nextVisible.style.pointerEvents = '';
+        nextVisible.style.zIndex = '';
+        // Prepare for fade in
+        const endHeight = nextVisible.offsetHeight;
 
         // Animate height
         wrapper.style.height = startHeight + 'px';
@@ -1610,9 +1623,17 @@
         if (section.id === currentCategory + 'Section') {
           section.classList.add('show');
           section.classList.remove('hidden');
+          section.style.position = '';
+          section.style.visibility = '';
+          section.style.pointerEvents = '';
+          section.style.zIndex = '';
         } else {
           section.classList.remove('show');
           section.classList.add('hidden');
+          section.style.position = '';
+          section.style.visibility = '';
+          section.style.pointerEvents = '';
+          section.style.zIndex = '';
         }
       });
       // Typing effect
