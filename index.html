@@ -712,6 +712,274 @@
       flex-shrink:0;
     }
 
+    /* ─────────────  CARD GLASS  ───────────── */
+    .main-content{background:var(--glass-bg);backdrop-filter:blur(20px);border:1px solid var(--glass-border);border-radius:20px;padding:40px;box-shadow:0 25px 50px rgba(103,84,133,.15);}
+
+    /* ─── Anime List Card Improvements ─── */
+    .anime-grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 16px;
+      animation: none;
+    }
+    .anime-card {
+      position: relative;
+      padding: 16px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(103,84,133,.08) 0%, rgba(201,179,195,.04) 100%);
+      border: 1px solid rgba(103, 84, 133, 0.2);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-origin: center;
+      animation: cardEntry 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      opacity: 0;
+    }
+    @keyframes cardEntry {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    .anime-card:nth-child(n) {
+      animation-delay: calc(0.05s * var(--card-index, 1));
+    }
+    .anime-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+      box-shadow:
+        0 12px 24px rgba(103, 84, 133, 0.12),
+        0 4px 8px rgba(103, 84, 133, 0.08),
+        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+      background: linear-gradient(135deg, rgba(103,84,133,.12) 0%, rgba(201,179,195,.06) 100%);
+    }
+    .anime-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+      transition: left 0.6s;
+      pointer-events: none;
+    }
+    .anime-card:hover::after {
+      left: 100%;
+    }
+    /* Category Badges */
+    .anime-card-category {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 4px 12px;
+      border-radius: 999px;
+      border: 1.5px solid;
+      background: transparent;
+      color: rgba(255,255,255,0.95);
+      white-space: nowrap;
+      letter-spacing: 0.3px;
+      margin-bottom: 8px;
+      margin-top: 4px;
+      gap: 4px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      max-width: none;
+      overflow: visible;
+      position: relative;
+    }
+    .anime-card:hover .anime-card-category {
+      transform: translateX(2px);
+      box-shadow: 0 0 12px rgba(var(--category-rgb), 0.3);
+    }
+    .anime-card-category.cat-platinum-masterpiece {
+      --category-rgb: 0,229,255;
+      background: rgba(0,229,255,0.08);
+      border-color: var(--cat-platinum);
+    }
+    .anime-card-category.cat-overaveragely-enjoyable {
+      --category-rgb: 255,165,0;
+      background: rgba(255,165,0,0.08);
+      border-color: var(--cat-overaverage);
+    }
+    .anime-card-category.cat-average-enjoyability {
+      --category-rgb: 255,235,59;
+      background: rgba(255,235,59,0.08);
+      border-color: var(--cat-average);
+    }
+    .anime-card-category.cat-unfinished-disinterested {
+      --category-rgb: 255,82,82;
+      background: rgba(255,82,82,0.08);
+      border-color: var(--cat-unfinished);
+    }
+    .anime-card-category.cat-planned-to-watch {
+      --category-rgb: 234,128,252;
+      background: rgba(234,128,252,0.08);
+      border-color: var(--cat-planned);
+    }
+    /* Score Chip */
+    .anime-card-score-topright {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 2;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .anime-card:hover .anime-card-score-topright {
+      transform: scale(1.1) rotate(-2deg);
+    }
+    .score-chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px 3px 8px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      gap: 4px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      backdrop-filter: blur(10px);
+      transition: all 0.2s;
+    }
+    .score-chip .star-icon {
+      font-size: 0.9rem;
+      color: #FFD600;
+      filter: drop-shadow(0 0 3px rgba(255,214,0,0.5));
+      transition: transform 0.3s;
+    }
+    .anime-card:hover .score-chip .star-icon {
+      transform: rotate(72deg);
+    }
+    .score-chip.score-green {
+      border-color: #4CAF50;
+      background: rgba(76,175,80,0.15);
+      color: #81C784;
+    }
+    .score-chip.score-lightgreen {
+      border-color: #8BC34A;
+      background: rgba(139,195,74,0.15);
+      color: #AED581;
+    }
+    .score-chip.score-yellow {
+      border-color: #FFEB3B;
+      background: rgba(255,235,59,0.15);
+      color: #FFF176;
+    }
+    .score-chip.score-orange {
+      border-color: #FF9800;
+      background: rgba(255,152,0,0.15);
+      color: #FFB74D;
+    }
+    .score-chip.score-red {
+      border-color: #F44336;
+      background: rgba(244,67,54,0.15);
+      color: #E57373;
+    }
+    .score-chip.score-none { display: none; }
+    /* Episodes Chip */
+    .episodes-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      background: rgba(103,84,133,0.12);
+      border: 1px solid rgba(103,84,133,0.3);
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--accent-bright);
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .episodes-chip svg {
+      width: 12px;
+      height: 12px;
+      fill: var(--primary);
+      transition: transform 0.3s;
+    }
+    .anime-card:hover .episodes-chip {
+      background: rgba(103,84,133,0.18);
+      border-color: rgba(103,84,133,0.4);
+    }
+    .anime-card:hover .episodes-chip svg {
+      transform: translateX(2px);
+    }
+    /* Note Styling */
+    .anime-card-note {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.4;
+      margin-top: 8px;
+      padding: 8px 12px;
+      background: rgba(0,0,0,0.15);
+      border-radius: 8px;
+      border-left: 2px solid var(--primary-dark);
+      max-height: 60px;
+      overflow-y: auto;
+      font-style: normal;
+      transition: all 0.2s;
+    }
+    .anime-card-note::-webkit-scrollbar {
+      width: 4px;
+    }
+    .anime-card-note::-webkit-scrollbar-track {
+      background: rgba(0,0,0,0.1);
+      border-radius: 2px;
+    }
+    .anime-card-note::-webkit-scrollbar-thumb {
+      background: var(--primary-dark);
+      border-radius: 2px;
+    }
+    .anime-card:hover .anime-card-note {
+      background: rgba(0,0,0,0.25);
+      color: rgba(255,255,255,0.85);
+      border-left-color: var(--primary);
+    }
+    /* Cover Image Presentation & Loading */
+    .anime-card-cover {
+      width: 65px;
+      height: 92px;
+      border-radius: 8px;
+      object-fit: cover;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, rgba(103,84,133,.2) 0%, rgba(201,179,195,.1) 100%);
+    }
+    .anime-card-cover::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.1));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .anime-card:hover .anime-card-cover {
+      transform: scale(1.05) translateY(-2px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    }
+    .anime-card:hover .anime-card-cover::after {
+      opacity: 1;
+    }
+    .anime-card-cover::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      animation: shimmer 2s infinite;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .anime-card-cover.loading::before {
+      opacity: 1;
+    }
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
   </style>
 </head>
 <body>
