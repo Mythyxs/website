@@ -793,6 +793,19 @@
       }
     }
 
+    .tab-sections-wrapper {
+      position: relative;
+      transition: height 0.6s ease;
+      overflow: hidden;
+    }
+    .accolades-section {
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .accolades-section:not(.hidden) {
+      opacity: 1;
+    }
+
   </style>
 </head>
 <body>
@@ -821,62 +834,56 @@
 
   <!-- ───────────  MAIN  ─────────── -->
   <div class="container" id="mainContainer">
-    <div class="hero-section">
-      <h1 class="name">shemxz</h1>
-      <p class="typing" id="typing"></p>
+    <!-- TABS -->
+    <div class="category-tabs">
+      <button class="tab-button active" onclick="showCategory('home', this)">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48">
+          <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M13.4,13.8l-3.6,2.9c-1.4,1.1-2.3,2.9-2.3,4.7v18.1c0,1.1,0.9,2,2,2h20"/>
+          <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M35,41.5h3.5c1.1,0,2-0.9,2-2V21.4c0-1.8-0.8-3.6-2.3-4.7L24.6,6c-0.4-0.3-0.9-0.3-1.2,0l-4.6,3.6"/>
+          <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M18.5,35.7v-8.2c0-0.6,0.4-1,1-1h8.9c0.6,0,1,0.4,1,1v14"/>
+        </svg>
+        Home
+      </button>
+      <button class="tab-button" onclick="showCategory('animeList', this)">
+          <svg width="24" height="24" viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 10h-2.5v2.5h-3V10H8V7h2.5V4.5h3V7H16v3z"/></svg>
+          Anime List
+      </button>
+      <button class="tab-button" onclick="showCategory('schedule', this)">
+          <svg width="24" height="24" viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
+          Schedule
+      </button>
+      <button class="tab-button" onclick="showCategory('hoop', this)">
+        <svg width="24" height="24" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <g transform="translate(0,64) scale(0.1,-0.1)" fill="currentColor" stroke="none">
+            <path d="M250 570 c-39 -11 -83 -36 -104 -59 -19 -21 -19 -21 15 -21 20 0 69
+            -18 123 -45 83 -42 147 -57 160 -36 8 13 -48 96 -85 124 -45 34 -79 45 -109
+            37z"/>
+            <path d="M391 542 c24 -22 53 -56 64 -76 11 -20 24 -35 30 -33 15 5 18 53 5
+            76 -12 23 -67 54 -115 65 -28 7 -28 6 16 -32z"/>
+            <path d="M117 463 c-23 -6 -46 -52 -53 -107 l-6 -44 73 -12 c73 -12 269 -9
+            317 6 19 5 22 13 20 37 -3 29 -4 30 -63 32 -50 1 -74 9 -148 48 -86 45 -102
+            50 -140 40z"/>
+            <path d="M526 447 c-3 -14 -13 -32 -21 -40 -10 -11 -13 -25 -9 -46 7 -35 13
+            -37 54 -16 25 13 28 18 20 43 -4 16 -14 41 -22 57 l-15 28 -7 -26z"/>
+            <path d="M540 307 c-32 -15 -40 -26 -40 -57 0 -17 8 -29 25 -37 30 -13 40 0
+            51 66 7 44 3 46 -36 28z"/>
+            <path d="M69 252 c13 -42 30 -73 59 -104 37 -40 84 -37 180 11 42 21 96 44
+            120 51 37 12 42 17 42 42 0 28 -1 28 -42 21 -56 -10 -260 -10 -320 0 l-47 8
+            8 -29z"/>
+            <path d="M479 163 c-6 -16 -18 -36 -26 -46 -9 -9 -14 -20 -10 -23 10 -10 91
+            72 83 84 -13 21 -36 13 -47 -15z"/>
+            <path d="M331 135 c-45 -25 -90 -45 -99 -45 -36 0 7 -21 55 -27 76 -9 100 1
+            133 54 17 26 30 51 30 55 0 18 -39 5 -119 -37z"/>
+          </g>
+        </svg>
+        Hoop Journey
+      </button>
+      <button class="tab-button" onclick="showCategory('other', this)">
+        <svg width="24" height="24" viewBox="0 0 24 24"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+        Other Games
+      </button>
     </div>
-
-    <div class="main-content">
-      <!-- TABS -->
-      <div class="category-tabs">
-        <button class="tab-button active" onclick="showCategory('home', this)">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48">
-            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M13.4,13.8l-3.6,2.9c-1.4,1.1-2.3,2.9-2.3,4.7v18.1c0,1.1,0.9,2,2,2h20"/>
-            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M35,41.5h3.5c1.1,0,2-0.9,2-2V21.4c0-1.8-0.8-3.6-2.3-4.7L24.6,6c-0.4-0.3-0.9-0.3-1.2,0l-4.6,3.6"/>
-            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M18.5,35.7v-8.2c0-0.6,0.4-1,1-1h8.9c0.6,0,1,0.4,1,1v14"/>
-          </svg>
-          Home
-        </button>
-        <button class="tab-button" onclick="showCategory('animeList', this)">
-            <svg width="24" height="24" viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 10h-2.5v2.5h-3V10H8V7h2.5V4.5h3V7H16v3z"/></svg>
-            Anime List
-        </button>
-        <button class="tab-button" onclick="showCategory('schedule', this)">
-            <svg width="24" height="24" viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
-            Schedule
-        </button>
-        <button class="tab-button" onclick="showCategory('hoop', this)">
-          <svg width="24" height="24" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-            <g transform="translate(0,64) scale(0.1,-0.1)" fill="currentColor" stroke="none">
-              <path d="M250 570 c-39 -11 -83 -36 -104 -59 -19 -21 -19 -21 15 -21 20 0 69
-              -18 123 -45 83 -42 147 -57 160 -36 8 13 -48 96 -85 124 -45 34 -79 45 -109
-              37z"/>
-              <path d="M391 542 c24 -22 53 -56 64 -76 11 -20 24 -35 30 -33 15 5 18 53 5
-              76 -12 23 -67 54 -115 65 -28 7 -28 6 16 -32z"/>
-              <path d="M117 463 c-23 -6 -46 -52 -53 -107 l-6 -44 73 -12 c73 -12 269 -9
-              317 6 19 5 22 13 20 37 -3 29 -4 30 -63 32 -50 1 -74 9 -148 48 -86 45 -102
-              50 -140 40z"/>
-              <path d="M526 447 c-3 -14 -13 -32 -21 -40 -10 -11 -13 -25 -9 -46 7 -35 13
-              -37 54 -16 25 13 28 18 20 43 -4 16 -14 41 -22 57 l-15 28 -7 -26z"/>
-              <path d="M540 307 c-32 -15 -40 -26 -40 -57 0 -17 8 -29 25 -37 30 -13 40 0
-              51 66 7 44 3 46 -36 28z"/>
-              <path d="M69 252 c13 -42 30 -73 59 -104 37 -40 84 -37 180 11 42 21 96 44
-              120 51 37 12 42 17 42 42 0 28 -1 28 -42 21 -56 -10 -260 -10 -320 0 l-47 8
-              8 -29z"/>
-              <path d="M479 163 c-6 -16 -18 -36 -26 -46 -9 -9 -14 -20 -10 -23 10 -10 91
-              72 83 84 -13 21 -36 13 -47 -15z"/>
-              <path d="M331 135 c-45 -25 -90 -45 -99 -45 -36 0 7 -21 55 -27 76 -9 100 1
-              133 54 17 26 30 51 30 55 0 18 -39 5 -119 -37z"/>
-            </g>
-          </svg>
-          Hoop Journey
-        </button>
-        <button class="tab-button" onclick="showCategory('other', this)">
-          <svg width="24" height="24" viewBox="0 0 24 24"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
-          Other Games
-        </button>
-      </div>
-
+    <div class="tab-sections-wrapper" id="tabSectionsWrapper">
       <!-- ───────────  HOME  ─────────── -->
       <div id="homeSection" class="accolades-section">
         <h2 class="section-title"></h2>
@@ -1491,27 +1498,57 @@
         if (currentCategory === catId) return;
         currentCategory = catId;
 
-        document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
-        if (buttonElement) buttonElement.classList.add('active');
-        
-        document.querySelectorAll('.accolades-section').forEach(s => s.classList.add('hidden'));
-        const targetSection = document.getElementById(catId + 'Section');
-        if (targetSection) {
-            targetSection.classList.remove('hidden');
-            targetSection.style.animation = 'none';
-            setTimeout(() => targetSection.style.animation = `fadeInUp .6s ease forwards`, 10);
+        const wrapper = document.getElementById('tabSectionsWrapper');
+        const currentVisible = document.querySelector('.accolades-section:not(.hidden)');
+        const nextVisible = document.getElementById(catId + 'Section');
 
-            if (catId === 'animeList') {
-                if (animeDataCache.all.length === 0) { 
-                    loadAndPrepareAnimeData(); 
-                } else {
-                    renderAnimeList(); 
-                }
-            } else if (catId === 'schedule') {
-                loadAndRenderSchedule(); 
-            } else if (catId === 'home') {
-                targetSection.querySelectorAll('.social-card').forEach((c,i)=>{c.style.animation='none';setTimeout(()=>c.style.animation=`fadeInUp .6s ease ${i*.1}s forwards`,10);});
-                const counter=targetSection.querySelector('.visitor-counter');if(counter){counter.style.animation='none';setTimeout(()=>counter.style.animation='fadeInUp .6s ease .3s forwards',10);}
+        if (!wrapper || !nextVisible) return;
+
+        const startHeight = currentVisible ? currentVisible.offsetHeight : 0;
+
+        // Show the new section off-screen temporarily to measure its height
+        nextVisible.classList.remove('hidden');
+        nextVisible.style.position = 'absolute';
+        nextVisible.style.visibility = 'hidden';
+
+        const endHeight = nextVisible.offsetHeight;
+
+        // Restore styles
+        nextVisible.style.position = '';
+        nextVisible.style.visibility = '';
+        nextVisible.classList.add('hidden');
+
+        // Animate height
+        wrapper.style.height = startHeight + 'px';
+
+        requestAnimationFrame(() => {
+            wrapper.style.height = endHeight + 'px';
+
+            setTimeout(() => {
+                document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+                if (buttonElement) buttonElement.classList.add('active');
+
+                document.querySelectorAll('.accolades-section').forEach(s => s.classList.add('hidden'));
+                nextVisible.classList.remove('hidden');
+
+                wrapper.style.height = '';
+            }, 600); // Match transition duration
+        });
+
+        // Trigger tab-specific logic
+        if (catId === 'animeList') {
+            animeDataCache.all.length === 0 ? loadAndPrepareAnimeData() : renderAnimeList();
+        } else if (catId === 'schedule') {
+            loadAndRenderSchedule();
+        } else if (catId === 'home') {
+            nextVisible.querySelectorAll('.social-card').forEach((c, i) => {
+                c.style.animation = 'none';
+                setTimeout(() => c.style.animation = `fadeInUp .6s ease ${i * .1}s forwards`, 10);
+            });
+            const counter = nextVisible.querySelector('.visitor-counter');
+            if (counter) {
+                counter.style.animation = 'none';
+                setTimeout(() => counter.style.animation = 'fadeInUp .6s ease .3s forwards', 10);
             }
         }
     }
@@ -1519,7 +1556,7 @@
     /* Removed mouse gradient JS */
 
     /* sparkles */
-    document.addEventListener('click',e=>{const tab=e.target.closest('.tab-button');if(tab)sparkle(tab);});function sparkle(el){const r=el.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,w=document.createElement('div');w.style.position='fixed';w.style.left=`${cx}px`;w.style.top=`${cy}px`;w.style.pointerEvents='none';w.style.zIndex=9999;document.body.appendChild(w);const n=10;for(let i=0;i<n;i++){const s=document.createElement('div');s.className='sparkle';const a=(360/n)*i+Math.random()*10-5,d=30+Math.random()*10;s.style.setProperty('--angle',a+'deg');s.style.setProperty('--distance',d+'px');w.appendChild(s);setTimeout(()=>s.remove(),800);}setTimeout(()=>w.remove(),800);}
+  
 
     /* visitor counter */
     function initVisitorCounter(){const binId='683f4c3f8561e97a501f44c4',apiKey='$2a$10$NwYMNtIZx5ag/xokwHWN4.1u.yOLzNxLLroIP/IBcjJBEi0YiB81e',url=`https://api.jsonbin.io/v3/b/${binId}`,headers={'Content-Type':'application/json','X-Master-Key':apiKey};fetch(url,{headers}).then(r=>r.json()).then(d=>{const real=d.record.visits+1,total=real+146;fetch(url,{method:'PUT',headers,body:JSON.stringify({visits:real})});const el=document.getElementById('visitorCount'),dur=2000,start=performance.now();function anim(t){const p=Math.min((t-start)/dur,1),ease=1-Math.pow(1-p,3);el.textContent=Math.floor(total*ease).toLocaleString();if(p<1)requestAnimationFrame(anim);}requestAnimationFrame(anim);}).catch(()=>document.getElementById('visitorCount').textContent='N/A');}
