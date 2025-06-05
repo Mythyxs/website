@@ -1367,19 +1367,19 @@
                 }
                 statusClass = 'status-aired';
             } else if (airingMs && airingMs > nowMs) {
-                const airingDate = new Date(airingMs);
-                const now = new Date();
-                const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-                const target = new Date(airingDate.getFullYear(), airingDate.getMonth(), airingDate.getDate());
-                const daysUntil = Math.ceil((target - today) / (1000 * 3600 * 24));
-                if (daysUntil === 0) {
+                // --- FIXED LOGIC FOR STATUS CHIP TO MATCH COUNTDOWN ---
+                const diffMs = airingMs - nowMs;
+                const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+                const diffHours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                if (diffDays === 0) {
                     statusText = 'Airs Today';
                     statusClass = 'status-today';
-                } else if (daysUntil === 1) {
+                } else if (diffDays === 1 || (diffDays === 0 && diffHours >= 24)) {
+                    // If less than 48h but more than 24h
                     statusText = 'Airs Tomorrow';
                     statusClass = 'status-tomorrow';
                 } else {
-                    statusText = `In ${daysUntil} days`;
+                    statusText = `In ${diffDays + 1} days`;
                     statusClass = 'status-soon';
                 }
                 countdownId = `countdown-${idx}-${nextEp.episode}`;
