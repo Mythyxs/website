@@ -677,13 +677,39 @@
 
     .anime-total-count {
       text-align: center;
-      color: var(--primary);
+      color: #fff;
       font-size: 1.1rem;
       margin-bottom: 12px;
       font-style: italic;
       opacity: 0.92;
       text-shadow: 0 0 10px rgba(103,84,133,.25);
+      font-weight: 400;
+      font-family: "Segoe UI", sans-serif;
+      letter-spacing: 0.08em;
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      align-items: center;
+    }
+    .anime-total-count .count-total {
+      color: #fff;
       font-weight: 600;
+      font-style: normal;
+    }
+    .anime-total-count .count-platinum {
+      color: var(--cat-platinum);
+    }
+    .anime-total-count .count-overaverage {
+      color: var(--cat-overaverage);
+    }
+    .anime-total-count .count-average {
+      color: var(--cat-average);
+    }
+    .anime-total-count .count-unfinished {
+      color: var(--cat-unfinished);
+    }
+    .anime-total-count .count-planned {
+      color: var(--cat-planned);
     }
 
   </style>
@@ -1103,25 +1129,21 @@
     function updateAnimeTotalCount() {
         const total = animeDataCache.all.length;
         const categories = [
-            'Platinum Masterpiece',
-            'Overaveragely Enjoyable',
-            'Average Enjoyability',
-            'Unfinished / Disinterested',
-            'Planned to Watch'
+            { name: 'Platinum Masterpiece', class: 'count-platinum' },
+            { name: 'Overaveragely Enjoyable', class: 'count-overaverage' },
+            { name: 'Average Enjoyability', class: 'count-average' },
+            { name: 'Unfinished / Disinterested', class: 'count-unfinished' },
+            { name: 'Planned to Watch', class: 'count-planned' }
         ];
         const counts = {};
         categories.forEach(cat => {
-            counts[cat] = animeDataCache.all.filter(anime => anime.category === cat).length;
+            counts[cat.name] = animeDataCache.all.filter(anime => anime.category === cat.name).length;
         });
         const el = document.getElementById('animeTotalCount');
         if (el) {
-            el.textContent =
-                `Total Anime: ${total}` +
-                ' | Platinum Masterpiece: ' + counts['Platinum Masterpiece'] +
-                ' | Overaveragely Enjoyable: ' + counts['Overaveragely Enjoyable'] +
-                ' | Average Enjoyability: ' + counts['Average Enjoyability'] +
-                ' | Unfinished / Disinterested: ' + counts['Unfinished / Disinterested'] +
-                ' | Planned to Watch: ' + counts['Planned to Watch'];
+            el.innerHTML =
+                `<span class="count-total">${total}</span>` +
+                categories.map(cat => ` <span class="${cat.class}">${counts[cat.name]}</span>`).join('');
         }
     }
 
