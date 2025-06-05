@@ -534,6 +534,33 @@
       fill: currentColor;
     }
 
+    /* ─── quick card-layout fixes ─── */
+
+    /* 1. keep the score chip in the *real* top-right corner */
+    .anime-card-score-topright{
+      position:absolute;
+      top:14px;          /* sit under the card border */
+      right:16px;
+      transform:none;    /* kill the 50%-centre transform */
+    }
+
+    /* 2. we no longer need a huge right-padding "buffer" */
+    .anime-card-details{
+      padding-right:0;   /* lets long chips / titles use full width */
+    }
+
+    /* 3. let long category pills show their whole text */
+    .anime-card-category{
+      max-width:unset;
+      overflow:visible;
+      white-space:normal;
+    }
+
+    /* 4. stop the new episodes-chip from shrinking */
+    .episodes-chip{
+      flex-shrink:0;
+    }
+
   </style>
 </head>
 <body>
