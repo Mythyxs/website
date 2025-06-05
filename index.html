@@ -834,6 +834,12 @@
 
   <!-- ───────────  MAIN  ─────────── -->
   <div class="container" id="mainContainer">
+    <div id="heroHomeWrapper" class="hero-home-wrapper hidden">
+      <div class="hero-section">
+        <h1 class="name">shemxz</h1>
+        <p class="typing" id="typing"></p>
+      </div>
+    </div>
     <!-- TABS -->
     <div class="category-tabs">
       <button class="tab-button active" data-category="home">
@@ -886,10 +892,6 @@
     <div class="tab-sections-wrapper" id="tabSectionsWrapper">
       <!-- ───────────  HOME  ─────────── -->
       <div id="homeSection" class="accolades-section">
-        <div class="hero-section">
-          <h1 class="name">shemxz</h1>
-          <p class="typing" id="typing"></p>
-        </div>
         <h2 class="section-title"></h2>
 
         <!-- SOCIAL LINKS -->
@@ -1500,6 +1502,16 @@
     function showCategory(catId, buttonElement) {
         if (currentCategory === catId) return;
         currentCategory = catId;
+
+        // Toggle heroHomeWrapper visibility
+        const heroHome = document.getElementById('heroHomeWrapper');
+        if (heroHome) {
+          if (catId === 'home') {
+            heroHome.classList.remove('hidden');
+          } else {
+            heroHome.classList.add('hidden');
+          }
+        }
 
         const wrapper = document.getElementById('tabSectionsWrapper');
         const currentVisible = document.querySelector('.accolades-section:not(.hidden)');
