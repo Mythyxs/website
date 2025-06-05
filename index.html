@@ -93,7 +93,14 @@
     .tab-button.active{border-color:var(--primary);}
 
     /* ─── Accolades grid / Anime Grid ─── */
-    .accolades-container, .anime-grid-container {display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;opacity:0;transform:translateY(20px);animation:fadeInUp .6s ease forwards;}
+    .accolades-container {display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;opacity:0;transform:translateY(20px);animation:fadeInUp .6s ease forwards;}
+
+    .anime-grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 16px;
+      animation: none;
+    }
 
     .accolade-card, .anime-card {background:linear-gradient(135deg,rgba(103,84,133,.1) 0%,rgba(201,179,195,.05) 100%);border:1px solid rgba(103,84,133,.3);border-radius:15px;padding:20px; text-align:left; transition:all .3s ease;position:relative;overflow:hidden; display: flex; flex-direction: column;overflow:visible;}
     .accolade-card::before, .anime-card::before {content:'';position:absolute;inset:0;background:radial-gradient(circle at var(--mouse-x,50%) var(--mouse-y,50%),rgba(103,84,133,.25) 0%,transparent 50%);opacity:0;transition:opacity .3s;pointer-events:none;}
@@ -156,8 +163,8 @@
     }
     
     .visitor-label{font-size:.9rem;color:var(--accent);margin-bottom:10px;text-transform:uppercase;letter-spacing:2px;}
-    .visitor-count{font-size:2.5rem;font-weight:300;background:var(--text-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-shadow:0 0 20px rgba(103,84,133,.3);}
-    .visitor-counter:hover .visitor-count {
+    /* .visitor-count defined above with hover */
+    .visitor-counter:hover .visitor-count { /* This one seems more specific, keeping for now */
       transform: scale(1.05);
       filter: drop-shadow(0 0 10px var(--accent-bright));
       transition: transform 0.3s ease, filter 0.3s ease;
@@ -206,12 +213,13 @@
         display: flex;
         gap: 15px;
         align-items: flex-start; /* Align items to the top */
+        position: relative; /* lets score chip float correctly */
     }
     .anime-card-cover {
-        width: 80px; /* Adjusted size */
-        height: 115px; /* Adjusted size for aspect ratio */
+        width: 65px;  /* From compact layout */
+        height: 92px; /* From compact layout */
         object-fit: cover;
-        border-radius: 8px;
+        border-radius: 6px; /* From compact layout */
         flex-shrink: 0;
         background-color: rgba(255,255,255,0.05); /* Placeholder bg */
     }
@@ -219,75 +227,93 @@
         flex-grow: 1;
         display: flex;
         flex-direction: column;
+        gap: 4px; /* From compact layout */
+        padding-right:0;   /* From quick card-layout fixes - lets long chips / titles use full width */
     }
     .anime-card-title {
-        font-size: 1.2rem;
-        font-weight: 600;
-        color: #fff; /* Brighter white for title */
-        margin-bottom: 5px;
+        font-size: 1.05rem; /* From compact layout */
+        font-weight: 600;   /* From compact layout */
+        color: #fff; 
+        margin-bottom: 4px; /* From compact layout */
+        margin-top: 0;      /* From compact layout */
         word-break: break-word;
     }
     .anime-card-category {
-    font-size: 0.75rem;
-    padding: 4px 10px;
-    border-radius: 12px;
-    color: black;
-    align-self: flex-start;
-    margin-bottom: 8px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    white-space: nowrap;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    border: 1px solid rgba(255,255,255,0.1);
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-
-
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 2px 10px 2px 8px;
+      border-radius: 999px;
+      border: 1.5px solid var(--primary);
+      background: rgba(103,84,133,0.10);
+      color: #fff;
+      white-space: normal; /* From quick card-layout fixes - let long category pills show their whole text */
+      overflow: visible;   /* From quick card-layout fixes */
+      text-overflow: ellipsis; /* still good as a fallback */
+      min-width: 0;
+      max-width:unset; /* From quick card-layout fixes */
+      box-shadow: none;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+      margin-top: 2px;
+      gap: 3px;
+      transition: background 0.2s, color 0.2s, border 0.2s;
+    }
 
     .anime-card-rating-note-wrapper {
-        margin-top: auto; /* Pushes this to the bottom of the flex column */
+        margin-top: auto; 
     }
     .anime-card-rating {
         display: flex;
         align-items: center;
-        margin-bottom: 8px;
+        margin-bottom: 4px; /* From compact layout */
+        margin-top: 0;      /* From compact layout */
     }
     .score-chip {
-        display: inline-flex;
-        align-items: center;
-        padding: 4px 10px;
-        border-radius: 15px;
-        font-size: 0.85rem;
-        font-weight: bold;
-        margin-left: 0; /* Removed margin-left to align with title */
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 10px 2px 8px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-left: 0;
+      box-shadow: none;
+      border: 1.5px solid #4CAF50;
+      background: rgba(76,175,80,0.10);
+      color: #fff;
+      gap: 3px;
+      min-width: 0;
+      white-space: nowrap;
+      transition: border 0.2s, background 0.2s, color 0.2s;
     }
-    .score-chip .star-icon { margin-right: 5px; font-size: 1rem; }
-    .score-chip.score-green { background-color: #4CAF50; color: white; }
-    .score-chip.score-lightgreen { background-color: #8BC34A; color: white; }
-    .score-chip.score-yellow { background-color: #FFEB3B; color: #333; }
-    .score-chip.score-orange { background-color: #FF9800; color: white; }
-    .score-chip.score-red { background-color: #F44336; color: white; }
+    .score-chip .star-icon { 
+        margin-right: 4px; 
+        font-size: 1rem; 
+        color: #FFD600;
+        filter: drop-shadow(0 0 2px #FFD60088);
+    }
+    .score-chip.score-green { border-color: #4CAF50; background: rgba(76,175,80,0.10); color: #fff; }
+    .score-chip.score-lightgreen { border-color: #8BC34A; background: rgba(139,195,74,0.10); color: #fff; }
+    .score-chip.score-yellow { border-color: #FFEB3B; background: rgba(255,235,59,0.10); color: #fff; }
+    .score-chip.score-orange { border-color: #FF9800; background: rgba(255,152,0,0.10); color: #fff; }
+    .score-chip.score-red { border-color: #F44336; background: rgba(244,67,54,0.10); color: #fff; }
     .score-chip.score-none { display: none; }
 
     .anime-card-note {
-        font-size: 0.8rem;
+        font-size: 0.78rem; /* From compact layout */
         color: var(--accent);
         opacity: .9;
         font-style: italic;
-        margin-bottom: 8px;
-        max-height: 60px; /* Limit note height */
-        overflow-y: auto; /* Allow scrolling for long notes */
+        margin-bottom: 4px; /* From compact layout */
+        max-height: 40px;   /* From compact layout */
+        overflow-y: auto; 
     }
      .anime-card-episodes {
-        font-size: 0.8rem;
+        font-size: 0.75rem; /* From compact layout */
         color: var(--accent-bright);
         opacity: .8;
-        margin-top: 5px;
+        margin-top: 2px; /* From compact layout */
     }
 
     /* Schedule Page Styles */
@@ -373,44 +399,44 @@
       font-size: 0.9rem;
       opacity: 0.6;
     }
-    /* --- STATUS BADGES --- */
-    .schedule-item-status {
+    /* --- STATUS BADGES (Schedule) --- */
+    .schedule-item-status { /* This rule is also used by anime-card-category, shared styles below */
       display: inline-flex;
       align-items: center;
       gap: 4px;
       padding: 3px 10px;
       border-radius: 999px;
-      font-size: 0.75rem;
+      font-size: 0.75rem; /* Base size, might be overridden by more specific below */
       font-weight: 600;
-      border: 1.5px solid;
-      background: transparent;
+      border: 1.5px solid; /* Base border, color to be specified */
+      background: transparent; /* Base background, color to be specified */
       letter-spacing: 0.3px;
       transition: all 0.2s;
       width: fit-content;
       max-width: 100%;
     }
-    .status-aired {
-      border-color: #4CAF50;
-      color: #4CAF50;
-      background: rgba(76, 175, 80, 0.08);
+    .status-aired { /* Specific to schedule */
+      border-color: #4CAF50; /* Will be overridden by .schedule-item-status.status-aired below */
+      color: #4CAF50;       /* Will be overridden */
+      background: rgba(76, 175, 80, 0.08); /* Will be overridden */
       position: relative;
       animation: pulse-glow-green 2s ease-in-out infinite;
     }
-    .status-today {
-      border-color: var(--cat-platinum);
-      color: var(--cat-platinum);
-      background: rgba(0, 229, 255, 0.08);
+    .status-today { /* Specific to schedule */
+      border-color: var(--cat-platinum); /* Will be overridden */
+      color: var(--cat-platinum);        /* Will be overridden */
+      background: rgba(0, 229, 255, 0.08); /* Will be overridden */
       animation: pulse-glow 2s ease-in-out infinite;
     }
-    .status-tomorrow {
-      border-color: var(--cat-average);
-      color: var(--cat-average);
-      background: rgba(255, 235, 59, 0.08);
+    .status-tomorrow { /* Specific to schedule */
+      border-color: var(--cat-average); /* Will be overridden */
+      color: var(--cat-average);        /* Will be overridden */
+      background: rgba(255, 235, 59, 0.08); /* Will be overridden */
     }
-    .status-soon {
-      border-color: var(--cat-overaverage);
-      color: var(--cat-overaverage);
-      background: rgba(255, 165, 0, 0.08);
+    .status-soon { /* Specific to schedule */
+      border-color: var(--cat-overaverage); /* Will be overridden */
+      color: var(--cat-overaverage);        /* Will be overridden */
+      background: rgba(255, 165, 0, 0.08); /* Will be overridden */
     }
     @keyframes pulse-glow {
       0%, 100% { box-shadow: 0 0 0 0 rgba(0, 229, 255, 0); }
@@ -420,7 +446,7 @@
       0%, 100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
       50% { box-shadow: 0 0 8px 2px rgba(76, 175, 80, 0.25); }
     }
-    /* --- EPISODE CHIP --- */
+    /* --- EPISODE CHIP (Schedule) --- */
     .schedule-item-ep {
       display: inline-flex;
       align-items: center;
@@ -441,7 +467,7 @@
       font-size: 0.6rem;
       color: var(--primary);
     }
-    /* --- AIRING TODAY ANIMATION --- */
+    /* --- AIRING TODAY ANIMATION (Schedule) --- */
     .schedule-item.airing-today {
       background: linear-gradient(135deg, rgba(0, 229, 255, 0.05) 0%, rgba(103,84,133,.08) 100%);
       border-color: rgba(0, 229, 255, 0.3);
@@ -457,8 +483,8 @@
       border-radius: 50%;
       animation: blink-dot 2s ease-in-out infinite;
     }
-    /* --- RECENTLY AIRED ANIMATION --- */
-    .schedule-item.status-aired {
+    /* --- RECENTLY AIRED ANIMATION (Schedule) --- */
+    .schedule-item.status-aired { /* Note: This might conflict with general .status-aired if not careful */
       background: linear-gradient(135deg, rgba(76, 175, 80, 0.05) 0%, rgba(103,84,133,.08) 100%);
       border-color: rgba(76, 175, 80, 0.3);
     }
@@ -481,24 +507,9 @@
       0%, 100% { opacity: 1; transform: scale(1); }
       50% { opacity: 0.3; transform: scale(0.8); }
     }
-    /* --- MOBILE RESPONSIVENESS --- */
+    /* --- MOBILE RESPONSIVENESS (Schedule) --- */
     @media (max-width: 768px) {
-      .schedule-item {
-        padding: 14px;
-        gap: 12px;
-      }
-      .schedule-item-cover {
-        width: 60px;
-        height: 85px;
-      }
-      .schedule-item-title {
-        font-size: 1rem;
-      }
-      .schedule-item-status,
-      .schedule-item-ep {
-        font-size: 0.7rem;
-        padding: 2px 8px;
-      }
+      /* .schedule-item styles specific to mobile are below, after general mobile tweaks */
     }
 
     .loading-indicator, .empty-state {
@@ -521,7 +532,7 @@
     @media(max-width:768px){
       .container{padding:15px;}
       .main-content{padding:25px;}
-      .accolades-container, .anime-grid-container{grid-template-columns:1fr;}
+      .accolades-container, .anime-grid-container{grid-template-columns:1fr;} /* This will override anime-grid-container's desktop columns */
       .tab-button { font-size: 0.9rem; padding: 10px 15px; }
       .anime-controls { flex-direction: column; align-items: stretch; }
       .anime-controls > div { margin-bottom: 10px; }
@@ -530,26 +541,45 @@
       .anime-card-details { align-items: center; }
       .anime-card-category { align-self: center; }
       .anime-card-rating { justify-content: center; }
-      .schedule-item { flex-direction: column; align-items: center; text-align:center; }
-      .schedule-item-cover { margin-bottom: 10px; }
+      /* Schedule mobile */
+      .schedule-item {
+        padding: 14px;
+        gap: 12px;
+        flex-direction: column; 
+        align-items: center; 
+        text-align:center;
+      }
+      .schedule-item-cover { 
+        margin-bottom: 10px;
+        width: 60px;
+        height: 85px;
+      }
+      .schedule-item-title {
+        font-size: 1rem;
+      }
+      .schedule-item-status,
+      .schedule-item-ep {
+        font-size: 0.7rem;
+        padding: 2px 8px;
+      }
     }
 
-    /* ─── Category/Status Chips (Anime & Schedule) ─── */
-    .anime-card-category, .schedule-item-status {
+    /* ─── Category/Status Chips (Anime & Schedule) - Shared Styles ─── */
+    .anime-card-category, .schedule-item-status { /* Shared base style */
       display: inline-flex;
       align-items: center;
-      font-size: 0.82rem;
+      font-size: 0.82rem; /* Base size */
       font-weight: 600;
       padding: 2px 10px 2px 8px;
       border-radius: 999px;
-      border: 1.5px solid var(--primary);
-      background: rgba(103,84,133,0.10);
-      color: #fff;
-      white-space: nowrap;
-      overflow: hidden;
+      border: 1.5px solid var(--primary); /* Default border */
+      background: rgba(103,84,133,0.10); /* Default background */
+      color: #fff; /* Default text color */
+      white-space: nowrap; /* For anime-card-category, this is overridden by more specific rule if needed */
+      overflow: hidden;    /* For anime-card-category, this is overridden by more specific rule if needed */
       text-overflow: ellipsis;
       min-width: 0;
-      max-width: 100%;
+      max-width: 100%; /* For anime-card-category, this is overridden by more specific rule if needed */
       box-shadow: none;
       letter-spacing: 0.5px;
       margin-bottom: 6px;
@@ -564,43 +594,12 @@
     .anime-card-category.cat-unfinished-disinterested { background: rgba(255,82,82,0.10); border-color: var(--cat-unfinished); }
     .anime-card-category.cat-planned-to-watch { background: rgba(234,128,252,0.10); border-color: var(--cat-planned); }
 
-    /* Schedule status color overrides */
-    .schedule-item-status.status-today { background: rgba(0,229,255,0.13); border-color: var(--cat-platinum); color: #fff; }
-    .schedule-item-status.status-tomorrow { background: rgba(255,235,59,0.13); border-color: var(--cat-average); color: #fff; }
-    .schedule-item-status.status-soon { background: rgba(255,165,0,0.13); border-color: var(--cat-overaverage); color: #fff; }
-    .schedule-item-status.status-aired { background: rgba(139,195,74,0.13); border-color: #8BC34A; color: #fff; }
-    .schedule-item-status.status-past { background: rgba(117,117,117,0.13); border-color: #757575; color: #fff; }
-
-    /* ─── Score Chip ─── */
-    .score-chip {
-      display: inline-flex;
-      align-items: center;
-      padding: 2px 10px 2px 8px;
-      border-radius: 999px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      margin-left: 0;
-      box-shadow: none;
-      border: 1.5px solid #4CAF50;
-      background: rgba(76,175,80,0.10);
-      color: #fff;
-      gap: 3px;
-      min-width: 0;
-      white-space: nowrap;
-      transition: border 0.2s, background 0.2s, color 0.2s;
-    }
-    .score-chip .star-icon {
-      margin-right: 4px;
-      font-size: 1rem;
-      color: #FFD600;
-      filter: drop-shadow(0 0 2px #FFD60088);
-    }
-    .score-chip.score-green { border-color: #4CAF50; background: rgba(76,175,80,0.10); color: #fff; }
-    .score-chip.score-lightgreen { border-color: #8BC34A; background: rgba(139,195,74,0.10); color: #fff; }
-    .score-chip.score-yellow { border-color: #FFEB3B; background: rgba(255,235,59,0.10); color: #fff; }
-    .score-chip.score-orange { border-color: #FF9800; background: rgba(255,152,0,0.10); color: #fff; }
-    .score-chip.score-red { border-color: #F44336; background: rgba(244,67,54,0.10); color: #fff; }
-    .score-chip.score-none { display: none; }
+    /* Schedule status color overrides - more specific selectors */
+    .schedule-item-status.status-today { background: rgba(0,229,255,0.13); border-color: var(--cat-platinum); color: #fff; font-size: 0.75rem; /* Resetting from shared if different */ }
+    .schedule-item-status.status-tomorrow { background: rgba(255,235,59,0.13); border-color: var(--cat-average); color: #fff; font-size: 0.75rem; }
+    .schedule-item-status.status-soon { background: rgba(255,165,0,0.13); border-color: var(--cat-overaverage); color: #fff; font-size: 0.75rem; }
+    .schedule-item-status.status-aired { background: rgba(139,195,74,0.13); border-color: #8BC34A; color: #fff; font-size: 0.75rem; }
+    .schedule-item-status.status-past { background: rgba(117,117,117,0.13); border-color: #757575; color: #fff; font-size: 0.75rem; }
 
     /* ─── Anime Card Compact Layout ─── */
     .anime-card {
@@ -608,64 +607,27 @@
       min-height: unset;
       border-radius: 12px;
       position: relative;
+      /* ADDED for filter/sort animations */
+      animation: cardEntry 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      opacity: 0;
     }
-    .anime-card-content {
-      gap: 10px;
-      align-items: flex-start;
-    }
-    .anime-card-cover {
-      width: 65px;
-      height: 92px;
-      border-radius: 6px;
-    }
-    .anime-card-details {
-      gap: 4px;
-    }
-    .anime-card-title {
-      font-size: 1.05rem;
-      font-weight: 600;
-      margin-bottom: 4px;
-      margin-top: 0;
-    }
-    .anime-card-rating {
-      margin-bottom: 4px;
-      margin-top: 0;
-    }
-    .anime-card-note {
-      font-size: 0.78rem;
-      margin-bottom: 4px;
-      max-height: 40px;
-    }
-    .anime-card-episodes {
-      font-size: 0.75rem;
-      margin-top: 2px;
-    }
+    /* .anime-card-content defined above with common styles */
+    /* .anime-card-cover defined above with common styles */
+    /* .anime-card-details defined above with common styles */
+    /* .anime-card-title defined above with common styles */
+    /* .anime-card-rating defined above with common styles */
+    /* .anime-card-note defined above with common styles */
+    /* .anime-card-episodes defined above with common styles */
 
     .anime-card-score-topright {
-      position: absolute;
-      top: 10px;
-      right: 12px;
+      position:absolute; /* From quick card-layout fixes */
+      top:14px;          /* From quick card-layout fixes - sit under the card border */
+      right:16px;        /* From quick card-layout fixes */
+      transform:none;    /* From quick card-layout fixes - kill the 50%-centre transform */
       z-index: 2;
     }
 
-    /* ─── Anime card clean-up ─── */
-    .anime-card-content{               /* keeps markup exactly the same */
-      position: relative;              /* lets score chip float correctly */
-    }
-
-    .anime-card-score-topright{        /* move chip out of the text flow */
-      position: absolute;
-      top: 50%;                        /* vertically centre it */
-      right: 12px;
-      transform: translateY(-50%);
-    }
-
-    /* give the text column breathing-room so it never collides with the chip */
-    .anime-card-details{
-      padding-right: 75px;             /* ~ chip width + a little buffer */
-    }
-
-    /* ─── “47/47 episodes” chip like the screenshot ─── */
+    /* ─── “episodes” chip ─── */
     .episodes-chip{
       display: inline-flex;
       align-items: center;
@@ -678,6 +640,7 @@
       font-weight: 600;
       white-space: nowrap;
       color: var(--accent-bright);
+      flex-shrink:0; /* From quick card-layout fixes - stop the new episodes-chip from shrinking */
     }
     .episodes-chip svg{
       width: 14px;
@@ -685,31 +648,21 @@
       fill: currentColor;
     }
 
-    /* ─── quick card-layout fixes ─── */
-
-    /* 1. keep the score chip in the *real* top-right corner */
-    .anime-card-score-topright{
-      position:absolute;
-      top:14px;          /* sit under the card border */
-      right:16px;
-      transform:none;    /* kill the 50%-centre transform */
+    /* ADDED Keyframes and Stagger for Anime Cards */
+    @keyframes cardEntry {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
     }
 
-    /* 2. we no longer need a huge right-padding "buffer" */
-    .anime-card-details{
-      padding-right:0;   /* lets long chips / titles use full width */
-    }
-
-    /* 3. let long category pills show their whole text */
-    .anime-card-category{
-      max-width:unset;
-      overflow:visible;
-      white-space:normal;
-    }
-
-    /* 4. stop the new episodes-chip from shrinking */
-    .episodes-chip{
-      flex-shrink:0;
+    /* Stagger animation */
+    .anime-card:nth-child(n) { /* Applies to all anime-card elements */
+      animation-delay: calc(0.05s * var(--card-index, 1));
     }
 
   </style>
@@ -1112,7 +1065,11 @@
         if (filteredList.length === 0) {
             container.innerHTML = `<div class="empty-state">No anime found for the selected criteria.</div>`;
         } else {
-            filteredList.forEach(anime => container.appendChild(createAnimeCard(anime)));
+            filteredList.forEach((anime, index) => { // Added index
+              const card = createAnimeCard(anime);
+              card.style.setProperty('--card-index', index % 10); // Limit delay to first 10 cards for simultaneous stagger
+              container.appendChild(card);
+            });
         }
     }
 
@@ -1324,7 +1281,7 @@
             // --- NEW: Use new HTML structure and classes ---
             let scheduleItemClass = 'schedule-item';
             if (statusClass === 'status-today') scheduleItemClass += ' airing-today';
-            if (statusClass === 'status-aired') scheduleItemClass += ' status-aired';
+            if (statusClass === 'status-aired') scheduleItemClass += ' status-aired'; // This class is for the overall card state
             scheduleDiv.className = scheduleItemClass;
             scheduleDiv.innerHTML = `
                 <img src="${coverUrl}" alt="${officialTitle}" class="schedule-item-cover" onerror="this.src='https://via.placeholder.com/70x100/1A1A1A/4A4A4A?text=N/A';">
@@ -1373,7 +1330,7 @@
 
 
     /* mouse gradient */
-    document.addEventListener('mousemove',e=>{document.querySelectorAll('.accolade-card, .social-card, .anime-card').forEach(c=>{const r=c.getBoundingClientRect();const x=((e.clientX-r.left)/r.width)*100,y=((e.clientY-r.top)/r.height)*100;c.style.setProperty('--mouse-x',x+'%');c.style.setProperty('--mouse-y',y+'%');});});
+    document.addEventListener('mousemove',e=>{document.querySelectorAll('.accolade-card, .social-card, .anime-card, .schedule-item').forEach(c=>{const r=c.getBoundingClientRect();const x=((e.clientX-r.left)/r.width)*100,y=((e.clientY-r.top)/r.height)*100;c.style.setProperty('--mouse-x',x+'%');c.style.setProperty('--mouse-y',y+'%');});});
 
     /* sparkles */
     document.addEventListener('click',e=>{const tab=e.target.closest('.tab-button');if(tab)sparkle(tab);});function sparkle(el){const r=el.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,w=document.createElement('div');w.style.position='fixed';w.style.left=`${cx}px`;w.style.top=`${cy}px`;w.style.pointerEvents='none';w.style.zIndex=9999;document.body.appendChild(w);const n=10;for(let i=0;i<n;i++){const s=document.createElement('div');s.className='sparkle';const a=(360/n)*i+Math.random()*10-5,d=30+Math.random()*10;s.style.setProperty('--angle',a+'deg');s.style.setProperty('--distance',d+'px');w.appendChild(s);setTimeout(()=>s.remove(),800);}setTimeout(()=>w.remove(),800);}
@@ -1390,13 +1347,14 @@
 
       // Initial data load for anime list, then schedule
       loadAndPrepareAnimeData().then(() => {
-        loadAndCacheScheduleData();
+        // Schedule data is cached once, then re-used or refreshed manually
+        loadAndCacheScheduleData(); 
       });
 
       // Setup event listeners for anime list controls
       document.getElementById('categoryFilter').addEventListener('change', renderAnimeList);
       document.getElementById('sortOrder').addEventListener('change', renderAnimeList);
-      document.getElementById('refreshScheduleBtn').addEventListener('click', () => loadAndRenderSchedule(true));
+      document.getElementById('refreshScheduleBtn').addEventListener('click', () => loadAndRenderSchedule(true)); // Pass true to force refresh
     });
 
   </script>
