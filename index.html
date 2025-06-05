@@ -1578,6 +1578,11 @@
     setTimeout(initVisitorCounter,3200);
 
     document.addEventListener('DOMContentLoaded', () => {
+      // Show heroHomeWrapper if Home is active on load
+      const heroHome = document.getElementById('heroHomeWrapper');
+      if (heroHome && currentCategory === 'home') {
+        heroHome.classList.remove('hidden');
+      }
       // Typing effect
       const phrases=["i like dick","apothecary diaries is the best anime","watch frieren its peak","yes i exploit in every game","bleach clears one piece"],shuffled=[...phrases].sort(()=>Math.random()-.5);let idx=0,ch=0;const tEl=document.getElementById("typing");if(tEl){function type(){if(ch<=shuffled[idx].length){tEl.textContent=shuffled[idx].slice(0,ch++);setTimeout(type,100);}else{setTimeout(()=>del(),2000);}}function del(){if(ch>0){tEl.textContent=shuffled[idx].slice(0,--ch);setTimeout(del,50);}else{idx=(idx+1)%shuffled.length;setTimeout(type,500);}}type();}
 
