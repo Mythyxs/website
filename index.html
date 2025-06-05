@@ -1354,6 +1354,7 @@
             let statusText = "";
             let statusClass = "status-past";
             let countdownId = null;
+            let showCountdown = false;
 
             if (anime.recentlyAired) {
                 const diff = nowMs - airingMs;
@@ -1366,9 +1367,23 @@
                 }
                 statusClass = 'status-aired';
             } else if (airingMs && airingMs > nowMs) {
+                const airingDate = new Date(airingMs);
+                const now = new Date();
+                const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                const target = new Date(airingDate.getFullYear(), airingDate.getMonth(), airingDate.getDate());
+                const daysUntil = Math.ceil((target - today) / (1000 * 3600 * 24));
+                if (daysUntil === 0) {
+                    statusText = 'Airs Today';
+                    statusClass = 'status-today';
+                } else if (daysUntil === 1) {
+                    statusText = 'Airs Tomorrow';
+                    statusClass = 'status-tomorrow';
+                } else {
+                    statusText = `In ${daysUntil} days`;
+                    statusClass = 'status-soon';
+                }
                 countdownId = `countdown-${idx}-${nextEp.episode}`;
-                statusText = `<span id='${countdownId}'></span>`;
-                statusClass = 'status-today'; // Will be updated by countdown
+                showCountdown = true;
             } else {
                 statusText = "No upcoming episode";
                 statusClass = 'status-past';
@@ -1385,8 +1400,9 @@
                 <div class="schedule-item-details">
                     <div class="schedule-item-title">${officialTitle}</div>
                     <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-                      ${episodeProgressText ? `<div class="schedule-item-ep">${episodeProgressText}</div>` : ''}
+                      ${episodeProgressText ? `<div class=\"schedule-item-ep\">${episodeProgressText}</div>` : ''}
                       <div class="schedule-item-status ${statusClass}">${statusText}</div>
+                      ${showCountdown ? `<span id="${countdownId}" class="schedule-countdown" style="margin-left:6px;font-size:0.8em;color:var(--accent-bright);"></span>` : ''}
                     </div>
                     <div class="schedule-item-time">${formattedTime}</div>
                 </div>
@@ -1394,7 +1410,7 @@
             container.appendChild(scheduleDiv);
 
             // Add countdown timer if needed
-            if (countdownId && airingMs) {
+            if (showCountdown && countdownId && airingMs) {
                 function updateCountdown() {
                     const now = Date.now();
                     let diff = Math.floor((airingMs - now) / 1000);
@@ -1412,9 +1428,9 @@
                         if (h > 0 || d > 0) str += `${h}h `;
                         if (m > 0 || h > 0 || d > 0) str += `${m}m `;
                         str += `${s}s`;
-                        el.textContent = `Airs in ${str}`;
+                        el.textContent = `(${str})`;
                     } else {
-                        el.textContent = 'Aired just now';
+                        el.textContent = '';
                         setTimeout(() => loadAndRenderSchedule(true), 2000); // Refresh schedule after 2s
                     }
                 }
