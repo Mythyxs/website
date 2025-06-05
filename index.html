@@ -836,7 +836,7 @@
   <div class="container" id="mainContainer">
     <!-- TABS -->
     <div class="category-tabs">
-      <button class="tab-button active" onclick="showCategory('home', this)">
+      <button class="tab-button active" data-category="home">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48">
           <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M13.4,13.8l-3.6,2.9c-1.4,1.1-2.3,2.9-2.3,4.7v18.1c0,1.1,0.9,2,2,2h20"/>
           <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M35,41.5h3.5c1.1,0,2-0.9,2-2V21.4c0-1.8-0.8-3.6-2.3-4.7L24.6,6c-0.4-0.3-0.9-0.3-1.2,0l-4.6,3.6"/>
@@ -844,15 +844,15 @@
         </svg>
         Home
       </button>
-      <button class="tab-button" onclick="showCategory('animeList', this)">
+      <button class="tab-button" data-category="animeList">
           <svg width="24" height="24" viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 10h-2.5v2.5h-3V10H8V7h2.5V4.5h3V7H16v3z"/></svg>
           Anime List
       </button>
-      <button class="tab-button" onclick="showCategory('schedule', this)">
+      <button class="tab-button" data-category="schedule">
           <svg width="24" height="24" viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
           Schedule
       </button>
-      <button class="tab-button" onclick="showCategory('hoop', this)">
+      <button class="tab-button" data-category="hoop">
         <svg width="24" height="24" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
           <g transform="translate(0,64) scale(0.1,-0.1)" fill="currentColor" stroke="none">
             <path d="M250 570 c-39 -11 -83 -36 -104 -59 -19 -21 -19 -21 15 -21 20 0 69
@@ -878,7 +878,7 @@
         </svg>
         Hoop Journey
       </button>
-      <button class="tab-button" onclick="showCategory('other', this)">
+      <button class="tab-button" data-category="other">
         <svg width="24" height="24" viewBox="0 0 24 24"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
         Other Games
       </button>
@@ -1063,7 +1063,7 @@
     window.addEventListener('load',()=>{setTimeout(()=>{document.getElementById('introOverlay').classList.add('fade-out');setTimeout(()=>{document.getElementById('mainContainer').classList.add('show');document.getElementById('introOverlay').style.display='none';},1000);},3000);});
 
     /* typing */
-    const phrases=["i like dick","apothecary diaries is the best anime","watch frieren its peak","yes i exploit in every game","bleach clears one piece"],shuffled=[...phrases].sort(()=>Math.random()-.5);let idx=0,ch=0;const tEl=document.getElementById("typing");function type(){if(ch<=shuffled[idx].length){tEl.textContent=shuffled[idx].slice(0,ch++);setTimeout(type,100);}else{setTimeout(()=>del(),2000);}}function del(){if(ch>0){tEl.textContent=shuffled[idx].slice(0,--ch);setTimeout(del,50);}else{idx=(idx+1)%shuffled.length;setTimeout(type,500);}}type();
+    const phrases=["i like dick","apothecary diaries is the best anime","watch frieren its peak","yes i exploit in every game","bleach clears one piece"],shuffled=[...phrases].sort(()=>Math.random()-.5);let idx=0,ch=0;const tEl=document.getElementById("typing");if(tEl){function type(){if(ch<=shuffled[idx].length){tEl.textContent=shuffled[idx].slice(0,ch++);setTimeout(type,100);}else{setTimeout(()=>del(),2000);}}function del(){if(ch>0){tEl.textContent=shuffled[idx].slice(0,--ch);setTimeout(del,50);}else{idx=(idx+1)%shuffled.length;setTimeout(type,500);}}type();}
 
     /* tabs */
     let currentCategory = 'home';
@@ -1563,6 +1563,17 @@
     setTimeout(initVisitorCounter,3200);
 
     document.addEventListener('DOMContentLoaded', () => {
+      // Typing effect
+      const phrases=["i like dick","apothecary diaries is the best anime","watch frieren its peak","yes i exploit in every game","bleach clears one piece"],shuffled=[...phrases].sort(()=>Math.random()-.5);let idx=0,ch=0;const tEl=document.getElementById("typing");if(tEl){function type(){if(ch<=shuffled[idx].length){tEl.textContent=shuffled[idx].slice(0,ch++);setTimeout(type,100);}else{setTimeout(()=>del(),2000);}}function del(){if(ch>0){tEl.textContent=shuffled[idx].slice(0,--ch);setTimeout(del,50);}else{idx=(idx+1)%shuffled.length;setTimeout(type,500);}}type();}
+
+      // Tab button event listeners
+      document.querySelectorAll('.tab-button').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const catId = this.getAttribute('data-category');
+          showCategory(catId, this);
+        });
+      });
+
       document.querySelectorAll('.accolade-icon').forEach(icon => {
         const delay = (Math.random() * 2).toFixed(2); 
         icon.style.animationDelay = `${delay}s`;
