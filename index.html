@@ -1320,8 +1320,9 @@
           <div class="anime-card-content">
             <img src="${anime.coverImageUrl || 'placeholder.png'}"
                  alt="${anime.title}"
-                 class="anime-card-cover"
-                 onerror="this.src='https://via.placeholder.com/80x115/1A1A1A/4A4A4A?text=No+Image';">
+                 class="anime-card-cover loading"
+                 onload="this.classList.remove('loading')"
+                 onerror="this.src='https://via.placeholder.com/80x115/1A1A1A/4A4A4A?text=No+Image';this.classList.remove('loading');">
 
             <div class="anime-card-details" style="min-width:0;">
               <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
@@ -1380,7 +1381,11 @@
         if (filteredList.length === 0) {
             container.innerHTML = `<div class="empty-state">No anime found for the selected criteria.</div>`;
         } else {
-            filteredList.forEach(anime => container.appendChild(createAnimeCard(anime)));
+            filteredList.forEach((anime, index) => {
+                const card = createAnimeCard(anime);
+                card.style.setProperty('--card-index', index % 10);
+                container.appendChild(card);
+            });
         }
     }
 
