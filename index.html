@@ -85,99 +85,58 @@
     .main-content{background:var(--glass-bg);backdrop-filter:blur(20px);border:1px solid var(--glass-border);border-radius:20px;padding:40px;box-shadow:0 25px 50px rgba(103,84,133,.15);}
 
     /* ─── Tabs ─── */
-    .category-tabs-bar {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      margin-bottom: 40px;
-      background: rgba(36, 26, 49, 0.7);
-      border-radius: 18px;
-      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.12);
-      backdrop-filter: blur(12px);
-      border: 1.5px solid var(--glass-border);
-      padding: 10px 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      max-width: 900px;
-      margin-left: auto;
-      margin-right: auto;
-      transition: box-shadow 0.3s;
-    }
     .category-tabs {
       display: flex;
-      gap: 18px;
-      padding: 0 12px;
       flex-wrap: wrap;
+      gap: 12px;
       justify-content: center;
-      align-items: center;
+      margin-bottom: 40px;
     }
+
     .tab-button {
+      padding: 12px 24px;
+      border-radius: 12px;
+      border: 2px solid transparent;
+      background: linear-gradient(to bottom right, rgba(255,255,255,0.05), rgba(255,255,255,0));
+      color: var(--accent-bright);
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: all 0.3s ease;
       position: relative;
-      padding: 14px 28px;
-      border-radius: 999px;
-      font-size: 1.08rem;
-      font-weight: 500;
-      background: transparent;
-      border: none;
-      color: var(--accent);
-      transition: color 0.2s, background 0.2s, box-shadow 0.2s, transform 0.2s;
-      outline: none;
-      box-shadow: none;
-      display: flex;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      display: inline-flex;
       align-items: center;
       gap: 10px;
-      cursor: pointer;
-      z-index: 1;
     }
+
     .tab-button svg {
-      margin-right: 8px;
-      min-width: 22px;
-      min-height: 22px;
+      width: 18px;
+      height: 18px;
       fill: currentColor;
-      transition: fill 0.2s;
+      transition: transform 0.3s ease;
     }
-    .tab-button.active {
+
+    .tab-button:hover {
+      background: linear-gradient(to bottom right, var(--primary-dark), var(--primary));
       color: #fff;
-      background: linear-gradient(90deg, var(--primary-dark), var(--primary), var(--accent));
-      box-shadow: 0 4px 16px 0 rgba(103,84,133,0.18);
-      transform: scale(1.06);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
     }
-    .tab-button:not(.active):hover {
-      background: rgba(103,84,133,0.13);
-      color: var(--primary);
-      box-shadow: 0 2px 8px 0 rgba(103,84,133,0.10);
-      transform: translateY(-2px) scale(1.03);
+
+    .tab-button:hover svg {
+      transform: scale(1.1);
     }
-    .tab-button:active {
-      transform: scale(0.98);
-    }
-    .tab-button .tab-indicator {
-      position: absolute;
-      left: 50%;
-      bottom: 6px;
-      transform: translateX(-50%);
-      width: 36px;
-      height: 4px;
-      border-radius: 2px;
-      background: var(--accent-bright);
-      opacity: 0;
-      transition: opacity 0.2s;
-      pointer-events: none;
-    }
-    .tab-button.active .tab-indicator {
-      opacity: 1;
-    }
-    @media (max-width: 768px) {
-      .category-tabs-bar {
-        max-width: 100vw;
-        border-radius: 0;
-        padding: 6px 0;
-      }
-      .tab-button {
-        font-size: 0.98rem;
-        padding: 10px 14px;
-      }
+
+    .tab-button.active {
+      background: linear-gradient(to bottom right, var(--primary), var(--accent));
+      color: #fff;
+      border-color: var(--primary);
+      box-shadow: 0 4px 10px rgba(103,84,133,0.4);
     }
 
     /* ─── Accolades grid / Anime Grid ─── */
@@ -869,60 +828,53 @@
 
     <div class="main-content">
       <!-- TABS -->
-      <div class="category-tabs-bar">
-        <div class="category-tabs">
-          <button class="tab-button active" onclick="showCategory('home', this)">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48">
-              <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M13.4,13.8l-3.6,2.9c-1.4,1.1-2.3,2.9-2.3,4.7v18.1c0,1.1,0.9,2,2,2h20"/>
-              <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M35,41.5h3.5c1.1,0,2-0.9,2-2V21.4c0-1.8-0.8-3.6-2.3-4.7L24.6,6c-0.4-0.3-0.9-0.3-1.2,0l-4.6,3.6"/>
-              <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M18.5,35.7v-8.2c0-0.6,0.4-1,1-1h8.9c0.6,0,1,0.4,1,1v14"/>
-            </svg>
-            Home
-            <span class="tab-indicator"></span>
-          </button>
-          <button class="tab-button" onclick="showCategory('animeList', this)">
-              <svg width="24" height="24" viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 10h-2.5v2.5h-3V10H8V7h2.5V4.5h3V7H16v3z"/></svg>
-              Anime List
-              <span class="tab-indicator"></span>
-          </button>
-          <button class="tab-button" onclick="showCategory('schedule', this)">
-              <svg width="24" height="24" viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
-              Schedule
-              <span class="tab-indicator"></span>
-          </button>
-          <button class="tab-button" onclick="showCategory('hoop', this)">
-            <svg width="24" height="24" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-              <g transform="translate(0,64) scale(0.1,-0.1)" fill="currentColor" stroke="none">
-                <path d="M250 570 c-39 -11 -83 -36 -104 -59 -19 -21 -19 -21 15 -21 20 0 69
+      <div class="category-tabs">
+        <button class="tab-button active" onclick="showCategory('home', this)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48">
+            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M13.4,13.8l-3.6,2.9c-1.4,1.1-2.3,2.9-2.3,4.7v18.1c0,1.1,0.9,2,2,2h20"/>
+            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M35,41.5h3.5c1.1,0,2-0.9,2-2V21.4c0-1.8-0.8-3.6-2.3-4.7L24.6,6c-0.4-0.3-0.9-0.3-1.2,0l-4.6,3.6"/>
+            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M18.5,35.7v-8.2c0-0.6,0.4-1,1-1h8.9c0.6,0,1,0.4,1,1v14"/>
+          </svg>
+          Home
+        </button>
+        <button class="tab-button" onclick="showCategory('animeList', this)">
+            <svg width="24" height="24" viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 10h-2.5v2.5h-3V10H8V7h2.5V4.5h3V7H16v3z"/></svg>
+            Anime List
+        </button>
+        <button class="tab-button" onclick="showCategory('schedule', this)">
+            <svg width="24" height="24" viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
+            Schedule
+        </button>
+        <button class="tab-button" onclick="showCategory('hoop', this)">
+          <svg width="24" height="24" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+            <g transform="translate(0,64) scale(0.1,-0.1)" fill="currentColor" stroke="none">
+              <path d="M250 570 c-39 -11 -83 -36 -104 -59 -19 -21 -19 -21 15 -21 20 0 69
               -18 123 -45 83 -42 147 -57 160 -36 8 13 -48 96 -85 124 -45 34 -79 45 -109
               37z"/>
-                <path d="M391 542 c24 -22 53 -56 64 -76 11 -20 24 -35 30 -33 15 5 18 53 5
+              <path d="M391 542 c24 -22 53 -56 64 -76 11 -20 24 -35 30 -33 15 5 18 53 5
               76 -12 23 -67 54 -115 65 -28 7 -28 6 16 -32z"/>
-                <path d="M117 463 c-23 -6 -46 -52 -53 -107 l-6 -44 73 -12 c73 -12 269 -9
+              <path d="M117 463 c-23 -6 -46 -52 -53 -107 l-6 -44 73 -12 c73 -12 269 -9
               317 6 19 5 22 13 20 37 -3 29 -4 30 -63 32 -50 1 -74 9 -148 48 -86 45 -102
               50 -140 40z"/>
-                <path d="M526 447 c-3 -14 -13 -32 -21 -40 -10 -11 -13 -25 -9 -46 7 -35 13
+              <path d="M526 447 c-3 -14 -13 -32 -21 -40 -10 -11 -13 -25 -9 -46 7 -35 13
               -37 54 -16 25 13 28 18 20 43 -4 16 -14 41 -22 57 l-15 28 -7 -26z"/>
-                <path d="M540 307 c-32 -15 -40 -26 -40 -57 0 -17 8 -29 25 -37 30 -13 40 0
+              <path d="M540 307 c-32 -15 -40 -26 -40 -57 0 -17 8 -29 25 -37 30 -13 40 0
               51 66 7 44 3 46 -36 28z"/>
-                <path d="M69 252 c13 -42 30 -73 59 -104 37 -40 84 -37 180 11 42 21 96 44
+              <path d="M69 252 c13 -42 30 -73 59 -104 37 -40 84 -37 180 11 42 21 96 44
               120 51 37 12 42 17 42 42 0 28 -1 28 -42 21 -56 -10 -260 -10 -320 0 l-47 8
               8 -29z"/>
-                <path d="M479 163 c-6 -16 -18 -36 -26 -46 -9 -9 -14 -20 -10 -23 10 -10 91
+              <path d="M479 163 c-6 -16 -18 -36 -26 -46 -9 -9 -14 -20 -10 -23 10 -10 91
               72 83 84 -13 21 -36 13 -47 -15z"/>
-                <path d="M331 135 c-45 -25 -90 -45 -99 -45 -36 0 7 -21 55 -27 76 -9 100 1
+              <path d="M331 135 c-45 -25 -90 -45 -99 -45 -36 0 7 -21 55 -27 76 -9 100 1
               133 54 17 26 30 51 30 55 0 18 -39 5 -119 -37z"/>
-              </g>
-            </svg>
-            Hoop Journey
-            <span class="tab-indicator"></span>
-          </button>
-          <button class="tab-button" onclick="showCategory('other', this)">
-            <svg width="24" height="24" viewBox="0 0 24 24"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
-            Other Games
-            <span class="tab-indicator"></span>
-          </button>
-        </div>
+            </g>
+          </svg>
+          Hoop Journey
+        </button>
+        <button class="tab-button" onclick="showCategory('other', this)">
+          <svg width="24" height="24" viewBox="0 0 24 24"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+          Other Games
+        </button>
       </div>
 
       <!-- ───────────  HOME  ─────────── -->
