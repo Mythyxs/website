@@ -407,11 +407,11 @@
       transition: background 0.2s, color 0.2s, border 0.2s;
     }
     /* Category color overrides - only border/background color changes, not style */
-    .anime-card-category[style*="cat-platinum"] { background: rgba(0,229,255,0.10); border-color: var(--cat-platinum); }
-    .anime-card-category[style*="cat-overaverage"] { background: rgba(255,165,0,0.10); border-color: var(--cat-overaverage); }
-    .anime-card-category[style*="cat-average"] { background: rgba(255,235,59,0.10); border-color: var(--cat-average); }
-    .anime-card-category[style*="cat-unfinished"] { background: rgba(255,82,82,0.10); border-color: var(--cat-unfinished); }
-    .anime-card-category[style*="cat-planned"] { background: rgba(234,128,252,0.10); border-color: var(--cat-planned); }
+    .anime-card-category.cat-platinum-masterpiece { background: rgba(0,229,255,0.10); border-color: var(--cat-platinum); }
+    .anime-card-category.cat-overaveragely-enjoyable { background: rgba(255,165,0,0.10); border-color: var(--cat-overaverage); }
+    .anime-card-category.cat-average-enjoyability { background: rgba(255,235,59,0.10); border-color: var(--cat-average); }
+    .anime-card-category.cat-unfinished-disinterested { background: rgba(255,82,82,0.10); border-color: var(--cat-unfinished); }
+    .anime-card-category.cat-planned-to-watch { background: rgba(234,128,252,0.10); border-color: var(--cat-planned); }
 
     /* Schedule status color overrides */
     .schedule-item-status.status-today { background: rgba(0,229,255,0.13); border-color: var(--cat-platinum); color: #fff; }
@@ -795,7 +795,8 @@
         const card = document.createElement('div');
         card.className = 'anime-card';
         
-        const categoryColor = categoryColors[anime.category] || 'var(--primary)';
+        // Generate a class for the category (e.g., cat-platinum-masterpiece)
+        const categoryClass = 'cat-' + (anime.category || '').replace(/\s+/g, '-').replace(/[^a-zA-Z0-9\-]/g, '').toLowerCase();
         
         let episodeText = '';
         if (anime.watchedEpisodes !== null && anime.totalEpisodes !== null) {
@@ -808,13 +809,12 @@
              episodeText = `${anime.watchedEpisodes} watched`;
         }
 
-
         card.innerHTML = `
             <div class="anime-card-content">
                 <img src="${anime.coverImageUrl || 'placeholder.png'}" alt="${anime.title}" class="anime-card-cover" onerror="this.src='https://via.placeholder.com/80x115/1A1A1A/4A4A4A?text=No+Image';">
                 <div class="anime-card-details" style="min-width:0;">
                     <div class="anime-card-title">${anime.title}</div>
-                    <div class="anime-card-category" style="background-color: ${categoryColor}; color: ${['var(--cat-average)', 'var(--cat-platinum)'].includes(categoryColor) ? 'black' : 'white'};">${anime.category}</div>
+                    <div class="anime-card-category ${categoryClass}">${anime.category}</div>
                     ${anime.rating > 0 ? `<div class="anime-card-rating">${createScoreChipHTML(anime.rating)}</div>` : ''}
                     ${anime.note ? `<div class="anime-card-note">${anime.note.replace(/\n/g, '<br>')}</div>` : ''}
                     ${episodeText ? `<div class="anime-card-episodes">${episodeText}</div>` : ''}
