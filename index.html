@@ -603,21 +603,10 @@
 
     /* ─── Anime Card Compact Layout ─── */
     .anime-card {
-      padding: 14px 16px;
-      min-height: unset;
-      border-radius: 12px;
-      position: relative;
-      /* ADDED for filter/sort animations */
+      /* Only keep animation and opacity for staggered entry */
       animation: cardEntry 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
       opacity: 0;
     }
-    /* .anime-card-content defined above with common styles */
-    /* .anime-card-cover defined above with common styles */
-    /* .anime-card-details defined above with common styles */
-    /* .anime-card-title defined above with common styles */
-    /* .anime-card-rating defined above with common styles */
-    /* .anime-card-note defined above with common styles */
-    /* .anime-card-episodes defined above with common styles */
 
     .anime-card-score-topright {
       position:absolute; /* From quick card-layout fixes */
