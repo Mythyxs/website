@@ -1062,8 +1062,9 @@
         /* ---------------- utilities ---------------- */
         const categoryClass =
           'cat-' + (anime.category || '')
-            .replace(/\s+/g,'-')
-            .replace(/[^a-zA-Z0-9\-]/g,'')
+            .replace(/\//g, '-')         // Replace slash with dash
+            .replace(/\s+/g, '-')        // Replace spaces with dash
+            .replace(/[^a-zA-Z0-9\-]/g, '') // Remove other non-alphanumerics
             .toLowerCase();
 
         const scoreChipHTML =
