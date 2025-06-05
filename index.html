@@ -497,6 +497,43 @@
       z-index: 2;
     }
 
+    /* ─── Anime card clean-up ─── */
+    .anime-card-content{               /* keeps markup exactly the same */
+      position: relative;              /* lets score chip float correctly */
+    }
+
+    .anime-card-score-topright{        /* move chip out of the text flow */
+      position: absolute;
+      top: 50%;                        /* vertically centre it */
+      right: 12px;
+      transform: translateY(-50%);
+    }
+
+    /* give the text column breathing-room so it never collides with the chip */
+    .anime-card-details{
+      padding-right: 75px;             /* ~ chip width + a little buffer */
+    }
+
+    /* ─── “47/47 episodes” chip like the screenshot ─── */
+    .episodes-chip{
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      background: rgba(44,130,127,.25);          /* teal-ish fill */
+      border: 1px solid rgba(44,130,127,.6);
+      border-radius: 8px;
+      font-size: .8rem;
+      font-weight: 600;
+      white-space: nowrap;
+      color: var(--accent-bright);
+    }
+    .episodes-chip svg{
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+
   </style>
 </head>
 <body>
@@ -803,37 +840,58 @@
         const card = document.createElement('div');
         card.className = 'anime-card';
         
-        // Generate a class for the category (e.g., cat-platinum-masterpiece)
-        const categoryClass = 'cat-' + (anime.category || '').replace(/\s+/g, '-').replace(/[^a-zA-Z0-9\-]/g, '').toLowerCase();
-        
-        let episodeText = '';
-        if (anime.watchedEpisodes !== null && anime.totalEpisodes !== null) {
-            if (anime.totalEpisodes > 0) {
-                episodeText = `${anime.watchedEpisodes}/${anime.totalEpisodes} episodes`;
-            } else if (anime.watchedEpisodes > 0) { // e.g. movie watched
-                 episodeText = `${anime.watchedEpisodes} watched`;
-            }
-        } else if (anime.watchedEpisodes !== null) {
-             episodeText = `${anime.watchedEpisodes} watched`;
-        }
+        /* ---------------- utilities ---------------- */
+        const categoryClass =
+          'cat-' + (anime.category || '')
+            .replace(/\s+/g,'-')
+            .replace(/[^a-zA-Z0-9\-]/g,'')
+            .toLowerCase();
 
-        // Score chip in top right
-        let scoreChipHTML = '';
-        if (anime.rating > 0) {
-            scoreChipHTML = `<div class="anime-card-score-topright">${createScoreChipHTML(anime.rating)}</div>`;
-        }
+        const scoreChipHTML =
+          anime.rating > 0
+            ? `<div class="anime-card-score-topright">
+                 ${createScoreChipHTML(anime.rating)}
+               </div>`
+            : '';
 
+        const episodeLabel =
+          anime.watchedEpisodes != null && anime.totalEpisodes != null
+            ? `${anime.watchedEpisodes}/${anime.totalEpisodes} episodes`
+            : anime.watchedEpisodes != null
+              ? `${anime.watchedEpisodes} watched`
+              : '';
+
+        const episodesChipHTML = episodeLabel
+          ? `<div class="episodes-chip">
+               <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+               <span>${episodeLabel}</span>
+             </div>`
+          : '';
+
+        /* ---------------- markup ---------------- */
         card.innerHTML = `
-            ${scoreChipHTML}
-            <div class="anime-card-content">
-                <img src="${anime.coverImageUrl || 'placeholder.png'}" alt="${anime.title}" class="anime-card-cover" onerror="this.src='https://via.placeholder.com/80x115/1A1A1A/4A4A4A?text=No+Image';">
-                <div class="anime-card-details" style="min-width:0;">
-                    <div class="anime-card-title">${anime.title}</div>
-                    <div class="anime-card-category ${categoryClass}">${anime.category}</div>
-                    ${anime.note ? `<div class="anime-card-note">${anime.note.replace(/\n/g, '<br>')}</div>` : ''}
-                    ${episodeText ? `<div class="anime-card-episodes">${episodeText}</div>` : ''}
-                </div>
+          ${scoreChipHTML}
+          <div class="anime-card-content">
+            <img src="${anime.coverImageUrl || 'placeholder.png'}"
+                 alt="${anime.title}"
+                 class="anime-card-cover"
+                 onerror="this.src='https://via.placeholder.com/80x115/1A1A1A/4A4A4A?text=No+Image';">
+
+            <div class="anime-card-details" style="min-width:0;">
+              <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+                <div class="anime-card-title">${anime.title}</div>
+                ${episodesChipHTML}
+              </div>
+
+              <div class="anime-card-category ${categoryClass}">
+                ${anime.category}
+              </div>
+
+              ${anime.note
+                ? `<div class="anime-card-note">${anime.note.replace(/\n/g,'<br>')}</div>`
+                : ''}
             </div>
+          </div>
         `;
         return card;
     }
