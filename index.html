@@ -746,21 +746,6 @@
       }
     }
 
-    /* Add this to the CSS section (after .schedule-item-ep and .schedule-item-time) */
-    .schedule-item-ep-time-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 6px;
-    }
-    @media (max-width: 768px) {
-      .schedule-item-ep-time-row {
-        flex-direction: column;
-        align-items: center;
-        gap: 4px;
-      }
-    }
-
   </style>
 </head>
 <body>
@@ -1410,11 +1395,11 @@
                 <img src="${coverUrl}" alt="${officialTitle}" class="schedule-item-cover" onerror="this.src='https://via.placeholder.com/70x100/1A1A1A/4A4A4A?text=N/A';">
                 <div class="schedule-item-details">
                     <div class="schedule-item-title">${officialTitle}</div>
-                    <div class="schedule-item-ep-time-row" style="display:flex;align-items:center;gap:10px;${episodeProgressText ? '' : 'display:none;'}">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
                       ${episodeProgressText ? `<div class="schedule-item-ep">${episodeProgressText}</div>` : ''}
-                      <div class="schedule-item-time" style="margin-bottom:0;">${formattedTime}</div>
+                      <div class="schedule-item-status ${statusClass}">${statusText}</div>
                     </div>
-                    <div class="schedule-item-status ${statusClass}">${statusText}</div>
+                    <div class="schedule-item-time">${formattedTime}</div>
                 </div>
             `;
             container.appendChild(scheduleDiv);
