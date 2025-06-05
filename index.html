@@ -676,40 +676,71 @@
     }
 
     .anime-total-count {
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      padding: 0;
       text-align: center;
       color: #fff;
       font-size: 1.1rem;
-      margin-bottom: 12px;
-      font-style: italic;
-      opacity: 0.92;
-      text-shadow: 0 0 10px rgba(103,84,133,.25);
+      margin-bottom: 20px;
       font-weight: 400;
       font-family: "Segoe UI", sans-serif;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.05em;
       display: flex;
       justify-content: center;
-      gap: 18px;
+      gap: 20px;
       align-items: center;
+      flex-wrap: wrap;
+      box-shadow: none;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: visible;
     }
-    .anime-total-count .count-total {
-      color: #fff;
-      font-weight: 600;
-      font-style: normal;
+    .count-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 12px;
+      border-radius: 0;
+      background: transparent;
+      transition: all 0.3s ease;
+      position: relative;
     }
-    .anime-total-count .count-platinum {
-      color: var(--cat-platinum);
+    .count-item:hover {
+      background: transparent;
+      transform: scale(1.05);
     }
-    .anime-total-count .count-overaverage {
-      color: var(--cat-overaverage);
+    .count-label {
+      font-size: 0.75rem;
+      opacity: 0.8;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 500;
     }
-    .anime-total-count .count-average {
-      color: var(--cat-average);
+    .count-number {
+      font-size: 1.4rem;
+      font-weight: 700;
+      text-shadow: 0 0 20px currentColor;
     }
-    .anime-total-count .count-unfinished {
-      color: var(--cat-unfinished);
-    }
-    .anime-total-count .count-planned {
-      color: var(--cat-planned);
+    .count-total { color: #fff; }
+    .count-platinum { color: var(--cat-platinum); }
+    .count-overaverage { color: var(--cat-overaverage); }
+    .count-average { color: var(--cat-average); }
+    .count-unfinished { color: var(--cat-unfinished); }
+    .count-planned { color: var(--cat-planned); }
+    @media (max-width: 768px) {
+      .anime-total-count {
+        padding: 20px;
+        gap: 12px;
+      }
+      .count-item {
+        padding: 6px 8px;
+      }
+      .count-number {
+        font-size: 1.2rem;
+      }
     }
 
   </style>
@@ -1129,11 +1160,11 @@
     function updateAnimeTotalCount() {
         const total = animeDataCache.all.length;
         const categories = [
-            { name: 'Platinum Masterpiece', class: 'count-platinum' },
-            { name: 'Overaveragely Enjoyable', class: 'count-overaverage' },
-            { name: 'Average Enjoyability', class: 'count-average' },
-            { name: 'Unfinished / Disinterested', class: 'count-unfinished' },
-            { name: 'Planned to Watch', class: 'count-planned' }
+            { name: 'Platinum Masterpiece', class: 'count-platinum', label: 'Platinum' },
+            { name: 'Overaveragely Enjoyable', class: 'count-overaverage', label: 'Over Average' },
+            { name: 'Average Enjoyability', class: 'count-average', label: 'Average' },
+            { name: 'Unfinished / Disinterested', class: 'count-unfinished', label: 'Unfinished' },
+            { name: 'Planned to Watch', class: 'count-planned', label: 'Planned' }
         ];
         const counts = {};
         categories.forEach(cat => {
@@ -1142,8 +1173,15 @@
         const el = document.getElementById('animeTotalCount');
         if (el) {
             el.innerHTML =
-                `<span class="count-total">${total}</span>` +
-                categories.map(cat => ` <span class="${cat.class}">${counts[cat.name]}</span>`).join('');
+                `<div class="count-item count-total">
+                    <span class="count-label">Total</span>
+                    <span class="count-number">${total}</span>
+                </div>` +
+                categories.map(cat => `
+                    <div class="count-item ${cat.class}">
+                        <span class="count-label">${cat.label}</span>
+                        <span class="count-number">${counts[cat.name]}</span>
+                    </div>`).join('');
         }
     }
 
