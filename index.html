@@ -240,10 +240,11 @@
     white-space: nowrap;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     border: 1px solid rgba(255,255,255,0.1);
-    width: auto;
-    max-width: 100%;
+    width: fit-content; /* Key fix */
+    max-width: unset;   /* Prevent restriction */
     overflow: visible;
 }
+
 
 
     .anime-card-rating-note-wrapper {
@@ -705,7 +706,7 @@
         card.innerHTML = `
             <div class="anime-card-content">
                 <img src="${anime.coverImageUrl || 'placeholder.png'}" alt="${anime.title}" class="anime-card-cover" onerror="this.src='https://via.placeholder.com/80x115/1A1A1A/4A4A4A?text=No+Image';">
-                <div class="anime-card-details">
+                <div class="anime-card-details" style="min-width:0;">
                     <div class="anime-card-title">${anime.title}</div>
                     <div class="anime-card-category" style="background-color: ${categoryColor}; color: ${['var(--cat-average)', 'var(--cat-platinum)'].includes(categoryColor) ? 'black' : 'white'};">${anime.category}</div>
                     ${anime.rating > 0 ? `<div class="anime-card-rating">${createScoreChipHTML(anime.rating)}</div>` : ''}
