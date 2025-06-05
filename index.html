@@ -1340,7 +1340,7 @@
             return;
         }
 
-        animeDataCache.scheduleData.forEach(anime => {
+        animeDataCache.scheduleData.forEach((anime, idx) => {
             const scheduleDiv = document.createElement('div');
             const nextEp = anime.nextEpisode;
             const officialTitle = anime.title || anime.romajiTitle || anime.englishTitle || 'Unknown Title';
@@ -1353,6 +1353,7 @@
 
             let statusText = "";
             let statusClass = "status-past";
+            let countdownId = null;
 
             if (anime.recentlyAired) {
                 const diff = nowMs - airingMs;
@@ -1365,21 +1366,9 @@
                 }
                 statusClass = 'status-aired';
             } else if (airingMs && airingMs > nowMs) {
-                const airingDate = new Date(airingMs);
-                const now = new Date();
-                const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-                const target = new Date(airingDate.getFullYear(), airingDate.getMonth(), airingDate.getDate());
-                const daysUntil = Math.ceil((target - today) / (1000 * 3600 * 24));
-                if (daysUntil === 0) {
-                    statusText = 'Airs Today';
-                    statusClass = 'status-today';
-                } else if (daysUntil === 1) {
-                    statusText = 'Airs Tomorrow';
-                    statusClass = 'status-tomorrow';
-                } else {
-                    statusText = `In ${daysUntil} days`;
-                    statusClass = 'status-soon';
-                }
+                countdownId = `countdown-${idx}-${nextEp.episode}`;
+                statusText = `<span id='${countdownId}'></span>`;
+                statusClass = 'status-today'; // Will be updated by countdown
             } else {
                 statusText = "No upcoming episode";
                 statusClass = 'status-past';
@@ -1403,6 +1392,35 @@
                 </div>
             `;
             container.appendChild(scheduleDiv);
+
+            // Add countdown timer if needed
+            if (countdownId && airingMs) {
+                function updateCountdown() {
+                    const now = Date.now();
+                    let diff = Math.floor((airingMs - now) / 1000);
+                    const el = document.getElementById(countdownId);
+                    if (!el) return;
+                    if (diff > 0) {
+                        const d = Math.floor(diff / 86400);
+                        diff %= 86400;
+                        const h = Math.floor(diff / 3600);
+                        diff %= 3600;
+                        const m = Math.floor(diff / 60);
+                        const s = diff % 60;
+                        let str = '';
+                        if (d > 0) str += `${d}d `;
+                        if (h > 0 || d > 0) str += `${h}h `;
+                        if (m > 0 || h > 0 || d > 0) str += `${m}m `;
+                        str += `${s}s`;
+                        el.textContent = `Airs in ${str}`;
+                    } else {
+                        el.textContent = 'Aired just now';
+                        setTimeout(() => loadAndRenderSchedule(true), 2000); // Refresh schedule after 2s
+                    }
+                }
+                updateCountdown();
+                setInterval(updateCountdown, 1000);
+            }
         });
     }
 
