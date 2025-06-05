@@ -386,11 +386,15 @@
       background: transparent;
       letter-spacing: 0.3px;
       transition: all 0.2s;
+      width: fit-content;
+      max-width: 100%;
     }
     .status-aired {
       border-color: #4CAF50;
       color: #4CAF50;
       background: rgba(76, 175, 80, 0.08);
+      position: relative;
+      animation: pulse-glow-green 2s ease-in-out infinite;
     }
     .status-today {
       border-color: var(--cat-platinum);
@@ -412,6 +416,10 @@
       0%, 100% { box-shadow: 0 0 0 0 rgba(0, 229, 255, 0); }
       50% { box-shadow: 0 0 8px 2px rgba(0, 229, 255, 0.3); }
     }
+    @keyframes pulse-glow-green {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+      50% { box-shadow: 0 0 8px 2px rgba(76, 175, 80, 0.25); }
+    }
     /* --- EPISODE CHIP --- */
     .schedule-item-ep {
       display: inline-flex;
@@ -425,6 +433,8 @@
       font-weight: 600;
       color: var(--accent-bright);
       margin-bottom: 6px;
+      width: fit-content;
+      max-width: 100%;
     }
     .schedule-item-ep::before {
       content: "\25B6";
@@ -446,6 +456,26 @@
       background: var(--cat-platinum);
       border-radius: 50%;
       animation: blink-dot 2s ease-in-out infinite;
+    }
+    /* --- RECENTLY AIRED ANIMATION --- */
+    .schedule-item.status-aired {
+      background: linear-gradient(135deg, rgba(76, 175, 80, 0.05) 0%, rgba(103,84,133,.08) 100%);
+      border-color: rgba(76, 175, 80, 0.3);
+    }
+    .schedule-item.status-aired::after {
+      content: '';
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      width: 12px;
+      height: 12px;
+      background: #4CAF50;
+      border-radius: 50%;
+      animation: blink-dot-green 2s ease-in-out infinite;
+    }
+    @keyframes blink-dot-green {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.3; transform: scale(0.8); }
     }
     @keyframes blink-dot {
       0%, 100% { opacity: 1; transform: scale(1); }
@@ -1292,7 +1322,10 @@
             const episodeProgressText = nextEp ? `EP ${nextEp.episode}${totalEpisodes ? `/${totalEpisodes}` : ''}` : '';
 
             // --- NEW: Use new HTML structure and classes ---
-            scheduleDiv.className = `schedule-item${statusClass === 'status-today' ? ' airing-today' : ''}`;
+            let scheduleItemClass = 'schedule-item';
+            if (statusClass === 'status-today') scheduleItemClass += ' airing-today';
+            if (statusClass === 'status-aired') scheduleItemClass += ' status-aired';
+            scheduleDiv.className = scheduleItemClass;
             scheduleDiv.innerHTML = `
                 <img src="${coverUrl}" alt="${officialTitle}" class="schedule-item-cover" onerror="this.src='https://via.placeholder.com/70x100/1A1A1A/4A4A4A?text=N/A';">
                 <div class="schedule-item-details">
