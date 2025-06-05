@@ -51,7 +51,7 @@
     .intro-logo svg{width:100%;height:100%;filter:drop-shadow(0 0 30px var(--primary));animation:fadeInScale 1s ease-out;}
     @keyframes fadeInScale{from{opacity:0;transform:scale(.5);}to{opacity:1;transform:scale(1);}}
 
-    .intro-text{font-size:3rem;font-weight:300;letter-spacing:5px;margin-bottom:30px;background:var(--text-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;opacity:0;animation:fadeInUp .8s ease-out .3s forwards;}
+    .intro-text{font-size:3rem;font-weight:300;letter-spacing:5px;margin-bottom:30px;background:var(--text-gradient);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;opacity:0;animation:fadeInUp .8s ease-out .3s forwards;}
 
     .loading-bar{width:200px;height:4px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden;margin:0 auto;opacity:0;animation:fadeIn .5s ease-out .6s forwards;}
     .loading-progress{height:100%;background:linear-gradient(90deg,var(--primary-dark),var(--primary));width:0%;border-radius:2px;animation:loadProgress 2s ease-out .8s forwards;}
@@ -73,7 +73,7 @@
 
     /* ─────────────  HERO  ───────────── */
     .hero-section{text-align:center;margin-bottom:40px;}
-    .name{font-size:clamp(3rem,8vw,5rem);margin:0 0 15px 0;letter-spacing:3px;font-weight:300;background:var(--text-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shimmer 3s ease-in-out infinite;text-shadow:0 0 30px var(--primary-dark);}
+    .name{font-size:clamp(3rem,8vw,5rem);margin:0 0 15px 0;letter-spacing:3px;font-weight:300;background:var(--text-gradient);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shimmer 3s ease-in-out infinite;text-shadow:0 0 30px var(--primary-dark);}
     @keyframes shimmer{0%,100%{background-position:0% 50%;filter:brightness(1);}50%{background-position:100% 50%;filter:brightness(1.2);}}
 
     .typing{font-size:1.3rem;color:var(--accent);font-family:'Courier New',monospace;margin-bottom:30px;min-height:1.5em;}
@@ -148,6 +148,7 @@
       font-size: 2.5rem;
       font-weight: 300;
       background: var(--text-gradient);
+      background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       text-shadow: 0 0 20px rgba(103, 84, 133, 0.3);
@@ -156,6 +157,7 @@
 
     .visitor-counter:hover .visitor-count {
       background: linear-gradient(45deg, var(--primary), var(--accent), var(--accent-bright));
+      background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       filter: drop-shadow(0 0 12px var(--accent)) drop-shadow(0 0 20px var(--accent-bright));
