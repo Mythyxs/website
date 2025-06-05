@@ -799,16 +799,14 @@
       overflow: hidden;
     }
     .accolades-section {
-      opacity: 0;
-      transition: opacity 0.4s ease;
+      /* Remove old opacity transition, handled by .fade-section now */
     }
     .accolades-section:not(.hidden) {
-      opacity: 1;
+      /* Remove old opacity transition, handled by .fade-section now */
     }
-
     .fade-section {
       opacity: 0;
-      transition: opacity 0.6s ease;
+      transition: opacity 0.6s cubic-bezier(0.4,0,0.2,1);
       will-change: opacity;
     }
     .fade-section.show {
@@ -900,7 +898,7 @@
     </div>
     <div class="tab-sections-wrapper" id="tabSectionsWrapper">
       <!-- ───────────  HOME  ─────────── -->
-      <div id="homeSection" class="accolades-section">
+      <div id="homeSection" class="accolades-section fade-section hidden">
         <h2 class="section-title"></h2>
 
         <!-- SOCIAL LINKS -->
@@ -960,7 +958,7 @@
       </div>
 
       <!-- ───────────  ANIME LIST  ─────────── -->
-      <div id="animeListSection" class="accolades-section hidden">
+      <div id="animeListSection" class="accolades-section fade-section hidden">
         <h2 class="section-title">
             <svg width="32" height="32" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:10px;fill:var(--primary);"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 10h-2.5v2.5h-3V10H8V7h2.5V4.5h3V7H16v3z"/></svg>
             My Anime List
@@ -999,7 +997,7 @@
       </div>
 
       <!-- ───────────  SCHEDULE  ─────────── -->
-      <div id="scheduleSection" class="accolades-section hidden">
+      <div id="scheduleSection" class="accolades-section fade-section hidden">
         <h2 class="section-title">
             <svg width="32" height="32" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:10px;fill:var(--primary);"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
             Upcoming Episodes
@@ -1021,7 +1019,7 @@
 
 
       <!-- ───────────  HOOP JOURNEY  ─────────── -->
-      <div id="hoopSection" class="accolades-section hidden">
+      <div id="hoopSection" class="accolades-section fade-section hidden">
         <h2 class="section-title">
           <svg width="32" height="32" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:10px;fill:var(--primary);"><path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2M5.23 7.75C6.1 8.62 6.7 9.74 6.91 11H4.07C4.22 10.07 4.54 9.2 5 8.41L5.23 7.75M4.07 13H6.91C6.7 14.26 6.1 15.38 5.23 16.25L5 15.59C4.54 14.8 4.22 13.93 4.07 13M11 19.93C9.51 19.65 8.16 18.9 7.09 17.83C8.22 16.7 9 15.21 9.26 13.55C10.13 13.82 11.05 14 12 14C12.95 14 13.87 13.82 14.74 13.55C15 15.21 15.79 16.7 16.91 17.83C15.84 18.9 14.5 19.65 11 19.93M11 4.07V7C11 7.55 11.45 8 12 8C12.55 8 13 7.55 13 7V4.07C15.84 4.44 18.1 6.34 18.91 8.88C17.91 8.31 16.79 8 15.64 8H15.5C14.5 6.82 13.08 6.15 11.5 6.15C10.44 6.15 9.47 6.55 8.73 7.19C8.15 7.89 7.96 8.79 8.16 9.64C6.97 10.15 5.96 11 5.3 12.1C4.5 10.58 4.07 8.82 4.07 7C4.07 5.2 5.23 3.75 7.09 2.17C8.17 1.11 9.51 .35 11 .07V4.07M19 8.41C19.46 9.2 19.78 10.07 19.93 11H17.09C17.3 9.74 17.9 8.62 18.77 7.75L19 8.41M19.93 13C19.78 13.93 19.46 14.8 19 15.59L18.77 16.25C17.9 15.38 17.3 14.26 17.09 13H19.93Z"/></svg>
           Hoop Journey Accolades
@@ -1043,7 +1041,7 @@
         </div>
       </div>
 
-      <div id="otherSection" class="accolades-section hidden">
+      <div id="otherSection" class="accolades-section fade-section hidden">
         <h2 class="section-title">
           <svg width="32" height="32" viewBox="0 0 24 24" style="vertical-align: middle; margin-right: 10px; fill: var(--primary);">
             <path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
@@ -1517,8 +1515,8 @@
         const heroHome = document.getElementById('heroHomeWrapper');
         if (heroHome) {
           if (catId === 'home') {
-            heroHome.classList.add('show');
             heroHome.classList.remove('hidden');
+            requestAnimationFrame(() => heroHome.classList.add('show'));
           } else {
             heroHome.classList.remove('show');
             setTimeout(() => heroHome.classList.add('hidden'), 600);
@@ -1526,21 +1524,18 @@
         }
 
         const wrapper = document.getElementById('tabSectionsWrapper');
-        const currentVisible = document.querySelector('.accolades-section:not(.hidden)');
+        const currentVisible = document.querySelector('.accolades-section.fade-section.show');
         const nextVisible = document.getElementById(catId + 'Section');
 
         if (!wrapper || !nextVisible) return;
 
         const startHeight = currentVisible ? currentVisible.offsetHeight : 0;
-
-        // Show the new section off-screen temporarily to measure its height
         nextVisible.classList.remove('hidden');
         nextVisible.style.position = 'absolute';
         nextVisible.style.visibility = 'hidden';
-
+        nextVisible.classList.add('show'); // Prepare for fade in
         const endHeight = nextVisible.offsetHeight;
-
-        // Restore styles
+        nextVisible.classList.remove('show');
         nextVisible.style.position = '';
         nextVisible.style.visibility = '';
         nextVisible.classList.add('hidden');
@@ -1548,35 +1543,46 @@
         // Animate height
         wrapper.style.height = startHeight + 'px';
 
-        requestAnimationFrame(() => {
+        // Fade out current, fade in next
+        if (currentVisible) {
+          currentVisible.classList.remove('show');
+          setTimeout(() => {
+            currentVisible.classList.add('hidden');
+            nextVisible.classList.remove('hidden');
+            requestAnimationFrame(() => nextVisible.classList.add('show'));
             wrapper.style.height = endHeight + 'px';
-
             setTimeout(() => {
-                document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
-                if (buttonElement) buttonElement.classList.add('active');
-
-                document.querySelectorAll('.accolades-section').forEach(s => s.classList.add('hidden'));
-                nextVisible.classList.remove('hidden');
-
-                wrapper.style.height = '';
-            }, 600); // Match transition duration
-        });
+              document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+              if (buttonElement) buttonElement.classList.add('active');
+              wrapper.style.height = '';
+            }, 600);
+          }, 600);
+        } else {
+          nextVisible.classList.remove('hidden');
+          requestAnimationFrame(() => nextVisible.classList.add('show'));
+          wrapper.style.height = endHeight + 'px';
+          setTimeout(() => {
+            document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+            if (buttonElement) buttonElement.classList.add('active');
+            wrapper.style.height = '';
+          }, 600);
+        }
 
         // Trigger tab-specific logic
         if (catId === 'animeList') {
-            animeDataCache.all.length === 0 ? loadAndPrepareAnimeData() : renderAnimeList();
+          animeDataCache.all.length === 0 ? loadAndPrepareAnimeData() : renderAnimeList();
         } else if (catId === 'schedule') {
-            loadAndRenderSchedule();
+          loadAndRenderSchedule();
         } else if (catId === 'home') {
-            nextVisible.querySelectorAll('.social-card').forEach((c, i) => {
-                c.style.animation = 'none';
-                setTimeout(() => c.style.animation = `fadeInUp .6s ease ${i * .1}s forwards`, 10);
-            });
-            const counter = nextVisible.querySelector('.visitor-counter');
-            if (counter) {
-                counter.style.animation = 'none';
-                setTimeout(() => counter.style.animation = 'fadeInUp .6s ease .3s forwards', 10);
-            }
+          nextVisible.querySelectorAll('.social-card').forEach((c, i) => {
+            c.style.animation = 'none';
+            setTimeout(() => c.style.animation = `fadeInUp .6s ease ${i * .1}s forwards`, 10);
+          });
+          const counter = nextVisible.querySelector('.visitor-counter');
+          if (counter) {
+            counter.style.animation = 'none';
+            setTimeout(() => counter.style.animation = 'fadeInUp .6s ease .3s forwards', 10);
+          }
         }
     }
 
@@ -1595,7 +1601,20 @@
       if (heroHome && currentCategory === 'home') {
         heroHome.classList.add('show');
         heroHome.classList.remove('hidden');
+      } else if (heroHome) {
+        heroHome.classList.remove('show');
+        heroHome.classList.add('hidden');
       }
+      // Show only the active tab section with fade
+      document.querySelectorAll('.accolades-section.fade-section').forEach(section => {
+        if (section.id === currentCategory + 'Section') {
+          section.classList.add('show');
+          section.classList.remove('hidden');
+        } else {
+          section.classList.remove('show');
+          section.classList.add('hidden');
+        }
+      });
       // Typing effect
       const phrases=["i like dick","apothecary diaries is the best anime","watch frieren its peak","yes i exploit in every game","bleach clears one piece"],shuffled=[...phrases].sort(()=>Math.random()-.5);let idx=0,ch=0;const tEl=document.getElementById("typing");if(tEl){function type(){if(ch<=shuffled[idx].length){tEl.textContent=shuffled[idx].slice(0,ch++);setTimeout(type,100);}else{setTimeout(()=>del(),2000);}}function del(){if(ch>0){tEl.textContent=shuffled[idx].slice(0,--ch);setTimeout(del,50);}else{idx=(idx+1)%shuffled.length;setTimeout(type,500);}}type();}
 
