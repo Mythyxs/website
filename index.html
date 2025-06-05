@@ -385,13 +385,14 @@
 
     /* ─── Category/Status Chips (Anime & Schedule) ─── */
     .anime-card-category, .schedule-item-status {
-      display: inline-block;
-      font-size: 0.78rem;
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.82rem;
       font-weight: 600;
-      padding: 3px 14px;
+      padding: 2px 10px 2px 8px;
       border-radius: 999px;
-      background: rgba(201,179,195,0.13);
       border: 1.5px solid var(--primary);
+      background: rgba(103,84,133,0.10);
       color: #fff;
       white-space: nowrap;
       overflow: hidden;
@@ -402,28 +403,22 @@
       letter-spacing: 0.5px;
       margin-bottom: 6px;
       margin-top: 2px;
+      gap: 3px;
       transition: background 0.2s, color 0.2s, border 0.2s;
     }
-    .anime-card-category {
-      margin-bottom: 6px;
-      margin-top: 2px;
-      background: rgba(201,179,195,0.13);
-      border: 1.5px solid var(--primary);
-      color: #fff;
-    }
     /* Category color overrides */
-    .anime-card-category[style*="cat-platinum"] { background: var(--cat-platinum); color: #222; border-color: var(--cat-platinum); }
-    .anime-card-category[style*="cat-overaverage"] { background: var(--cat-overaverage); color: #222; border-color: var(--cat-overaverage); }
-    .anime-card-category[style*="cat-average"] { background: var(--cat-average); color: #222; border-color: var(--cat-average); }
-    .anime-card-category[style*="cat-unfinished"] { background: var(--cat-unfinished); color: #fff; border-color: var(--cat-unfinished); }
-    .anime-card-category[style*="cat-planned"] { background: var(--cat-planned); color: #fff; border-color: var(--cat-planned); }
+    .anime-card-category[style*="cat-platinum"] { background: rgba(0,229,255,0.13); border-color: var(--cat-platinum); color: #fff; }
+    .anime-card-category[style*="cat-overaverage"] { background: rgba(255,165,0,0.13); border-color: var(--cat-overaverage); color: #fff; }
+    .anime-card-category[style*="cat-average"] { background: rgba(255,235,59,0.13); border-color: var(--cat-average); color: #fff; }
+    .anime-card-category[style*="cat-unfinished"] { background: rgba(255,82,82,0.13); border-color: var(--cat-unfinished); color: #fff; }
+    .anime-card-category[style*="cat-planned"] { background: rgba(234,128,252,0.13); border-color: var(--cat-planned); color: #fff; }
 
     /* Schedule status color overrides */
-    .schedule-item-status.status-today { background: var(--cat-platinum); color: #222; border-color: var(--cat-platinum); }
-    .schedule-item-status.status-tomorrow { background: var(--cat-average); color: #222; border-color: var(--cat-average); }
-    .schedule-item-status.status-soon { background: var(--cat-overaverage); color: #222; border-color: var(--cat-overaverage); }
-    .schedule-item-status.status-aired { background: #8BC34A; color: #fff; border-color: #8BC34A; }
-    .schedule-item-status.status-past { background: #757575; color: #fff; border-color: #757575; }
+    .schedule-item-status.status-today { background: rgba(0,229,255,0.13); border-color: var(--cat-platinum); color: #fff; }
+    .schedule-item-status.status-tomorrow { background: rgba(255,235,59,0.13); border-color: var(--cat-average); color: #fff; }
+    .schedule-item-status.status-soon { background: rgba(255,165,0,0.13); border-color: var(--cat-overaverage); color: #fff; }
+    .schedule-item-status.status-aired { background: rgba(139,195,74,0.13); border-color: #8BC34A; color: #fff; }
+    .schedule-item-status.status-past { background: rgba(117,117,117,0.13); border-color: #757575; color: #fff; }
 
     /* ─── Score Chip ─── */
     .score-chip {
@@ -451,7 +446,7 @@
     }
     .score-chip.score-green { border-color: #4CAF50; background: rgba(76,175,80,0.10); color: #fff; }
     .score-chip.score-lightgreen { border-color: #8BC34A; background: rgba(139,195,74,0.10); color: #fff; }
-    .score-chip.score-yellow { border-color: #FFEB3B; background: rgba(255,235,59,0.10); color: #333; }
+    .score-chip.score-yellow { border-color: #FFEB3B; background: rgba(255,235,59,0.10); color: #fff; }
     .score-chip.score-orange { border-color: #FF9800; background: rgba(255,152,0,0.10); color: #fff; }
     .score-chip.score-red { border-color: #F44336; background: rgba(244,67,54,0.10); color: #fff; }
     .score-chip.score-none { display: none; }
@@ -719,8 +714,7 @@
       <div id="otherSection" class="accolades-section hidden">
         <h2 class="section-title">
           <svg width="32" height="32" viewBox="0 0 24 24" style="vertical-align: middle; margin-right: 10px; fill: var(--primary);">
-            <path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
-          </svg>
+            <path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
           Other Accolades
         </h2>
         <div class="accolades-container">
