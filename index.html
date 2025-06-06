@@ -13,13 +13,20 @@
       --primary:#675485;        /* MAIN accent (buttons, borders)  */
       --accent:#c9b3c3;         /* light lavender highlight        */
       --accent-bright:#e5d9e5;  /* very light tint for hovers/glow */
-
-      /* Anime List Specific Colors */
       --cat-platinum: #00E5FF;
-      --cat-overaverage: #FFA500; /* Using a common orange */
-      --cat-average: #FFEB3B;    /* Using a common yellow */
+      --cat-overaverage: #FFA500;
+      --cat-average: #FFEB3B;
       --cat-unfinished: #FF5252;
       --cat-planned: #EA80FC;
+      /* New for redesign */
+      --anime-card-glass: rgba(40,30,60,0.55);
+      --anime-card-border: rgba(103,84,133,0.25);
+      --anime-card-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+      --anime-card-radius: 18px;
+      --anime-card-gradient: linear-gradient(135deg, rgba(103,84,133,0.18) 0%, rgba(201,179,195,0.08) 100%);
+      --anime-chip-gradient: linear-gradient(90deg, var(--primary), var(--accent));
+      --anime-chip-shadow: 0 2px 8px rgba(103,84,133,0.10);
+      --anime-score-shadow: 0 0 0 4px rgba(103,84,133,0.10);
     }
 
     :root{
@@ -882,6 +889,210 @@
       background: none !important;
       box-shadow: none !important;
       margin-top: 0 !important;
+    }
+
+    /* --- Redesigned Anime Card --- */
+    .anime-card {
+      background: var(--anime-card-gradient);
+      border: 1.5px solid var(--anime-card-border);
+      border-radius: var(--anime-card-radius);
+      box-shadow: var(--anime-card-shadow);
+      padding: 0;
+      overflow: visible;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      min-height: 180px;
+      transition: box-shadow 0.3s, border 0.3s, transform 0.3s;
+      animation: cardEntry 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      opacity: 0;
+    }
+    .anime-card:hover {
+      box-shadow: 0 12px 32px 0 rgba(103,84,133,0.25);
+      border-color: var(--primary);
+      transform: translateY(-6px) scale(1.025);
+    }
+    .anime-card-content {
+      display: flex;
+      gap: 0;
+      align-items: stretch;
+      position: relative;
+      padding: 0;
+    }
+    .anime-card-cover {
+      width: 90px;
+      height: 128px;
+      object-fit: cover;
+      border-radius: 14px 0 0 14px;
+      background: rgba(255,255,255,0.07);
+      box-shadow: 0 2px 12px rgba(103,84,133,0.10);
+      flex-shrink: 0;
+      margin: 0;
+      position: relative;
+      z-index: 1;
+    }
+    .anime-card-details {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 18px 22px 18px 18px;
+      min-width: 0;
+      position: relative;
+    }
+    .anime-card-title {
+      font-size: 1.18rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+      margin-top: 0;
+      letter-spacing: 0.01em;
+      line-height: 1.2;
+      word-break: break-word;
+      text-shadow: 0 2px 8px rgba(103,84,133,0.10);
+    }
+    .anime-card-category-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 16px 6px 12px;
+      border-radius: 999px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      background: var(--anime-chip-gradient);
+      color: #fff;
+      box-shadow: var(--anime-chip-shadow);
+      border: none;
+      letter-spacing: 0.04em;
+      user-select: none;
+      transition: background 0.3s;
+      border: 2px solid rgba(255,255,255,0.08);
+    }
+    .anime-card-category-badge svg {
+      width: 18px;
+      height: 18px;
+      margin-right: 2px;
+      opacity: 0.85;
+    }
+    .anime-card-score-circle {
+      position: absolute;
+      top: 14px;
+      right: 18px;
+      z-index: 3;
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--anime-score-shadow);
+      border: 3px solid rgba(255,255,255,0.13);
+      color: #fff;
+      font-weight: 800;
+      font-size: 1.08rem;
+      text-shadow: 0 2px 8px rgba(103,84,133,0.10);
+      transition: box-shadow 0.3s, border 0.3s;
+    }
+    .anime-card-score-circle .star-icon {
+      font-size: 1.1rem;
+      color: #FFD600;
+      margin-bottom: 1px;
+      filter: drop-shadow(0 0 2px #FFD60088);
+    }
+    .anime-card-score-circle .score-value {
+      font-size: 1.08rem;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 0px;
+    }
+    .anime-card-episodes-chip {
+      position: absolute;
+      left: 18px;
+      bottom: 14px;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 5px 14px 5px 10px;
+      border-radius: 999px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      background: rgba(44,130,127,0.22);
+      color: var(--accent-bright);
+      border: 1.5px solid rgba(44,130,127,0.45);
+      box-shadow: 0 2px 8px rgba(44,130,127,0.10);
+      user-select: none;
+      transition: background 0.3s;
+    }
+    .anime-card-episodes-chip svg {
+      width: 16px;
+      height: 16px;
+      margin-right: 2px;
+      opacity: 0.85;
+    }
+    .anime-card-episodes-progress {
+      width: 100%;
+      height: 5px;
+      background: rgba(44,130,127,0.13);
+      border-radius: 3px;
+      margin-top: 6px;
+      overflow: hidden;
+      position: relative;
+    }
+    .anime-card-episodes-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--cat-platinum));
+      border-radius: 3px;
+      transition: width 0.5s;
+    }
+    .anime-card-note {
+      font-size: 0.85rem;
+      color: var(--accent);
+      opacity: .92;
+      font-style: italic;
+      margin-top: 10px;
+      max-height: 48px;
+      overflow-y: auto;
+      line-height: 1.4;
+    }
+    @media (max-width: 768px) {
+      .anime-card-content {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .anime-card-cover {
+        width: 100%;
+        height: 180px;
+        border-radius: 14px 14px 0 0;
+      }
+      .anime-card-details {
+        padding: 16px 12px 16px 12px;
+      }
+      .anime-card-category-badge {
+        top: 10px;
+        left: 10px;
+        font-size: 0.88rem;
+        padding: 5px 12px 5px 9px;
+      }
+      .anime-card-score-circle {
+        top: 10px;
+        right: 12px;
+        width: 40px;
+        height: 40px;
+        font-size: 0.98rem;
+      }
+      .anime-card-episodes-chip {
+        left: 12px;
+        bottom: 10px;
+        font-size: 0.85rem;
+        padding: 4px 10px 4px 7px;
+      }
     }
   </style>
 </head>
