@@ -834,12 +834,17 @@
       padding-top: 0 !important;
     }
     .category-tabs.compact-topbar {
-      margin-top: 0 !important;
+      margin-top: 18px !important;
       box-shadow: 0 2px 12px rgba(0,0,0,0.10);
       background: rgba(36,26,49,0.95);
       position: sticky;
       top: 0;
       z-index: 10;
+    }
+    .category-tabs:not(.compact-topbar) {
+      background: none !important;
+      box-shadow: none !important;
+      margin-top: 0 !important;
     }
   </style>
 </head>
@@ -1642,7 +1647,10 @@
       } else {
         if (container) container.classList.remove('compact-topbar');
         if (categoryTabs) categoryTabs.classList.remove('compact-topbar');
-        if (heroHome) heroHome.classList.remove('hidden');
+        if (heroHome) {
+          heroHome.classList.remove('hidden');
+          heroHome.classList.add('show'); // Ensure visible on first load
+        }
       }
       // Show only the active tab section with fade
       document.querySelectorAll('.accolades-section.fade-section').forEach(section => {
