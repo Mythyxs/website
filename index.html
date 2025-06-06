@@ -207,7 +207,7 @@
       background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 0 12px var(--accent)) drop-shadow(0 0 20px var(--accent-bright));
+      filter: drop-shadow(0 0 12px var(--accent)) drop-shadow(0 0 5px var(--accent-bright));
       transform: scale(1.05);
     }
     
@@ -395,11 +395,11 @@
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
       overflow: hidden;
-      animation: cardEntry 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-      opacity: 0;
+      /* animation: cardEntry 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards; */
+      /* opacity: 0; */
     }
     .schedule-item:nth-child(n) {
-      animation-delay: calc(0.05s * var(--card-index, 1));
+      /* animation-delay: calc(0.05s * var(--card-index, 1)); */
     }
     /* Removed .schedule-item::before for mouse gradient */
     /* Removed .schedule-item:hover::before for mouse gradient */
@@ -1499,7 +1499,7 @@
             if (statusClass === 'status-today') scheduleItemClass += ' airing-today';
             if (statusClass === 'status-aired') scheduleItemClass += ' status-aired'; 
             scheduleDiv.className = scheduleItemClass;
-            scheduleDiv.style.setProperty('--card-index', idx % 10); // Add this line for staggered animation
+            scheduleDiv.style.setProperty('--card-index', idx % 10); // staggered animation
             scheduleDiv.innerHTML = `
                 <img src="${coverUrl}" alt="${officialTitle}" class="schedule-item-cover" onerror="this.src='https://via.placeholder.com/70x100/1A1A1A/4A4A4A?text=N/A';">
                 <div class="schedule-item-details">
@@ -1513,6 +1513,11 @@
                 </div>
             `;
             container.appendChild(scheduleDiv);
+            // Force reflow and trigger animation
+            void scheduleDiv.offsetWidth;
+            scheduleDiv.style.opacity = '0';
+            scheduleDiv.style.animation = `cardEntry 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards`;
+            scheduleDiv.style.animationDelay = `calc(0.05s * ${idx % 10})`;
 
             // Add countdown timer if needed
             if (showCountdown && countdownId && airingMs) {
