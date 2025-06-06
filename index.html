@@ -828,6 +828,19 @@
       z-index: 1;
     }
 
+    /* --- COMPACT TOPBAR MODE (non-home) --- */
+    .container.compact-topbar {
+      min-height: 0vh !important;
+      padding-top: 0 !important;
+    }
+    .category-tabs.compact-topbar {
+      margin-top: 0 !important;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+      background: rgba(36,26,49,0.95);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
   </style>
 </head>
 <body>
@@ -1533,10 +1546,18 @@
         // Animate heroHomeWrapper in sync with tab content
         const heroHome = document.getElementById('heroHomeWrapper');
         const isHome = catId === 'home';
-        if (heroHome) {
-          if (isHome) {
-            heroHome.classList.remove('hidden');
-          }
+
+        // --- NEW: Toggle compact-topbar class ---
+        const container = document.getElementById('mainContainer');
+        const categoryTabs = document.querySelector('.category-tabs');
+        if (!isHome) {
+          if (container) container.classList.add('compact-topbar');
+          if (categoryTabs) categoryTabs.classList.add('compact-topbar');
+          if (heroHome) heroHome.classList.add('hidden');
+        } else {
+          if (container) container.classList.remove('compact-topbar');
+          if (categoryTabs) categoryTabs.classList.remove('compact-topbar');
+          if (heroHome) heroHome.classList.remove('hidden');
         }
 
         const wrapper = document.getElementById('tabSectionsWrapper');
@@ -1611,12 +1632,17 @@
     document.addEventListener('DOMContentLoaded', () => {
       // Show heroHomeWrapper if Home is active on load
       const heroHome = document.getElementById('heroHomeWrapper');
-      if (heroHome && currentCategory === 'home') {
-        heroHome.classList.add('show');
-        heroHome.classList.remove('hidden');
-      } else if (heroHome) {
-        heroHome.classList.remove('show');
-        heroHome.classList.add('hidden');
+      const isHome = currentCategory === 'home';
+      const container = document.getElementById('mainContainer');
+      const categoryTabs = document.querySelector('.category-tabs');
+      if (!isHome) {
+        if (container) container.classList.add('compact-topbar');
+        if (categoryTabs) categoryTabs.classList.add('compact-topbar');
+        if (heroHome) heroHome.classList.add('hidden');
+      } else {
+        if (container) container.classList.remove('compact-topbar');
+        if (categoryTabs) categoryTabs.classList.remove('compact-topbar');
+        if (heroHome) heroHome.classList.remove('hidden');
       }
       // Show only the active tab section with fade
       document.querySelectorAll('.accolades-section.fade-section').forEach(section => {
