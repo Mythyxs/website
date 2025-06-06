@@ -189,7 +189,7 @@
     .visitor-counter{text-align:center;margin-top:40px;padding:20px;background:rgba(103,84,133,.05);border-radius:15px;border:1px solid rgba(103,84,133,.2);opacity:0;transform:translateY(20px);animation:fadeInUp .6s ease .3s forwards;position:relative;overflow:hidden;transition:all .3s ease;}
     .visitor-counter::before{content:'';position:absolute;inset:0;left:-100%;background:linear-gradient(90deg,transparent,rgba(103,84,133,.2),transparent);transition:left .6s;pointer-events:none;}
     .visitor-counter:hover::before{left:100%;}
-    .visitor-counter:hover{transform:translateY(-5px);border-color:var(--primary);box-shadow:0 15px 30px rgba(103,84,133,.3);}
+    .visitor-counter:hover{transform:translateY(-5px);border-color:var(--primary);box-shadow:0 5px 30px rgba(103,84,133,.3);}
     
     .visitor-count {
       font-size: 2.5rem;
@@ -395,6 +395,11 @@
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
       overflow: hidden;
+      animation: cardEntry 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      opacity: 0;
+    }
+    .schedule-item:nth-child(n) {
+      animation-delay: calc(0.05s * var(--card-index, 1));
     }
     /* Removed .schedule-item::before for mouse gradient */
     /* Removed .schedule-item:hover::before for mouse gradient */
@@ -1494,6 +1499,7 @@
             if (statusClass === 'status-today') scheduleItemClass += ' airing-today';
             if (statusClass === 'status-aired') scheduleItemClass += ' status-aired'; 
             scheduleDiv.className = scheduleItemClass;
+            scheduleDiv.style.setProperty('--card-index', idx % 10); // Add this line for staggered animation
             scheduleDiv.innerHTML = `
                 <img src="${coverUrl}" alt="${officialTitle}" class="schedule-item-cover" onerror="this.src='https://via.placeholder.com/70x100/1A1A1A/4A4A4A?text=N/A';">
                 <div class="schedule-item-details">
@@ -1624,11 +1630,6 @@
           }, 650);
         }
     }
-
-    /* Removed mouse gradient JS */
-
-    /* sparkles */
-  
 
     /* visitor counter */
     function initVisitorCounter(){const binId='683f4c3f8561e97a501f44c4',apiKey='$2a$10$NwYMNtIZx5ag/xokwHWN4.1u.yOLzNxLLroIP/IBcjJBEi0YiB81e',url=`https://api.jsonbin.io/v3/b/${binId}`,headers={'Content-Type':'application/json','X-Master-Key':apiKey};fetch(url,{headers}).then(r=>r.json()).then(d=>{const real=d.record.visits+1,total=real+146;fetch(url,{method:'PUT',headers,body:JSON.stringify({visits:real})});const el=document.getElementById('visitorCount'),dur=2000,start=performance.now();function anim(t){const p=Math.min((t-start)/dur,1),ease=1-Math.pow(1-p,3);el.textContent=Math.floor(total*ease).toLocaleString();if(p<1)requestAnimationFrame(anim);}requestAnimationFrame(anim);}).catch(()=>document.getElementById('visitorCount').textContent='N/A');}
