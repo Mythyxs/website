@@ -588,9 +588,36 @@
       .tab-button { font-size: 0.9rem; padding: 10px 15px; }
       .anime-controls { flex-direction: column; align-items: stretch; }
       .anime-controls > div { margin-bottom: 10px; }
-      .anime-card-content { flex-direction: column; align-items: center; text-align: center; }
-      .anime-card-cover { margin-bottom: 10px; }
-      .anime-card-details { align-items: center; }
+      .anime-card,
+      .anime-card-content,
+      .anime-card-details {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box;
+      }
+      .anime-card {
+        padding: 10px 6px !important;
+        margin: 0 !important;
+      }
+      .anime-card-content {
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        gap: 8px !important;
+      }
+      .anime-card-cover {
+        margin-bottom: 8px !important;
+      }
+      .anime-card-details {
+        align-items: center !important;
+        padding-right: 0 !important;
+      }
+      .anime-card-title {
+        max-width: 100vw !important;
+        white-space: normal !important;
+        overflow: visible !important;
+        text-overflow: unset !important;
+      }
       .anime-card-category { align-self: center; }
       .anime-card-rating { justify-content: center; }
       /* Schedule mobile */
@@ -842,9 +869,9 @@
       margin-top: 18px !important;
       box-shadow: none !important;
       background: transparent !important;
-      position: sticky;
-      top: 0;
-      z-index: 10;
+      /* position: sticky; */
+      /* top: 0; */
+      /* z-index: 10; */
     }
     .category-tabs:not(.compact-topbar) {
       background: none !important;
