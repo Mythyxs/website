@@ -189,7 +189,11 @@
     .visitor-counter{text-align:center;margin-top:40px;padding:20px;background:rgba(103,84,133,.05);border-radius:15px;border:1px solid rgba(103,84,133,.2);opacity:0;transform:translateY(20px);animation:fadeInUp .6s ease .3s forwards;position:relative;overflow:hidden;transition:all .3s ease;}
     .visitor-counter::before{content:'';position:absolute;inset:0;left:-100%;background:linear-gradient(90deg,transparent,rgba(103,84,133,.2),transparent);transition:left .6s;pointer-events:none;}
     .visitor-counter:hover::before{left:100%;}
-    .visitor-counter:hover{transform:translateY(-5px);border-color:var(--primary);box-shadow:0 5px 5px rgba(103,84,133,.3);}
+    .visitor-counter:hover{
+      transform:translateY(-5px);
+      border-color:var(--primary);
+      box-shadow:0 5px 5px rgba(103,84,133,.3);
+    }
     
     .visitor-count {
       font-size: 2.5rem;
@@ -830,6 +834,7 @@
       transition: height 0.6s ease;
       overflow: hidden;
       padding-bottom: 32px;
+      min-height: 60vh;
     }
     .accolades-section {
       /* Remove old opacity transition, handled by .fade-section now */
