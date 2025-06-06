@@ -883,6 +883,90 @@
       box-shadow: none !important;
       margin-top: 0 !important;
     }
+
+    /* --- Redesigned Anime Card Category Tag --- */
+    .anime-card-category {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 4px 16px 4px 12px;
+      border-radius: 999px;
+      border: 2px solid var(--primary);
+      background: linear-gradient(90deg, rgba(103,84,133,0.18), rgba(201,179,195,0.10));
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(103,84,133,0.10);
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+      margin-top: 2px;
+      gap: 6px;
+      transition: background 0.2s, color 0.2s, border 0.2s;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.18);
+    }
+    .anime-card-category.cat-platinum-masterpiece::before { content: "💎"; }
+    .anime-card-category.cat-overaveragely-enjoyable::before { content: "🔥"; }
+    .anime-card-category.cat-average-enjoyability::before { content: "⭐"; }
+    .anime-card-category.cat-unfinished--disinterested::before { content: "⏸️"; }
+    .anime-card-category.cat-planned-to-watch::before { content: "🕒"; }
+
+    /* --- Redesigned Episodes Chip --- */
+    .episodes-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 14px;
+      background: linear-gradient(90deg, rgba(44,130,127,0.35), rgba(103,84,133,0.15));
+      border: 1.5px solid rgba(44,130,127,0.7);
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--accent-bright);
+      box-shadow: 0 1px 6px rgba(44,130,127,0.10);
+      letter-spacing: 0.2px;
+    }
+    .episodes-chip svg {
+      width: 16px;
+      height: 16px;
+      fill: var(--cat-platinum);
+    }
+
+    /* --- Redesigned Score Chip --- */
+    .score-chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 14px 4px 10px;
+      border-radius: 999px;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-left: 0;
+      border: 2px solid #4CAF50;
+      background: linear-gradient(90deg, rgba(76,175,80,0.18), rgba(103,84,133,0.10));
+      color: #fff;
+      gap: 6px;
+      box-shadow: 0 2px 8px rgba(76,175,80,0.10);
+      letter-spacing: 0.2px;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.18);
+    }
+    .score-chip .star-icon {
+      margin-right: 6px;
+      font-size: 1.2em;
+      color: #FFD600;
+      filter: drop-shadow(0 0 4px #FFD60088);
+      animation: shimmer 2s infinite linear;
+    }
+    @keyframes shimmer {
+      0% { filter: drop-shadow(0 0 4px #FFD60088); }
+      50% { filter: drop-shadow(0 0 12px #FFD600cc); }
+      100% { filter: drop-shadow(0 0 4px #FFD60088); }
+    }
+
+    /* Score chip color variants (keep as is for now, but can be further improved if needed) */
+    .score-chip.score-green { border-color: #4CAF50; background: linear-gradient(90deg, rgba(76,175,80,0.18), rgba(103,84,133,0.10)); color: #fff; }
+    .score-chip.score-lightgreen { border-color: #8BC34A; background: linear-gradient(90deg, rgba(139,195,74,0.18), rgba(103,84,133,0.10)); color: #fff; }
+    .score-chip.score-yellow { border-color: #FFEB3B; background: linear-gradient(90deg, rgba(255,235,59,0.18), rgba(103,84,133,0.10)); color: #fff; }
+    .score-chip.score-orange { border-color: #FF9800; background: linear-gradient(90deg, rgba(255,152,0,0.18), rgba(103,84,133,0.10)); color: #fff; }
+    .score-chip.score-red { border-color: #F44336; background: linear-gradient(90deg, rgba(244,67,54,0.18), rgba(103,84,133,0.10)); color: #fff; }
+    .score-chip.score-none { display: none; }
   </style>
 </head>
 <body>
