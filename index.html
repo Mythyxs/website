@@ -239,7 +239,7 @@
       color: var(--accent);
       margin-right: 8px;
     }
-    .anime-controls select, .anime-controls button {
+    .anime-controls select, .anime-controls button, .anime-controls input[type="text"] {
   padding: 8px 12px;
   background-color: #241a31; /* solid dark background for contrast */
   border: 1px solid var(--primary-dark);
@@ -249,7 +249,10 @@
   cursor: pointer;
   transition: background-color .3s, border-color .3s;
 }
-    .anime-controls select:hover, .anime-controls button:hover {
+    .anime-controls input[type="text"] {
+        cursor: text;
+    }
+    .anime-controls select:hover, .anime-controls button:hover, .anime-controls input[type="text"]:hover {
       background-color: rgba(112, 90, 148, 0.75);
       border-color: var(--primary);
     }
@@ -1275,6 +1278,10 @@
                 </select>
             </div>
             <div>
+                <label for="searchBar">Search:</label>
+                <input type="text" id="searchBar" placeholder="Type to search...">
+            </div>
+            <div>
                 <label for="sortOrder">Sort:</label>
                 <select id="sortOrder">
                     <option value="az">Title (A-Z)</option>
@@ -1477,6 +1484,7 @@
         const container = document.getElementById('animeGridContainer');
         const filterValue = document.getElementById('categoryFilter').value;
         const sortValue = document.getElementById('sortOrder').value;
+        const searchValue = document.getElementById('searchBar').value.toLowerCase();
         const loadingIndicator = document.getElementById('animeListLoading');
 
         if (!container || !animeDataCache.all.length) {
@@ -1488,6 +1496,10 @@
         container.innerHTML = ''; // Clear previous items
 
         let filteredList = [...animeDataCache.all];
+
+        if (searchValue) {
+            filteredList = filteredList.filter(anime => anime.title.toLowerCase().includes(searchValue));
+        }
 
         if (filterValue !== 'All') {
             filteredList = filteredList.filter(anime => anime.category === filterValue);
@@ -1974,6 +1986,7 @@
 
       document.getElementById('categoryFilter').addEventListener('change', renderAnimeList);
       document.getElementById('sortOrder').addEventListener('change', renderAnimeList);
+      document.getElementById('searchBar').addEventListener('input', renderAnimeList);
       document.getElementById('refreshScheduleBtn').addEventListener('click', () => loadAndRenderSchedule(true)); 
     });
 
