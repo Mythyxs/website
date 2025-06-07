@@ -983,76 +983,48 @@
     .score-chip {
       display: inline-flex;
       align-items: center;
-      padding: 6px 12px;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      font-weight: 700;
-      gap: 6px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
-      position: relative;
-      overflow: hidden;
-      transition: all 0.3s ease;
-      background: linear-gradient(135deg, var(--score-bg) 0%, var(--score-bg-dark) 100%);
-      border: 1px solid var(--score-border);
+      gap: 4px;
+      padding: 3px 10px 3px 8px;
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      white-space: nowrap;
       color: #fff;
+      transition: all 0.3s ease;
     }
-    .score-chip::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-      transform: rotate(45deg);
-      transition: all 0.5s ease;
-      opacity: 0;
-    }
-    .anime-card:hover .score-chip::before {
-      opacity: 1;
-      transform: rotate(45deg) translate(20%, 20%);
-    }
+
     .score-chip .star-icon {
-      font-size: 1.1rem;
-      filter: drop-shadow(0 0 4px rgba(255,255,255,0.6));
-      animation: subtle-pulse 2s ease-in-out infinite;
+      font-size: .9rem;
+      color: #FFD600;
+      filter: drop-shadow(0 0 2px #FFD600);
+      line-height: 1;
     }
-    @keyframes subtle-pulse {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.1); opacity: 0.9; }
-    }
+
     .score-chip.score-green {
-      --score-bg: #4CAF50;
-      --score-bg-dark: #388E3C;
-      --score-border: #2E7D32;
+      background: rgba(76,175,80,0.15);
+      border-color: rgba(76,175,80,0.5);
     }
     .score-chip.score-lightgreen {
-      --score-bg: #8BC34A;
-      --score-bg-dark: #689F38;
-      --score-border: #558B2F;
+      background: rgba(139,195,74,0.15);
+      border-color: rgba(139,195,74,0.5);
     }
     .score-chip.score-yellow {
-      --score-bg: #FFEB3B;
-      --score-bg-dark: #FBC02D;
-      --score-border: #F57F17;
+      background: rgba(255,235,59,0.15);
+      border-color: rgba(255,235,59,0.5);
     }
     .score-chip.score-orange {
-      --score-bg: #FF9800;
-      --score-bg-dark: #F57C00;
-      --score-border: #E65100;
+      background: rgba(255,152,0,0.15);
+      border-color: rgba(255,152,0,0.5);
     }
     .score-chip.score-red {
-      --score-bg: #F44336;
-      --score-bg-dark: #D32F2F;
-      --score-border: #B71C1C;
+      background: rgba(244,67,54,0.15);
+      border-color: rgba(244,67,54,0.5);
     }
     .score-chip.score-none { display: none; }
-    .anime-card-score-topright {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      z-index: 3;
-    }
+
     .anime-card {
       padding: 16px;
       min-height: unset;
@@ -1428,12 +1400,7 @@
             .replace(/[^a-zA-Z0-9\-]/g,'')
             .toLowerCase();
 
-        const scoreChipHTML =
-          anime.rating > 0
-            ? `<div class="anime-card-score-topright">
-                 ${createScoreChipHTML(anime.rating)}
-               </div>`
-            : '';
+        const scoreChipHTML = createScoreChipHTML(anime.rating);
 
         const episodeLabel =
           anime.watchedEpisodes != null && anime.totalEpisodes != null
@@ -1451,7 +1418,6 @@
 
         /* ---------------- markup ---------------- */
         card.innerHTML = `
-          ${scoreChipHTML}
           <div class="anime-card-content">
             <img src="${anime.coverImageUrl || 'placeholder.png'}"
                  alt="${anime.title}"
@@ -1459,9 +1425,11 @@
                  onerror="this.src='https://via.placeholder.com/80x115/1A1A1A/4A4A4A?text=No+Image';">
 
             <div class="anime-card-details" style="min-width:0;">
-              <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-                <div class="anime-card-title">${anime.title}</div>
-                ${episodesChipHTML}
+              <div class="anime-card-title">${anime.title}</div>
+              
+              <div class="anime-card-meta">
+                  ${scoreChipHTML}
+                  ${episodesChipHTML}
               </div>
 
               <div class="anime-card-category ${categoryClass}">
@@ -1962,4 +1930,5 @@
 
   </script>
 </body>
+</html>
 </html>
