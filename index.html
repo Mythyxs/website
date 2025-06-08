@@ -785,6 +785,15 @@
       font-size: 1.1rem;
     }
 
+    .comment-author .crown-icon {
+        width: 16px;
+        height: 16px;
+        vertical-align: -3px;
+        margin-left: 4px;
+        fill: #FFD700; /* gold */
+        filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.7));
+    }
+
     .comment-date {
       font-size: 0.8rem;
       color: var(--accent);
@@ -2072,9 +2081,13 @@
         const sanitizedText = (comment.text || '').replace(/</g, "&lt;").replace(/>/g, "&gt;");
         const sanitizedUsername = (comment.username || '').replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
+        const crownIconHTML = sanitizedUsername.toLowerCase().includes('shem')
+            ? ` <svg class="crown-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M5,16L3,5L8.5,10L12,4L15.5,10L21,5L19,16H5Z"/></svg>`
+            : '';
+
         card.innerHTML = `
             <div class="comment-header">
-                <span class="comment-author">${sanitizedUsername}</span>
+                <span class="comment-author">${sanitizedUsername}${crownIconHTML}</span>
                 <span class="comment-date">${formattedDate}</span>
             </div>
             <p class="comment-body">${sanitizedText.replace(/\n/g, '<br>')}</p>
