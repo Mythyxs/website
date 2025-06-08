@@ -690,6 +690,114 @@
     .schedule-item-status.status-aired { background: rgba(139,195,74,0.13); border-color: #8BC34A; color: #fff; font-size: 0.75rem; }
     .schedule-item-status.status-past { background: rgba(117,117,117,0.13); border-color: #757575; color: #fff; font-size: 0.75rem; }
 
+    /* ─── Comments Section ─── */
+    .comments-section {
+      margin-top: 40px;
+      padding-top: 30px;
+      border-top: 1px solid var(--glass-border);
+    }
+
+    .comment-form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      max-width: 700px;
+      margin: 0 auto 40px auto;
+    }
+
+    .comment-form input,
+    .comment-form textarea {
+      padding: 12px 16px;
+      background-color: rgba(36, 26, 49, 0.7); /* Darker, more opaque */
+      border: 1px solid var(--primary-dark);
+      color: #fff;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      transition: all .3s ease;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    .comment-form textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .comment-form input:focus,
+    .comment-form textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      background-color: rgba(50, 36, 69, 0.8);
+      box-shadow: 0 0 8px rgba(103, 84, 133, 0.4);
+    }
+
+    .comment-form button {
+      padding: 12px 24px;
+      border-radius: 8px;
+      border: none;
+      background: linear-gradient(to right, var(--primary), var(--primary-dark));
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      align-self: flex-end; /* Pushes button to the right */
+    }
+
+    .comment-form button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(103, 84, 133, 0.3);
+    }
+
+    .comment-form button:disabled {
+        background: #555;
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
+
+    .comments-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .comment-card {
+      background: linear-gradient(135deg, rgba(103, 84, 133, .08) 0%, rgba(201, 179, 195, .04) 100%);
+      border: 1px solid rgba(103, 84, 133, 0.2);
+      border-radius: 12px;
+      padding: 20px;
+      animation: cardEntry 0.5s ease forwards;
+      opacity: 0;
+    }
+
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .comment-author {
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 1.1rem;
+    }
+
+    .comment-date {
+      font-size: 0.8rem;
+      color: var(--accent);
+      opacity: 0.7;
+    }
+
+    .comment-body {
+      color: var(--accent-bright);
+      line-height: 1.6;
+      white-space: pre-wrap; /* Preserve line breaks */
+      word-wrap: break-word;
+    }
+    
     /* ─── Anime Card Compact Layout ─── */
     .anime-card {
       padding: 14px 16px;
@@ -1298,6 +1406,21 @@
                 Loading Anime List...
             </div>
         </div>
+        <div class="comments-section">
+          <h3 class="section-title" style="margin-top: 60px; margin-bottom: 30px;">Comments</h3>
+          <form id="commentForm" class="comment-form">
+            <input type="text" id="commentUsername" placeholder="Your username" required>
+            <textarea id="commentText" placeholder="Leave a comment..." required></textarea>
+            <button type="submit" id="submitCommentBtn">Post Comment</button>
+          </form>
+          <div id="commentsContainer" class="comments-container">
+            <!-- Comments will be loaded here -->
+            <div class="loading-indicator" id="commentsLoading">
+                <svg viewBox="0 0 50 50"><circle cx="25" cy="25" r="20" fill="none" stroke-width="5" stroke="currentColor" stroke-linecap="round" pathLength="1" stroke-dasharray="0.5 0.5"></circle></svg>
+                Loading comments...
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- ───────────  SCHEDULE  ─────────── -->
@@ -1392,6 +1515,9 @@
         scheduleLastFetched: null
     };
     const ANIME_JSON_PATH = 'https://raw.githubusercontent.com/Mythyxs/website/refs/heads/main/anime_backup.json';
+    const COMMENTS_BIN_ID = '6844d32e8960c979a5a675ff';
+    const COMMENTS_API_KEY = '$2a$10$NwYMNtIZx5ag/xokwHWN4.1u.yOLzNxLLroIP/IBcjJBEi0YiB81e';
+    const COMMENTS_URL = `https://api.jsonbin.io/v3/b/${COMMENTS_BIN_ID}`;
 
 
     const categoryColors = {
@@ -1837,6 +1963,127 @@
             }
         });
     }
+    
+    // New comment functions
+    function createCommentCard(comment) {
+        const card = document.createElement('div');
+        card.className = 'comment-card';
+        const date = new Date(comment.date);
+        const formattedDate = date.toLocaleString(undefined, { 
+            year: 'numeric', month: 'long', day: 'numeric', 
+            hour: 'numeric', minute: '2-digit' 
+        });
+
+        card.innerHTML = `
+            <div class="comment-header">
+                <span class="comment-author">${comment.username}</span>
+                <span class="comment-date">${formattedDate}</span>
+            </div>
+            <p class="comment-body">${comment.text}</p>
+        `;
+        return card;
+    }
+
+    async function loadComments() {
+        const container = document.getElementById('commentsContainer');
+        const loadingIndicator = document.getElementById('commentsLoading');
+        if (loadingIndicator) loadingIndicator.style.display = 'block';
+        
+        try {
+            const response = await fetch(`${COMMENTS_URL}/latest`, { 
+                headers: { 'X-Master-Key': COMMENTS_API_KEY }
+            });
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            
+            const data = await response.json();
+            const comments = data.record.comments || [];
+            
+            if (loadingIndicator) loadingIndicator.style.display = 'none';
+            container.innerHTML = ''; // Clear container
+
+            if (comments.length === 0) {
+                container.innerHTML = `<div class="empty-state">No comments yet. Be the first!</div>`;
+                return;
+            }
+
+            comments.sort((a, b) => new Date(b.date) - new Date(a.date)); // Newest first
+
+            comments.forEach((comment, index) => {
+                const card = createCommentCard(comment);
+                card.style.setProperty('--card-index', index);
+                container.appendChild(card);
+            });
+
+        } catch (error) {
+            console.error('Failed to load comments:', error);
+            if (loadingIndicator) loadingIndicator.style.display = 'none';
+            if (container) container.innerHTML = `<div class="empty-state">Error loading comments. Please try again later.</div>`;
+        }
+    }
+
+    async function handleCommentSubmit(event) {
+        event.preventDefault();
+        const usernameInput = document.getElementById('commentUsername');
+        const textInput = document.getElementById('commentText');
+        const submitBtn = document.getElementById('submitCommentBtn');
+
+        const username = usernameInput.value.trim();
+        const text = textInput.value.trim();
+
+        if (!username || !text) {
+            alert('Please fill in both username and comment fields.');
+            return;
+        }
+        
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Posting...';
+
+        try {
+            // 1. GET the latest version of the bin
+            const getResponse = await fetch(`${COMMENTS_URL}/latest`, { 
+                headers: { 'X-Master-Key': COMMENTS_API_KEY }
+            });
+            if (!getResponse.ok) throw new Error('Failed to fetch latest comments before posting.');
+            const binData = await getResponse.json();
+            
+            const existingComments = binData.record.comments || [];
+
+            // 2. Add the new comment
+            const newComment = {
+                username: username,
+                text: text,
+                date: new Date().toISOString()
+            };
+            const updatedComments = [...existingComments, newComment];
+            
+            // 3. PUT the updated data back
+            const putResponse = await fetch(COMMENTS_URL, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Master-Key': COMMENTS_API_KEY
+                },
+                body: JSON.stringify({ comments: updatedComments })
+            });
+
+            if (!putResponse.ok) {
+                const errorBody = await putResponse.text();
+                throw new Error(`Failed to post comment. Server responded with: ${errorBody}`);
+            }
+
+            // 4. Success
+            usernameInput.value = ''; // Clear fields
+            textInput.value = '';
+            await loadComments(); // Refresh comments list
+
+        } catch (error) {
+            console.error('Error posting comment:', error);
+            alert('There was an error posting your comment. Please try again.');
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Post Comment';
+        }
+    }
 
     function showCategory(catId, buttonElement) {
         if (currentCategory === catId) return;
@@ -1907,6 +2154,7 @@
         // Trigger tab-specific logic
         if (catId === 'animeList') {
           animeDataCache.all.length === 0 ? loadAndPrepareAnimeData() : renderAnimeList();
+          loadComments();
         } else if (catId === 'schedule') {
           loadAndRenderSchedule();
         } else if (catId === 'home') {
@@ -1988,9 +2236,9 @@
       document.getElementById('sortOrder').addEventListener('change', renderAnimeList);
       document.getElementById('searchBar').addEventListener('input', renderAnimeList);
       document.getElementById('refreshScheduleBtn').addEventListener('click', () => loadAndRenderSchedule(true)); 
+      document.getElementById('commentForm').addEventListener('submit', handleCommentSubmit);
     });
 
   </script>
 </body>
-</html>
 </html>
