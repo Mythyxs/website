@@ -798,6 +798,100 @@
       word-wrap: break-word;
     }
     
+    .comment-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+    .comment-actions button {
+      background: none;
+      border: 1px solid transparent;
+      color: var(--accent);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      padding: 4px 8px;
+      border-radius: 20px;
+      transition: all 0.2s ease;
+    }
+    .comment-actions button:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: var(--glass-border);
+      color: #fff;
+    }
+    .comment-actions button.active {
+      background-color: var(--primary-dark);
+      color: white;
+    }
+    .comment-actions button svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    .replies-toggle {
+      margin-top: 15px;
+      color: var(--primary);
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 5px;
+      -webkit-user-select: none; /* Safari */
+      -ms-user-select: none; /* IE 10+ */
+      user-select: none;
+    }
+    .replies-toggle:hover {
+      background: rgba(103, 84, 133, 0.2);
+    }
+
+    .replies-container {
+      margin-top: 15px;
+      padding-left: 25px;
+      border-left: 2px solid var(--glass-border);
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .reply-form-container {
+      margin-top: 15px;
+      padding-left: 5px;
+    }
+    
+    .comment-card.is-reply {
+      background: rgba(0,0,0,0.1);
+      padding: 15px;
+      border-color: rgba(103, 84, 133, 0.1);
+    }
+
+    .reply-form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .reply-form textarea {
+        min-height: 60px;
+    }
+    .reply-form .comment-form-buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+    .reply-form .comment-form-buttons button {
+        padding: 8px 16px !important;
+        align-self: initial !important;
+    }
+    .reply-form .comment-form-buttons .cancel-reply-btn {
+        background: rgba(255,255,255,0.1);
+    }
+    
     /* ─── Anime Card Compact Layout ─── */
     .anime-card {
       padding: 14px 16px;
@@ -1415,8 +1509,8 @@
         <div class="comments-section">
           <h3 class="section-title" style="margin-top: 60px; margin-bottom: 30px;">Comments</h3>
           <form id="commentForm" class="comment-form">
-            <input type="text" id="commentUsername" placeholder="Your username" required>
-            <textarea id="commentText" placeholder="Leave a comment..." required></textarea>
+            <input type="text" id="commentUsername" name="username" placeholder="Your username" required>
+            <textarea id="commentText" name="text" placeholder="Leave a comment..." required></textarea>
             <button type="submit" id="submitCommentBtn">Post Comment</button>
           </form>
           <div id="commentsContainer" class="comments-container">
@@ -1971,54 +2065,149 @@
     }
     
     // New comment functions
-    function createCommentCard(comment) {
+    animeDataCache.comments = [];
+
+    function findComment(commentId, comments = animeDataCache.comments) {
+        for (const comment of comments) {
+            if (comment.id === commentId) return comment;
+            if (comment.replies) {
+                const foundInReply = findComment(commentId, comment.replies);
+                if (foundInReply) return foundInReply;
+            }
+        }
+        return null;
+    }
+
+    async function updateCommentsOnServer() {
+        try {
+            await fetch(COMMENTS_URL, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Master-Key': COMMENTS_API_KEY,
+                    'X-Bin-Versioning': 'false' // important to not create new versions
+                },
+                body: JSON.stringify({ comments: animeDataCache.comments })
+            });
+        } catch (error) {
+            console.error("Failed to update comments on server:", error);
+            alert("Sorry, there was an error saving your action. Please refresh and try again.");
+        }
+    }
+
+    function createReplyForm(parentId) {
+        return `
+            <form class="reply-form">
+                <input type="hidden" name="parentId" value="${parentId}">
+                <input type="text" name="username" class="comment-form-input" placeholder="Your username" required>
+                <textarea name="text" class="comment-form-textarea" placeholder="Write a reply..." required></textarea>
+                <div class="comment-form-buttons">
+                    <button type="button" class="cancel-reply-btn">Cancel</button>
+                    <button type="submit">Reply</button>
+                </div>
+            </form>
+        `;
+    }
+    
+    function createCommentCard(comment, isReply = false) {
         const card = document.createElement('div');
-        card.className = 'comment-card';
+        card.className = isReply ? 'comment-card is-reply' : 'comment-card';
+        card.dataset.id = comment.id;
+
         const date = new Date(comment.date);
-        const formattedDate = date.toLocaleString(undefined, { 
-            year: 'numeric', month: 'long', day: 'numeric', 
-            hour: 'numeric', minute: '2-digit' 
+        const formattedDate = date.toLocaleString(undefined, {
+            year: 'numeric', month: 'long', day: 'numeric',
+            hour: 'numeric', minute: '2-digit'
         });
+
+        const repliesToggleHTML = !isReply && comment.replies && comment.replies.length > 0
+            ? `<div class="replies-toggle" role="button" tabindex="0">
+                 &#9662; View ${comment.replies.length} replies
+               </div>`
+            : '';
 
         card.innerHTML = `
             <div class="comment-header">
                 <span class="comment-author">${comment.username}</span>
                 <span class="comment-date">${formattedDate}</span>
             </div>
-            <p class="comment-body">${comment.text}</p>
+            <p class="comment-body">${comment.text.replace(/\n/g, '<br>')}</p>
+            <div class="comment-actions">
+                <button class="like-btn" title="Like">
+                    <svg viewBox="0 0 24 24"><path d="M23,10C23,8.89 22.1,8 21,8H14.68L15.64,3.43L15.67,3.24C15.67,2.96 15.55,2.71 15.38,2.53L14.37,1.5L7.87,8.04C7.5,8.4 7.27,8.87 7.27,9.4V19C7.27,20.1 8.17,21 9.27,21H18.27C19.14,21 19.86,20.45 20.17,19.67L22.84,13.06C22.94,12.79 23,12.5 23,12.22V10M1,19H5V9H1V19Z"/></svg>
+                    <span class="like-count">${comment.likes || 0}</span>
+                </button>
+                <button class="dislike-btn" title="Dislike">
+                    <svg viewBox="0 0 24 24" style="transform: scaleY(-1);"><path d="M23,10C23,8.89 22.1,8 21,8H14.68L15.64,3.43L15.67,3.24C15.67,2.96 15.55,2.71 15.38,2.53L14.37,1.5L7.87,8.04C7.5,8.4 7.27,8.87 7.27,9.4V19C7.27,20.1 8.17,21 9.27,21H18.27C19.14,21 19.86,20.45 20.17,19.67L22.84,13.06C22.94,12.79 23,12.5 23,12.22V10M1,19H5V9H1V19Z"/></svg>
+                    <span class="dislike-count">${comment.dislikes || 0}</span>
+                </button>
+                ${!isReply ? `<button class="reply-btn">Reply</button>` : ''}
+            </div>
+            <div class="reply-form-container" style="display: none;"></div>
+            ${repliesToggleHTML}
+            <div class="replies-container" style="display: none;"></div>
         `;
         return card;
+    }
+
+    function renderComments() {
+        const container = document.getElementById('commentsContainer');
+        const loadingIndicator = document.getElementById('commentsLoading');
+        
+        if (loadingIndicator) loadingIndicator.style.display = 'none';
+        container.innerHTML = '';
+
+        if (!animeDataCache.comments || animeDataCache.comments.length === 0) {
+            container.innerHTML = `<div class="empty-state">No comments yet. Be the first!</div>`;
+            return;
+        }
+
+        animeDataCache.comments.forEach(comment => {
+            const card = createCommentCard(comment, false);
+
+            if (comment.replies && comment.replies.length > 0) {
+                const repliesContainer = card.querySelector('.replies-container');
+                comment.replies.sort((a,b) => new Date(a.date) - new Date(b.date)); // Oldest reply first
+                comment.replies.forEach(replyData => {
+                    const replyCard = createCommentCard(replyData, true);
+                    repliesContainer.appendChild(replyCard);
+                });
+            }
+            container.appendChild(card);
+        });
     }
 
     async function loadComments() {
         const container = document.getElementById('commentsContainer');
         const loadingIndicator = document.getElementById('commentsLoading');
         if (loadingIndicator) loadingIndicator.style.display = 'block';
-        
+
         try {
-            const response = await fetch(`${COMMENTS_URL}/latest`, { 
+            const response = await fetch(`${COMMENTS_URL}/latest`, {
                 headers: { 'X-Master-Key': COMMENTS_API_KEY }
             });
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-            
+
             const data = await response.json();
-            const comments = data.record.comments || [];
-            
-            if (loadingIndicator) loadingIndicator.style.display = 'none';
-            container.innerHTML = ''; // Clear container
+            animeDataCache.comments = data.record.comments || [];
 
-            if (comments.length === 0) {
-                container.innerHTML = `<div class="empty-state">No comments yet. Be the first!</div>`;
-                return;
-            }
-
-            comments.sort((a, b) => new Date(b.date) - new Date(a.date)); // Newest first
-
-            comments.forEach((comment, index) => {
-                const card = createCommentCard(comment);
-                card.style.setProperty('--card-index', index);
-                container.appendChild(card);
+            animeDataCache.comments.forEach(c => {
+                c.id = c.id || `${new Date(c.date).valueOf()}-${Math.random().toString(36).substr(2, 5)}`;
+                c.likes = c.likes || 0;
+                c.dislikes = c.dislikes || 0;
+                c.replies = c.replies || [];
+                if (c.replies) {
+                  c.replies.forEach(r => {
+                    r.id = r.id || `${new Date(r.date).valueOf()}-${Math.random().toString(36).substr(2, 5)}`;
+                    r.likes = r.likes || 0;
+                    r.dislikes = r.dislikes || 0;
+                  });
+                }
             });
+            
+            animeDataCache.comments.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            renderComments();
 
         } catch (error) {
             console.error('Failed to load comments:', error);
@@ -2027,14 +2216,14 @@
         }
     }
 
-    async function handleCommentSubmit(event) {
+    async function postComment(event) {
         event.preventDefault();
-        const usernameInput = document.getElementById('commentUsername');
-        const textInput = document.getElementById('commentText');
-        const submitBtn = document.getElementById('submitCommentBtn');
-
-        const username = usernameInput.value.trim();
-        const text = textInput.value.trim();
+        const form = event.target;
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const parentId = form.querySelector('input[name="parentId"]')?.value || null;
+        
+        const username = form.querySelector('[name="username"]').value.trim();
+        const text = form.querySelector('[name="text"]').value.trim();
 
         if (!username || !text) {
             alert('Please fill in both username and comment fields.');
@@ -2044,140 +2233,94 @@
         submitBtn.disabled = true;
         submitBtn.textContent = 'Posting...';
 
-        try {
-            // 1. GET the latest version of the bin
-            const getResponse = await fetch(`${COMMENTS_URL}/latest`, { 
-                headers: { 'X-Master-Key': COMMENTS_API_KEY }
-            });
-            if (!getResponse.ok) throw new Error('Failed to fetch latest comments before posting.');
-            const binData = await getResponse.json();
-            
-            const existingComments = binData.record.comments || [];
+        const commentData = {
+            id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+            username: username,
+            text: text,
+            date: new Date().toISOString(),
+            likes: 0,
+            dislikes: 0,
+        };
 
-            // 2. Add the new comment
-            const newComment = {
-                username: username,
-                text: text,
-                date: new Date().toISOString()
-            };
-            const updatedComments = [...existingComments, newComment];
-            
-            // 3. PUT the updated data back
-            const putResponse = await fetch(COMMENTS_URL, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Master-Key': COMMENTS_API_KEY
-                },
-                body: JSON.stringify({ comments: updatedComments })
-            });
-
-            if (!putResponse.ok) {
-                const errorBody = await putResponse.text();
-                throw new Error(`Failed to post comment. Server responded with: ${errorBody}`);
+        if (parentId) {
+            const parentComment = findComment(parentId);
+            if (parentComment) {
+                if (!parentComment.replies) parentComment.replies = [];
+                parentComment.replies.push(commentData);
             }
+        } else {
+            commentData.replies = [];
+            animeDataCache.comments.unshift(commentData);
+        }
 
-            // 4. Success
-            usernameInput.value = ''; // Clear fields
-            textInput.value = '';
-            await loadComments(); // Refresh comments list
-
-        } catch (error) {
-            console.error('Error posting comment:', error);
-            alert('There was an error posting your comment. Please try again.');
+        try {
+            await updateCommentsOnServer();
+            renderComments(); // Re-render everything to show the new comment/reply
+            if (!parentId) { // If it was the main form
+                form.reset();
+            }
+        } catch(error) {
+            console.error("Error submitting comment:", error);
+            alert("Failed to submit comment. Please try again.");
+            // Revert optimistic update if server fails
+            loadComments();
         } finally {
             submitBtn.disabled = false;
-            submitBtn.textContent = 'Post Comment';
+            submitBtn.textContent = parentId ? 'Reply' : 'Post Comment';
         }
     }
+    
+    function handleCommentInteraction(event) {
+        const target = event.target;
+        const button = target.closest('button');
+        const commentCard = target.closest('.comment-card');
 
-    function showCategory(catId, buttonElement) {
-        if (currentCategory === catId) return;
-        const prevCategory = currentCategory;
-        currentCategory = catId;
-
-        // Instantly update tab highlight
-        document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
-        if (buttonElement) buttonElement.classList.add('active');
-
-        // Animate heroHomeWrapper in sync with tab content
-        const heroHome = document.getElementById('heroHomeWrapper');
-        const isHome = catId === 'home';
-
-        // --- NEW: Toggle compact-topbar class ---
-        const container = document.getElementById('mainContainer');
-        const categoryTabs = document.querySelector('.category-tabs');
-        if (!isHome) {
-          if (container) container.classList.add('compact-topbar');
-          if (categoryTabs) categoryTabs.classList.add('compact-topbar');
-          if (heroHome) heroHome.classList.add('hidden');
-        } else {
-          if (container) container.classList.remove('compact-topbar');
-          if (categoryTabs) categoryTabs.classList.remove('compact-topbar');
-          if (heroHome) heroHome.classList.remove('hidden');
+        // Handle reply toggle
+        const toggle = target.closest('.replies-toggle');
+        if (toggle && commentCard) {
+            const repliesContainer = commentCard.querySelector('.replies-container');
+            const isHidden = repliesContainer.style.display === 'none';
+            repliesContainer.style.display = isHidden ? 'flex' : 'none';
+            toggle.innerHTML = isHidden
+                ? `&#9652; Hide replies`
+                : `&#9662; View ${commentCard.querySelectorAll('.is-reply').length} replies`;
+            return;
         }
 
-        const wrapper = document.getElementById('tabSectionsWrapper');
-        const currentVisible = document.querySelector('.accolades-section.fade-section.show');
-        const nextVisible = document.getElementById(catId + 'Section');
+        if (!button || !commentCard) return;
 
-        if (!wrapper || !nextVisible) return;
+        const commentId = commentCard.dataset.id;
+        const comment = findComment(commentId);
+        if (!comment) return;
 
-        // Step 1: Fade out current
-        if (currentVisible) {
-          currentVisible.classList.remove('show');
-          if (prevCategory === 'home' && heroHome) heroHome.classList.remove('show');
-        }
-        if (!isHome && heroHome) heroHome.classList.remove('show');
-
-        setTimeout(() => {
-          // Step 2: Animate height to new tab
-          if (currentVisible) currentVisible.classList.add('hidden');
-          nextVisible.classList.remove('hidden');
-          // For hero section
-          if (isHome && heroHome) {
-            heroHome.classList.remove('hidden');
-          }
-          // Ensure .show is present for accurate height
-          let removeShowAfter = false;
-          if (!nextVisible.classList.contains('show')) {
-            nextVisible.classList.add('show');
-            removeShowAfter = true;
-          }
-          const endHeight = nextVisible.offsetHeight;
-          if (removeShowAfter) nextVisible.classList.remove('show');
-          wrapper.style.height = endHeight + 'px';
-          setTimeout(() => {
-            // Step 3: Fade in new tab
-            nextVisible.classList.add('show');
-            if (isHome && heroHome) heroHome.classList.add('show');
-            setTimeout(() => {
-              wrapper.style.height = '';
-            }, 600);
-          }, 40); // Small delay to allow height to animate
-        }, 600);
-
-        // Trigger tab-specific logic
-        if (catId === 'animeList') {
-          animeDataCache.all.length === 0 ? loadAndPrepareAnimeData() : renderAnimeList();
-          loadComments();
-        } else if (catId === 'schedule') {
-          loadAndRenderSchedule();
-        } else if (catId === 'home') {
-          setTimeout(() => {
-            nextVisible.querySelectorAll('.social-card').forEach((c, i) => {
-              c.style.animation = 'none';
-              setTimeout(() => c.style.animation = `fadeInUp .6s ease ${i * .1}s forwards`, 10);
-            });
-            const counter = nextVisible.querySelector('.visitor-counter');
-            if (counter) {
-              counter.style.animation = 'none';
-              setTimeout(() => counter.style.animation = 'fadeInUp .6s ease .3s forwards', 10);
+        if (button.classList.contains('like-btn')) {
+            comment.likes = (comment.likes || 0) + 1;
+            button.querySelector('.like-count').textContent = comment.likes;
+            updateCommentsOnServer();
+        } else if (button.classList.contains('dislike-btn')) {
+            comment.dislikes = (comment.dislikes || 0) + 1;
+            button.querySelector('.dislike-count').textContent = comment.dislikes;
+            updateCommentsOnServer();
+        } else if (button.classList.contains('reply-btn')) {
+            const formContainer = commentCard.querySelector('.reply-form-container');
+            if (formContainer.style.display === 'none') {
+                formContainer.style.display = 'block';
+                formContainer.innerHTML = createReplyForm(commentId);
+                formContainer.querySelector('textarea').focus();
+            } else {
+                formContainer.style.display = 'none';
+                formContainer.innerHTML = '';
             }
-          }, 650);
+        } else if (button.classList.contains('cancel-reply-btn')) {
+            const formContainer = button.closest('.reply-form-container');
+            if(formContainer) {
+                formContainer.style.display = 'none';
+                formContainer.innerHTML = '';
+            }
+        } else if (button.type === 'submit' && button.closest('form.reply-form')) {
+             postComment(event);
         }
     }
-
     /* visitor counter */
     function initVisitorCounter(){const binId='683f4c3f8561e97a501f44c4',apiKey='$2a$10$NwYMNtIZx5ag/xokwHWN4.1u.yOLzNxLLroIP/IBcjJBEi0YiB81e',url=`https://api.jsonbin.io/v3/b/${binId}`,headers={'Content-Type':'application/json','X-Master-Key':apiKey};fetch(url,{headers}).then(r=>r.json()).then(d=>{const real=d.record.visits+1,total=real+146;fetch(url,{method:'PUT',headers,body:JSON.stringify({visits:real})});const el=document.getElementById('visitorCount'),dur=2000,start=performance.now();function anim(t){const p=Math.min((t-start)/dur,1),ease=1-Math.pow(1-p,3);el.textContent=Math.floor(total*ease).toLocaleString();if(p<1)requestAnimationFrame(anim);}requestAnimationFrame(anim);}).catch(()=>document.getElementById('visitorCount').textContent='N/A');}
     setTimeout(initVisitorCounter,3200);
@@ -2219,7 +2362,7 @@
         }
       });
       // Typing effect
-      const phrases=["i like dick","apothecary diaries is the best anime","watch frieren its peak","yes i exploit in every game","bleach clears one piece"],shuffled=[...phrases].sort(()=>Math.random()-.5);let idx=0,ch=0;const tEl=document.getElementById("typing");if(tEl){function type(){if(ch<=shuffled[idx].length){tEl.textContent=shuffled[idx].slice(0,ch++);setTimeout(type,100);}else{setTimeout(()=>del(),2000);}}function del(){if(ch>0){tEl.textContent=shuffled[idx].slice(0,--ch);setTimeout(del,50);}else{idx=(idx+1)%shuffled.length;setTimeout(type,500);}}type();}
+      const phrases=["i like dick","apothecary diaries is the best anime","watch frieren its peak","idk what to put here","bleach clears one piece"],shuffled=[...phrases].sort(()=>Math.random()-.5);let idx=0,ch=0;const tEl=document.getElementById("typing");if(tEl){function type(){if(ch<=shuffled[idx].length){tEl.textContent=shuffled[idx].slice(0,ch++);setTimeout(type,100);}else{setTimeout(()=>del(),2000);}}function del(){if(ch>0){tEl.textContent=shuffled[idx].slice(0,--ch);setTimeout(del,50);}else{idx=(idx+1)%shuffled.length;setTimeout(type,500);}}type();}
 
       // Tab button event listeners
       document.querySelectorAll('.tab-button').forEach(btn => {
@@ -2245,7 +2388,13 @@
         document.querySelector('.comments-section').scrollIntoView({ behavior: 'smooth' });
       });
       document.getElementById('refreshScheduleBtn').addEventListener('click', () => loadAndRenderSchedule(true)); 
-      document.getElementById('commentForm').addEventListener('submit', handleCommentSubmit);
+      document.getElementById('commentForm').addEventListener('submit', postComment);
+      document.getElementById('commentsContainer').addEventListener('click', handleCommentInteraction);
+      document.getElementById('commentsContainer').addEventListener('submit', function(e) {
+          if (e.target.classList.contains('reply-form')) {
+              postComment(e);
+          }
+      });
     });
 
   </script>
