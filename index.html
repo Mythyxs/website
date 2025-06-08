@@ -2082,7 +2082,7 @@
         const sanitizedUsername = (comment.username || '').replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
         const crownIconHTML = sanitizedUsername.toLowerCase().includes('shem')
-            ? ` <svg class="crown-icon" width="24" height="24" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg" fill="currentColor" style="vertical-align: middle;"><g transform="translate(0.000000,30.000000) scale(0.100000,-0.100000)" stroke="none"><path d="M100 252 c-22 -11 -42 -31 -53 -56 -17 -35 -17 -45 -6 -78 14 -43 30-59 77-78 26-10 38-10 65 0 46 19 62 35 76 78 11 33 11 43 -6 78 -17 38 -67 73 -103 73 -8 0 -31 -8 -50 -17z m120 -59 c0 -12 -73 -83 -85 -83 -16 0-50 38 -42 47 4 3 15 -1 25 -10 17 -16 20 -15 52 18 32 33 50 43 50 28z"/></g></svg>`
+            ? ` <svg class="crown-icon" style="vertical-align:1px; margin-left:-2px;" viewBox="0 0 24 24" fill="currentColor"><path d="M5 16L3 5l5.5 5l3.5-6l3.5 6L21 5l-2 11H5z"></path><path d="M19 19a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-1h14v1z"></path></svg>`
             : '';
 
         card.innerHTML = `
