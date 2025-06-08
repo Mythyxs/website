@@ -1398,6 +1398,12 @@
                     <option value="rating_asc">Rating (Low to High)</option>
                 </select>
             </div>
+            <div style="margin-left: auto;">
+                <button id="scrollToCommentsBtn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" style="fill:var(--primary);"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                    View Comments
+                </button>
+            </div>
         </div>
         <div id="animeGridContainer" class="anime-grid-container">
             <!-- Anime cards will be injected here -->
@@ -2235,6 +2241,9 @@
       document.getElementById('categoryFilter').addEventListener('change', renderAnimeList);
       document.getElementById('sortOrder').addEventListener('change', renderAnimeList);
       document.getElementById('searchBar').addEventListener('input', renderAnimeList);
+      document.getElementById('scrollToCommentsBtn').addEventListener('click', () => {
+        document.querySelector('.comments-section').scrollIntoView({ behavior: 'smooth' });
+      });
       document.getElementById('refreshScheduleBtn').addEventListener('click', () => loadAndRenderSchedule(true)); 
       document.getElementById('commentForm').addEventListener('submit', handleCommentSubmit);
     });
