@@ -2129,30 +2129,16 @@
 
     async function handleVote(commentId, voteType) {
         const votedComments = JSON.parse(localStorage.getItem('votedComments') || '{}');
-        if (votedComments[commentId]) {
-            return; // Already voted
+        const existingVote = votedComments[commentId];
+
+        // Disable buttons on the specific card immediately to prevent double-clicks
+        const card = document.querySelector(`.comment-card[data-comment-id="${commentId}"]`);
+        if (card) {
+            card.querySelectorAll('.comment-actions button').forEach(b => b.disabled = true);
         }
 
-        const card = document.querySelector(`.comment-card[data-comment-id="${commentId}"]`);
-        if (!card) return;
-        
-        const likeBtn = card.querySelector('.like-btn');
-        const dislikeBtn = card.querySelector('.dislike-btn');
-        const targetBtn = voteType === 'like' ? likeBtn : dislikeBtn;
-        const countSpan = targetBtn.querySelector('span');
-        const currentCount = parseInt(countSpan.textContent);
-
-        // Optimistic UI update
-        countSpan.textContent = currentCount + 1;
-        likeBtn.disabled = true;
-        dislikeBtn.disabled = true;
-        if (voteType === 'like') likeBtn.classList.add('liked');
-        else dislikeBtn.classList.add('disliked');
-
-        votedComments[commentId] = voteType;
-        localStorage.setItem('votedComments', JSON.stringify(votedComments));
-
         try {
+            // 1. Get the latest data
             const getResponse = await fetch(`${COMMENTS_URL}/latest`, { headers: { 'X-Master-Key': COMMENTS_API_KEY } });
             if (!getResponse.ok) throw new Error('Failed to fetch latest comments for voting.');
             const binData = await getResponse.json();
@@ -2161,12 +2147,28 @@
             const commentToUpdate = findCommentById(allComments, commentId);
             if (!commentToUpdate) throw new Error("Comment not found");
 
-            if (voteType === 'like') {
-                commentToUpdate.likes = (commentToUpdate.likes || 0) + 1;
+            // 2. Determine the new vote state
+            const isRevoke = existingVote === voteType;
+            const isChange = existingVote && existingVote !== voteType;
+
+            if (isRevoke) {
+                // User is revoking their vote
+                commentToUpdate[voteType + 's'] = (commentToUpdate[voteType + 's'] || 1) - 1;
+                delete votedComments[commentId];
             } else {
-                commentToUpdate.dislikes = (commentToUpdate.dislikes || 0) + 1;
+                if (isChange) {
+                    // User is changing their vote (e.g., from like to dislike)
+                    commentToUpdate[existingVote + 's'] = (commentToUpdate[existingVote + 's'] || 1) - 1;
+                }
+                // Apply the new vote
+                commentToUpdate[voteType + 's'] = (commentToUpdate[voteType + 's'] || 0) + 1;
+                votedComments[commentId] = voteType;
             }
-            
+
+            // 3. Update local storage with the new vote status
+            localStorage.setItem('votedComments', JSON.stringify(votedComments));
+
+            // 4. PUT the updated data back to the server
             const putResponse = await fetch(COMMENTS_URL, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json', 'X-Master-Key': COMMENTS_API_KEY },
@@ -2174,18 +2176,14 @@
             });
             if (!putResponse.ok) throw new Error('Failed to save vote to server.');
 
+            // 5. Refresh the entire comments section from the server's single source of truth
+            await loadComments();
+
         } catch (error) {
             console.error('Error handling vote:', error);
-            // Revert UI on failure
-            countSpan.textContent = currentCount;
-            likeBtn.disabled = false;
-            dislikeBtn.disabled = false;
-            if (voteType === 'like') likeBtn.classList.remove('liked');
-            else dislikeBtn.classList.remove('disliked');
-            // Revert local storage
-            delete votedComments[commentId];
-            localStorage.setItem('votedComments', JSON.stringify(votedComments));
             alert('Could not save your vote due to a server error. Please try again.');
+            // On failure, re-enable buttons by reloading the comments section
+            await loadComments();
         }
     }
 
@@ -2226,6 +2224,28 @@
         form.querySelector('textarea').focus();
     }
 
+    function ensureCommentIds(comments) {
+        let changed = false;
+        function traverse(items) {
+            for (const item of items) {
+                if (!item.id) {
+                    // Assign a new ID if missing
+                    item.id = `c_${Date.now()}_${Math.random().toString(36).substr(2, 9)}_${items.indexOf(item)}`;
+                    changed = true;
+                }
+                // Ensure vote counts and replies array exist
+                if (typeof item.likes !== 'number') item.likes = 0;
+                if (typeof item.dislikes !== 'number') item.dislikes = 0;
+                if (!Array.isArray(item.replies)) item.replies = [];
+
+                if (item.replies.length > 0) {
+                    traverse(item.replies);
+                }
+            }
+        }
+        traverse(comments);
+        return changed;
+    }
 
     async function loadComments() {
         const container = document.getElementById('commentsContainer');
@@ -2240,6 +2260,18 @@
             
             const data = await response.json();
             const comments = data.record.comments || [];
+
+            // --- MIGRATION & DATA INTEGRITY CHECK ---
+            const wasChanged = ensureCommentIds(comments);
+            if (wasChanged) {
+                console.log("Applying data structure updates to comments on the server...");
+                await fetch(COMMENTS_URL, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'X-Master-Key': COMMENTS_API_KEY },
+                    body: JSON.stringify({ comments: comments })
+                });
+            }
+            // --- END MIGRATION ---
             
             if (loadingIndicator) loadingIndicator.style.display = 'none';
             container.innerHTML = ''; // Clear container
@@ -2266,21 +2298,12 @@
 
     async function handleCommentSubmit(event, parentId = null) {
         event.preventDefault();
+        const form = event.target; // Use the form that triggered the event directly
+
+        const usernameInput = form.querySelector('input[type="text"]');
+        const textInput = form.querySelector('textarea');
+        const submitBtn = form.querySelector('button[type="submit"]');
         
-        let form, usernameInput, textInput, submitBtn;
-
-        if (parentId) {
-            form = document.querySelector(`.comment-card[data-comment-id="${parentId}"] .reply-form`);
-            usernameInput = form.querySelector('input[type="text"]');
-            textInput = form.querySelector('textarea');
-            submitBtn = form.querySelector('button[type="submit"]');
-        } else {
-            form = document.getElementById('commentForm');
-            usernameInput = document.getElementById('commentUsername');
-            textInput = document.getElementById('commentText');
-            submitBtn = document.getElementById('submitCommentBtn');
-        }
-
         const username = usernameInput.value.trim();
         const text = textInput.value.trim();
 
