@@ -2307,6 +2307,12 @@
         const username = usernameInput.value.trim();
         const text = textInput.value.trim();
 
+        if (username.toLowerCase().includes('shem')) {
+            alert("Usernames cannot contain 'shem' to prevent impersonation.");
+            usernameInput.focus();
+            return;
+        }
+
         if (!username || !text) {
             alert('Please fill in both username and comment fields.');
             return;
