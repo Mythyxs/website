@@ -785,12 +785,27 @@
       font-size: 1.1rem;
     }
 
+    .comment-author .shem-username {
+        background: linear-gradient(90deg, #FFD700, #FDB813, #FFD700);
+        background-size: 200% auto;
+        animation: shimmer-gold 3s linear infinite;
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 700; /* Ensure the font weight is bold */
+    }
+
+    @keyframes shimmer-gold {
+        to {
+            background-position: -200% center;
+        }
+    }
+
     .comment-author .crown-icon {
         width: 16px;
         height: 16px;
         vertical-align: -3px;
         margin-left: 4px;
-        fill: #FFD700; /* gold */
         filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.7));
     }
 
@@ -2081,13 +2096,15 @@
         const sanitizedText = (comment.text || '').replace(/</g, "&lt;").replace(/>/g, "&gt;");
         const sanitizedUsername = (comment.username || '').replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-        const crownIconHTML = sanitizedUsername.toLowerCase().includes('shem')
-            ? ` <svg class="crown-icon" style="vertical-align:1px; margin-left:-2px;" viewBox="0 0 24 24" fill="currentColor"><path d="M5 16L3 5l5.5 5l3.5-6l3.5 6L21 5l-2 11H5z"></path><path d="M19 19a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-1h14v1z"></path></svg>`
-            : '';
+        let authorHTML = sanitizedUsername;
+        if (sanitizedUsername.toLowerCase().includes('shem')) {
+            const crownIconHTML = ` <svg class="crown-icon" style="vertical-align:1px; margin-left:-2.5px;" viewBox="0 0 24 24"><defs><linearGradient id="crown-gradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#FFD700"/><stop offset="50%" stop-color="#FDB813"/><stop offset="100%" stop-color="#FFD700"/></linearGradient></defs><path d="M5 16L3 5l5.5 5l3.5-6l3.5 6L21 5l-2 11H5z" fill="url(#crown-gradient)"></path><path d="M19 19a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-1h14v1z" fill="url(#crown-gradient)"></path></svg>`;
+            authorHTML = `<span class="shem-username">${sanitizedUsername}</span>${crownIconHTML}`;
+        }
 
         card.innerHTML = `
             <div class="comment-header">
-                <span class="comment-author">${sanitizedUsername}${crownIconHTML}</span>
+                <span class="comment-author">${authorHTML}</span>
                 <span class="comment-date">${formattedDate}</span>
             </div>
             <p class="comment-body">${sanitizedText.replace(/\n/g, '<br>')}</p>
