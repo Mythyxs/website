@@ -539,8 +539,8 @@
     .schedule-item.airing-today::after {
       content: '';
       position: absolute;
-      top: -2px;
-      right: -2px;
+      top: 5px;
+      right: 5px;
       width: 12px;
       height: 12px;
       background: var(--cat-platinum);
@@ -555,8 +555,8 @@
     .schedule-item.status-aired::after {
       content: '';
       position: absolute;
-      top: -2px;
-      right: -2px;
+      top: 5px;
+      right: 5px;
       width: 12px;
       height: 12px;
       background: #4CAF50;
@@ -1212,6 +1212,7 @@
       padding: 1px;
       background: linear-gradient(45deg, var(--primary), var(--accent));
       -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
       -webkit-mask-composite: xor;
       mask-composite: exclude;
       opacity: 0;
