@@ -1861,7 +1861,7 @@
     }
     
     // AniList API related functions (adapted from Flutter)
-    const ANILIST_GRAPHQL_URL = 'https://anilist-proxy-production.up.railway.app/anilist';
+    const ANILIST_GRAPHQL_URL = 'https://anilist-proxy-4mpy.onrender.com/anilist';
 
     const ANILIST_QUERY = `
       query ($search: String) {
@@ -1909,7 +1909,7 @@
 
     async function loadAndCacheScheduleData(forceRefresh = false) {
         try {
-            const response = await fetch("https://anilist-proxy-production.up.railway.app/cached-schedule");
+            const response = await fetch("https://anilist-proxy-4mpy.onrender.com/cached-schedule");
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             const data = await response.json();
             console.log("Schedule:", data);
