@@ -162,49 +162,54 @@
     .accolade-title{font-size:1.1rem;font-weight:600;color:var(--accent);margin-bottom:8px;text-align:center;}
     .accolade-desc{font-size:.9rem;color:#ddd;opacity:.8;text-align:center;}
 
+    /* ─────────────  SECTION TITLES (Redesigned, Animated)  ───────────── */
     .section-title {
-      display: flex;
+      opacity: 0;
+      transform: translateY(20px);
+      display: inline-flex;
       align-items: center;
-      justify-content: center;
-      gap: 16px;
-      font-size: 2.1rem;
-      font-weight: 790;
-      letter-spacing: 1.2px;
+      gap: 12px;
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
       background: var(--text-gradient);
       background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      text-shadow: 0 2px 24px rgba(103,84,133,0.18);
-      margin-bottom: 36px;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
       position: relative;
-      padding-bottom: 10px;
-      opacity: 0;
-      animation: fadeInUp 0.8s cubic-bezier(0.4,0,0.2,1) 0.05s forwards;
+      padding-bottom: 12px;
+      text-shadow:
+        0 1px 0 rgba(0, 0, 0, 0.2),
+        0 2px 8px rgba(0, 0, 0, 0.4);
+      animation: fadeInUp 0.8s cubic-bezier(0.4,0,0.2,1) 0.1s forwards;
     }
-
     .section-title svg {
-      width: 34px;
-      height: 34px;
-      flex-shrink: 0;
-      background: rgba(103,84,133,0.10);
+      width: 32px;
+      height: 32px;
+      background: rgba(255, 255, 255, 0.05);
       border-radius: 50%;
       padding: 6px;
-      box-shadow: 0 2px 12px rgba(103,84,133,0.10);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+      flex-shrink: 0;
     }
-
     .section-title::after {
-      content: '';
-      display: block;
+      content: "";
       position: absolute;
       left: 50%;
       bottom: 0;
       transform: translateX(-50%);
-      width: 48px;
-      height: 3px;
+      width: 0;
+      height: 4px;
       border-radius: 2px;
       background: var(--primary);
-      opacity: 0.6;
-      margin-top: 8px;
+      opacity: 0.8;
+      animation: expand 1s ease-out 0.2s forwards;
+    }
+    @keyframes expand {
+      from { width: 0; }
+      to   { width: 60px; }
     }
     .section-title:empty::after {
       display: none;
