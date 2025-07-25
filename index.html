@@ -162,7 +162,7 @@
     .accolade-title{font-size:1.1rem;font-weight:600;color:var(--accent);margin-bottom:8px;text-align:center;}
     .accolade-desc{font-size:.9rem;color:#ddd;opacity:.8;text-align:center;}
 
-    /* ─────────────  SECTION TITLES (Redesigned, Animated)  ───────────── */
+    /* ─────────────  SECTION TITLES (Redesigned, Animated, Centered)  ───────────── */
     .section-title {
       opacity: 0;
       transform: translateY(20px);
@@ -183,7 +183,13 @@
       text-shadow:
         0 1px 0 rgba(0, 0, 0, 0.2),
         0 2px 8px rgba(0, 0, 0, 0.4);
-      animation: fadeInUp 0.8s cubic-bezier(0.4,0,0.2,1) 0.1s forwards;
+      animation: fadeInUp 0.75s cubic-bezier(0.4,0,0.2,1) 0.05s forwards;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    /* Ensure parent context allows centering */
+    .accolades-section, .fade-section {
+      text-align: center;
     }
     .section-title svg {
       width: 32px;
@@ -203,7 +209,7 @@
       width: 0;
       height: 4px;
       border-radius: 2px;
-      background: var(--primary);
+      background: var(--text-gradient);
       opacity: 0.8;
       animation: expand 1s ease-out 0.2s forwards;
     }
