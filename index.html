@@ -24,8 +24,8 @@
 
     :root{
       --text-gradient:linear-gradient(45deg,var(--primary-dark),var(--primary),var(--accent));
-      --glass-bg:rgba(0,0,0,.3);
-      --glass-border:rgba(103,84,133,.2);
+      --glass-bg:rgba(0,0,0,0.3);
+      --glass-border:rgba(103,84,133,0.2);
     }
 
     /* ─────────────  RESET  ───────────── */
@@ -149,7 +149,7 @@
       animation: none;
     }
 
-    .accolade-card, .anime-card {background:linear-gradient(135deg,rgba(103,84,133,.1) 0%,rgba(201,179,195,.05) 100%);border:1px solid rgba(103,84,133,.3);border-radius:15px;padding:20px; text-align:left; transition:all .3s ease;position:relative;overflow:hidden; display: flex; flex-direction: column;overflow:visible;}
+    .accolade-card, .anime-card {background:linear-gradient(135deg,rgba(103,84,133,.1) 0%,rgba(201,179,195,.05) 100%);border:1px solid rgba(103,84,133,0.3);border-radius:15px;padding:20px; text-align:left; transition:all .3s ease;position:relative;overflow:hidden; display: flex; flex-direction: column;overflow:visible;}
     /* Removed .accolade-card::before, .anime-card::before for mouse gradient */
     /* Removed .accolade-card:hover::before, .anime-card:hover::before for mouse gradient */
     .accolade-card:hover, .anime-card:hover {transform:translateY(-5px) scale(1.02);border-color:var(--primary);box-shadow:0 15px 30px rgba(103,84,133,.25);}
@@ -229,7 +229,7 @@
 
     /* ─── Social cards ─── */
     .social-links-container{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:25px;margin-top:30px;}
-    .social-card{background:linear-gradient(135deg,rgba(103,84,133,.1) 0%,rgba(201,179,195,.05) 100%);border:1px solid rgba(103,84,133,.3);border-radius:15px;padding:25px;display:flex;align-items:center;gap:20px;text-decoration:none;color:#fff;transition:all .3s ease;position:relative;overflow:hidden;opacity:0;transform:translateY(20px);animation:fadeInUp .6s ease forwards;}
+    .social-card{background:linear-gradient(135deg,rgba(103,84,133,.1) 0%,rgba(201,179,195,.05) 100%);border:1px solid rgba(103,84,133,0.3);border-radius:15px;padding:25px;display:flex;align-items:center;gap:20px;text-decoration:none;color:#fff;transition:all .3s ease;position:relative;overflow:hidden;opacity:0;transform:translateY(20px);animation:fadeInUp .6s ease forwards;}
     .social-card:nth-child(1){animation-delay:.1s;}.social-card:nth-child(2){animation-delay:.2s;}
     /* Removed .social-card::before for mouse gradient */
     /* Removed .social-card:hover::before for mouse gradient */
@@ -243,13 +243,13 @@
     .social-desc{font-size:.95rem;color:#ddd;opacity:.8;}
 
     /* ─── Visitor counter ─── */
-    .visitor-counter{text-align:center;margin-top:40px;padding:20px;background:rgba(103,84,133,.05);border-radius:15px;border:1px solid rgba(103,84,133,.2);opacity:0;transform:translateY(20px);animation:fadeInUp .6s ease .3s forwards;position:relative;overflow:hidden;transition:all .3s ease;}
-    .visitor-counter::before{content:'';position:absolute;inset:0;left:-100%;background:linear-gradient(90deg,transparent,rgba(103,84,133,.2),transparent);transition:left .6s;pointer-events:none;}
+    .visitor-counter{text-align:center;margin-top:40px;padding:20px;background:rgba(103,84,133,.05);border-radius:15px;border:1px solid rgba(103,84,133,0.2);opacity:0;transform:translateY(20px);animation:fadeInUp .6s ease .3s forwards;position:relative;overflow:hidden;transition:all .3s ease;}
+    .visitor-counter::before{content:'';position:absolute;inset:0;left:-100%;background:linear-gradient(90deg,transparent,rgba(103,84,133,0.2),transparent);transition:left .6s;pointer-events:none;}
     .visitor-counter:hover::before{left:100%;}
     .visitor-counter:hover{
       transform:translateY(-5px);
       border-color:var(--primary);
-      box-shadow:0 5px 5px rgba(103,84,133,.3);
+      box-shadow:0 5px 5px rgba(103,84,133,0.3);
     }
     
     .visitor-count {
@@ -454,7 +454,7 @@
     }
     /* --- NEW SCHEDULE CARD DESIGN --- */
     .schedule-item {
-      background: linear-gradient(135deg, rgba(103,84,133,.08) 0%, rgba(201,179,195,.04) 100%);
+      background: linear-gradient(135deg, rgba(103,84,133,0.08) 0%, rgba(201,179,195,.04) 100%);
       border: 1px solid rgba(103, 84, 133, 0.2);
       border-radius: 16px;
       padding: 16px;
@@ -591,7 +591,7 @@
     }
     /* --- AIRING TODAY ANIMATION (Schedule) --- */
     .schedule-item.airing-today {
-      background: linear-gradient(135deg, rgba(0, 229, 255, 0.05) 0%, rgba(103,84,133,.08) 100%);
+      background: linear-gradient(135deg, rgba(0, 229, 255, 0.05) 0%, rgba(103,84,133,0.08) 100%);
       border-color: rgba(0, 229, 255, 0.3);
     }
     .schedule-item.airing-today::after {
@@ -607,7 +607,7 @@
     }
     /* --- RECENTLY AIRED ANIMATION (Schedule) --- */
     .schedule-item.status-aired { /* Note: This might conflict with general .status-aired if not careful */
-      background: linear-gradient(135deg, rgba(76, 175, 80, 0.05) 0%, rgba(103,84,133,.08) 100%);
+      background: linear-gradient(135deg, rgba(76, 175, 80, 0.05) 0%, rgba(103,84,133,0.08) 100%);
       border-color: rgba(76, 175, 80, 0.3);
     }
     .schedule-item.status-aired::after {
@@ -825,7 +825,7 @@
     }
 
     .comment-card {
-      background: linear-gradient(135deg, rgba(103, 84, 133, .08) 0%, rgba(201, 179, 195, .04) 100%);
+      background: linear-gradient(135deg, rgba(103, 84, 133, 0.08) 0%, rgba(201, 179, 195, .04) 100%);
       border: 1px solid rgba(103, 84, 133, 0.2);
       border-radius: 12px;
       padding: 20px;
@@ -1335,7 +1335,7 @@
       border-radius: 16px;
       background: linear-gradient(135deg, rgba(103,84,133,.05) 0%, rgba(201,179,195,.03) 100%);
       backdrop-filter: blur(10px);
-      border: 1px solid rgba(103,84,133,.2);
+      border: 1px solid rgba(103,84,133,0.2);
       position: relative;
       animation: cardEntry 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
       opacity: 0;
@@ -1345,10 +1345,10 @@
       transform: translateY(-8px) scale(1.02);
       border-color: var(--primary);
       box-shadow: 
-        0 20px 40px rgba(103,84,133,.2),
+        0 20px 40px rgba(103,84,133,0.2),
         0 0 0 1px rgba(103,84,133,.1),
         inset 0 1px 0 rgba(255,255,255,0.05);
-      background: linear-gradient(135deg, rgba(103,84,133,.08) 0%, rgba(201,179,195,.05) 100%);
+      background: linear-gradient(135deg, rgba(103,84,133,0.08) 0%, rgba(201,179,195,.05) 100%);
     }
     .anime-card-details {
       flex-grow: 1;
@@ -1791,7 +1791,7 @@
 
         container.innerHTML = ''; // Clear previous items
 
-        let filteredList = [...animeDataCache.all];
+        let filteredList = animeDataCache.all.slice();
 
         if (searchValue) {
             filteredList = filteredList.filter(anime => anime.title.toLowerCase().includes(searchValue));
@@ -1818,7 +1818,7 @@
         
         // Determine top 3 ranked anime from the entire list
         const allRated = animeDataCache.all.filter(a => a.rating && a.rating > 0);
-        const uniqueScores = [...new Set(allRated.map(a => a.rating))].sort((a, b) => b - a);
+        const uniqueScores = Array.from(new Set(allRated.map(a => a.rating))).sort((a, b) => b - a);
         const topScores = {
             gold: uniqueScores[0],
             silver: uniqueScores[1],
@@ -2607,7 +2607,7 @@
         }
       });
       // Typing effect
-      const phrases=["i like dick","apothecary diaries is the best anime","watch frieren its peak","idk what to put here","bleach clears one piece"],shuffled=[...phrases].sort(()=>Math.random()-.5);let idx=0,ch=0;const tEl=document.getElementById("typing");if(tEl){function type(){if(ch<=shuffled[idx].length){tEl.textContent=shuffled[idx].slice(0,ch++);setTimeout(type,100);}else{setTimeout(()=>del(),2000);}}function del(){if(ch>0){tEl.textContent=shuffled[idx].slice(0,--ch);setTimeout(del,50);}else{idx=(idx+1)%shuffled.length;setTimeout(type,500);}}type();}
+      const phrases=["i like dick","apothecary diaries is the best anime","watch frieren its peak","idk what to put here","bleach clears one piece"],shuffled=phrases.slice().sort(()=>Math.random()-.5);let idx=0,ch=0;const tEl=document.getElementById("typing");if(tEl){function type(){if(ch<=shuffled[idx].length){tEl.textContent=shuffled[idx].slice(0,ch++);setTimeout(type,100);}else{setTimeout(()=>del(),2000);}}function del(){if(ch>0){tEl.textContent=shuffled[idx].slice(0,--ch);setTimeout(del,50);}else{idx=(idx+1)%shuffled.length;setTimeout(type,500);}}type();}
 
       // Tab button event listeners
       document.querySelectorAll('.tab-button').forEach(btn => {
