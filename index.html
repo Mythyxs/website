@@ -1393,6 +1393,56 @@
       flex-wrap: wrap;
       margin: 4px 0;
     }
+    /* ─── Games Accordion ─── */
+    .games-accordion { max-width: 1100px; margin: 10px auto 0 auto; text-align: left; }
+    .accordion-header { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 16px 18px; background: linear-gradient(135deg, rgba(103,84,133,.08) 0%, rgba(201,179,195,.05) 100%); border: 1px solid rgba(103,84,133,0.28); border-radius: 14px; color: #fff; cursor: pointer; transition: border-color .25s ease, box-shadow .25s ease, background .25s ease, transform .25s ease; position: relative; overflow: hidden; box-shadow: 0 6px 14px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.04); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+    .accordion-header::before { content: ""; position: absolute; inset: 0; border-radius: 14px; padding: 1px; background: linear-gradient(45deg, rgba(103,84,133,.6), rgba(201,179,195,.4)); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; opacity: .35; pointer-events: none; transition: opacity .25s ease; }
+    .accordion-header::after { content: ""; position: absolute; top: -120%; left: -40%; width: 60%; height: 340%; background: radial-gradient(ellipse at center, rgba(255,255,255,.08), transparent 60%); transform: rotate(25deg); opacity: 0; transition: opacity .3s ease, transform .3s ease; pointer-events: none; }
+    .accordion-header:hover { border-color: var(--primary); box-shadow: 0 14px 28px rgba(103,84,133,.28), 0 0 0 1px rgba(103,84,133,.12) inset; transform: translateY(-1px); }
+    .accordion-header:hover::after { opacity: 1; transform: rotate(25deg) translateX(12px); }
+    .accordion-header .accordion-left { display: inline-flex; align-items: center; gap: 10px; }
+    .accordion-header .accordion-logo { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; background: rgba(103,84,133,.12); border: 1px solid rgba(103,84,133,.3); box-shadow: inset 0 1px 0 rgba(255,255,255,.06); }
+    .accordion-header .accordion-logo svg { color: var(--primary); filter: drop-shadow(0 0 3px rgba(103,84,133,.5)); }
+    .accordion-header svg { transition: transform .3s ease, color .25s ease; transform: rotate(0deg); color: var(--accent); }
+    .accordion-header[aria-expanded="true"] { border-color: var(--primary); background: linear-gradient(135deg, rgba(103,84,133,.12) 0%, rgba(201,179,195,.06) 100%); box-shadow: 0 16px 32px rgba(103,84,133,.3), 0 0 0 1px rgba(103,84,133,.14) inset; }
+    .accordion-header[aria-expanded="true"]::before { opacity: .6; }
+    .accordion-header[aria-expanded="true"] svg { transform: rotate(180deg); color: var(--accent-bright); }
+    .accordion-header:focus-visible { outline: none; box-shadow: 0 0 0 2px rgba(103,84,133,.5), 0 0 0 4px rgba(201,179,195,.25); }
+    .accordion-header span {
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #fff; /* fallback */
+      background: linear-gradient(45deg, var(--primary-dark), var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-fill-color: transparent;
+      text-shadow: 0 1px 2px rgba(0,0,0,.25);
+    }
+    .accordion-header:hover span { filter: drop-shadow(0 0 6px rgba(201,179,195,.25)); }
+    .accordion-header[aria-expanded="true"] span {
+      background: linear-gradient(45deg, var(--primary), var(--accent), var(--accent-bright));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-fill-color: transparent;
+      filter: drop-shadow(0 0 8px rgba(201,179,195,.35));
+    }
+    .accordion-content { overflow: hidden; max-height: 0; transition: max-height .4s ease; }
+    .accordion-content.open { overflow: visible; }
+    /* Animate cards inside accordion */
+    .accordion-content .accolade-card { opacity: 0; transform: translateY(10px); }
+    .accordion-content.open .accolade-card { animation: cardEntry 0.35s cubic-bezier(0.4,0,0.2,1) forwards; }
+    .accordion-content.open.closing .accolade-card {
+        animation: none; /* Override entry animation */
+        opacity: 0;
+        transform: translateY(10px);
+        transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+    .accordion-content.closing .accolade-card { animation: none !important; opacity: 0; transform: translateY(10px); transition: opacity .22s ease, transform .22s ease; }
+    .accordion-content .accolades-container { padding-top: 14px; }
   </style>
 </head>
 <body>
@@ -1445,35 +1495,9 @@
           <svg width="24" height="24" viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
           Schedule
       </button>
-      <button class="tab-button" data-category="hoop">
-        <svg width="24" height="24" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-          <g transform="translate(0,64) scale(0.1,-0.1)" fill="currentColor" stroke="none">
-            <path d="M250 570 c-39 -11 -83 -36 -104 -59 -19 -21 -19 -21 15 -21 20 0 69
-            -18 123 -45 83 -42 147 -57 160 -36 8 13 -48 96 -85 124 -45 34 -79 45 -109
-            37z"/>
-            <path d="M391 542 c24 -22 53 -56 64 -76 11 -20 24 -35 30 -33 15 5 18 53 5
-            76 -12 23 -67 54 -115 65 -28 7 -28 6 16 -32z"/>
-            <path d="M117 463 c-23 -6 -46 -52 -53 -107 l-6 -44 73 -12 c73 -12 269 -9
-            317 6 19 5 22 13 20 37 -3 29 -4 30 -63 32 -50 1 -74 9 -148 48 -86 45 -102
-            50 -140 40z"/>
-            <path d="M526 447 c-3 -14 -13 -32 -21 -40 -10 -11 -13 -25 -9 -46 7 -35 13
-            -37 54 -16 25 13 28 18 20 43 -4 16 -14 41 -22 57 l-15 28 -7 -26z"/>
-            <path d="M540 307 c-32 -15 -40 -26 -40 -57 0 -17 8 -29 25 -37 30 -13 40 0
-            51 66 7 44 3 46 -36 28z"/>
-            <path d="M69 252 c13 -42 30 -73 59 -104 37 -40 84 -37 180 11 42 21 96 44
-            120 51 37 12 42 17 42 42 0 28 -1 28 -42 21 -56 -10 -260 -10 -320 0 l-47 8
-            8 -29z"/>
-            <path d="M479 163 c-6 -16 -18 -36 -26 -46 -9 -9 -14 -20 -10 -23 10 -10 91
-            72 83 84 -13 21 -36 13 -47 -15z"/>
-            <path d="M331 135 c-45 -25 -90 -45 -99 -45 -36 0 7 -21 55 -27 76 -9 100 1
-            133 54 17 26 30 51 30 55 0 18 -39 5 -119 -37z"/>
-          </g>
-        </svg>
-        Hoop Journey
-      </button>
-      <button class="tab-button" data-category="other">
+      <button class="tab-button" data-category="games">
         <svg width="24" height="24" viewBox="0 0 24 24"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
-        Other Games
+        Games
       </button>
     </div>
     <div class="tab-sections-wrapper" id="tabSectionsWrapper">
@@ -1622,52 +1646,91 @@
       </div>
 
 
-      <!-- ───────────  HOOP JOURNEY  ─────────── -->
-      <div id="hoopSection" class="accolades-section fade-section hidden">
+      <!-- ───────────  GAMES  ─────────── -->
+      <div id="gamesSection" class="accolades-section fade-section hidden">
         <h2 class="section-title">
-          <svg width="32" height="32" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:10px;fill:var(--primary);"><path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2M5.23 7.75C6.1 8.62 6.7 9.74 6.91 11H4.07C4.22 10.07 4.54 9.2 5 8.41L5.23 7.75M4.07 13H6.91C6.7 14.26 6.1 15.38 5.23 16.25L5 15.59C4.54 14.8 4.22 13.93 4.07 13M11 19.93C9.51 19.65 8.16 18.9 7.09 17.83C8.22 16.7 9 15.21 9.26 13.55C10.13 13.82 11.05 14 12 14C12.95 14 13.87 13.82 14.74 13.55C15 15.21 15.79 16.7 16.91 17.83C15.84 18.9 14.5 19.65 11 19.93M11 4.07V7C11 7.55 11.45 8 12 8C12.55 8 13 7.55 13 7V4.07C15.84 4.44 18.1 6.34 18.91 8.88C17.91 8.31 16.79 8 15.64 8H15.5C14.5 6.82 13.08 6.15 11.5 6.15C10.44 6.15 9.47 6.55 8.73 7.19C8.15 7.89 7.96 8.79 8.16 9.64C6.97 10.15 5.96 11 5.3 12.1C4.5 10.58 4.07 8.82 4.07 7C4.07 5.2 5.23 3.75 7.09 2.17C8.17 1.11 9.51 .35 11 .07V4.07M19 8.41C19.46 9.2 19.78 10.07 19.93 11H17.09C17.3 9.74 17.9 8.62 18.77 7.75L19 8.41M19.93 13C19.78 13.93 19.46 14.8 19 15.59L18.77 16.25C17.9 15.38 17.3 14.26 17.09 13H19.93Z"/></svg>
-          Hoop Journey
+          <svg width="32" height="32" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:10px;fill:var(--primary);"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+          Games
         </h2>
-        <div class="accolades-container">
-            <!-- Hoop accolades cards -->
-            <div class="accolade-card"> <div class="accolade-icon"> <svg viewBox="0 0 100 100" width="32" height="32" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"> <g transform="translate(0,100) scale(0.1,-0.1)" stroke="none"> <path d="M449 706 c-80 -30 -212 -82 -292 -116 -129 -55 -147 -66 -147 -86 0 -16 14 -33 48 -56 26 -17 107 -77 180 -131 l133 -99 102 47 c395 186 528 255 525 272 -2 9 -30 32 -63 51 -112 63 -322 172 -331 172 -5 -1 -75 -25 -155 -54z m191 19 c37 -19 37 -23 0 -37 -17 -5 -29 -15 -27 -21 1 -5 37 -29 79 -53 l77 -44 45 17 c44 17 46 16 95 -7 28 -13 51 -26 51 -30 0 -3 -57 -32 -127 -64 l-128 -58 -52 28 c-56 30 -59 34 -42 51 17 17 6 57 -21 70 -14 7 -56 13 -94 13 -57 0 -77 5 -115 27 -25 14 -41 28 -36 30 6 2 66 23 135 48 69 24 126 44 128 44 2 1 16 -6 32 -14z m125 -67 c36 -18 65 -35 65 -38 0 -3 -13 -11 -29 -17 -25 -9 -36 -7 -82 19 -72 39 -77 45 -48 57 13 5 25 10 26 10 2 1 32 -13 68 -31z m-402 -54 c45 -25 46 -25 26 -45 -23 -23 -24 -33 -4 -52 25 -26 83 -39 138 -33 46 5 57 3 101 -25 27 -17 45 -34 40 -38 -5 -4 -69 -34 -141 -67 -95 -42 -133 -64 -133 -76 0 -9 -4 -20 -10 -23 -6 -3 -10 4 -10 18 0 16 -12 32 -36 50 l-36 25 41 21 c22 12 41 24 41 26 0 3 -39 30 -86 60 l-85 55 -44 -19 -43 -19 -41 28 -42 27 128 56 c70 31 133 56 139 56 6 1 32 -10 57 -25z m222 -48 c20 -15 15 -46 -8 -46 -15 0 -107 48 -107 56 0 10 98 2 115 -10z m-100 -23 c25 -16 45 -31 45 -35 0 -13 -69 -9 -105 6 -37 16 -42 25 -23 44 18 18 32 15 83 -15z m-206 -100 c33 -21 60 -41 61 -45 0 -4 -13 -14 -29 -22 -27 -15 -30 -14 -92 30 -71 49 -79 60 -52 67 38 10 54 6 112 -30z"/> </g> </svg> </div> <div class="accolade-title">2x Finals Appearances</div> <div class="accolade-desc">Season 2 - Season 3</div> </div>
-            <div class="accolade-card"> <div class="accolade-icon"> <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 50 50" preserveAspectRatio="xMidYMid meet"> <g transform="translate(0.000000,50.000000) scale(0.100000,-0.100000)" stroke="none"> <path d="M20 460 c0 -6 30 -10 70 -10 l70 0 0 -60 0 -60 -70 0 c-40 0 -70 -4 -70 -10 0 -6 33 -10 80 -10 l80 0 0 35 0 35 70 0 70 0 0 -130 0 -130 -70 0 -70 0 0 35 0 35 -80 0 c-47 0 -80 -4 -80 -10 0 -6 30 -10 70 -10 l70 0 0 -60 0 -60 -70 0 c-40 0 -70 -4 -70 -10 0 -6 33 -10 80 -10 l80 0 0 35 0 35 80 0 80 0 0 70 0 70 70 0 c40 0 70 4 70 10 0 6 -30 10 -70 10 l-70 0 0 70 0 70 -80 0 -80 0 0 35 0 35 -80 0 c-47 0 -80 -4 -80 -10z"/> </g> </svg> </div> <div class="accolade-title">2x Conference-Finals Contender</div> <div class="accolade-desc">Season 2 - Season 3</div> </div>
-            <div class="accolade-card"> <div class="accolade-icon"> <svg viewBox="0 0 64 64" width="32" height="32" xmlns="http://www.w3.org/2000/svg"> <g transform="translate(0,64) scale(0.1,-0.1)" stroke="none"> <path d="M155 508 c52 -84 60 -108 47 -126 -26 -36 -52 -98 -52 -128 0 -51 40 -115 90 -141 55 -29 105 -29 160 0 50 26 90 90 90 141 0 30 -26 92 -52 128 -13 18 -5 42 47 126 l26 42 -40 0 c-38 0 -42 -3 -73 -55 -18 -30 -36 -55 -41 -55 -5 0 6 25 23 55 l31 55 -29 0 c-19 0 -35 -8 -45 -22 l-16 -23 -19 23 c-14 18 -26 23 -55 20 l-36 -3 30 -49 c17 -26 27 -51 23 -55 -4 -3 -8 -1 -11 4 -2 6 -17 31 -33 58 -25 39 -35 47 -61 47 l-30 0 26 -42z m185 -248 c0 -47 -3 -60 -15 -60 -11 0 -15 11 -15 40 0 35 -3 40 -22 40 l-23 1 24 19 c41 35 51 27 51 -40z"/> </g> </svg> </div> <div class="accolade-title">2x All-EBA First Team</div> <div class="accolade-desc">Season 2 - Season 3</div> </div>
-            <div class="accolade-card"> <div class="accolade-icon"> <svg viewBox="0 0 24 24"> <path d="M12,2L9.19,8.63L2,9.24L7.46,13.97L5.82,21L12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.63L12,2M12,4.74L13.71,8.42L17.77,8.74L14.59,11.51L15.48,15.43L12,13.31L8.52,15.43L9.41,11.51L6.23,8.74L10.29,8.42L12,4.74Z"/> </svg> </div> <div class="accolade-title">2x All-Star Starter</div> <div class="accolade-desc">Season 2 - Season 3</div> </div>
-            <div class="accolade-card"> <div class="accolade-icon"> <svg viewBox="0 0 24 24"> <path d="M21,9H15L13,3H11L9,9H3L7,2H5L1,9V11H7L9,18H11V22H13V18H15L17,11H23V9H21M9.5,9.5A1,1 0 0,1 8.5,10.5A1,1 0 0,1 7.5,9.5A1,1 0 0,1 8.5,8.5A1,1 0 0,1 9.5,9.5M16.5,9.5A1,1 0 0,1 15.5,10.5A1,1 0 0,1 14.5,9.5A1,1 0 0,1 15.5,8.5A1,1 0 0,1 16.5,9.5Z"/> </svg> </div> <div class="accolade-title">2x Center of the Year</div> <div class="accolade-desc">Season 2 - Season 3</div> </div>
-            <div class="accolade-card"> <div class="accolade-icon"> <svg viewBox="0 0 24 24"> <path d="M12 1L3 5V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V5L12 1M12 3.18L19 6.3V11.22C19 12.92 18.5 14.65 17.65 16.17C16.9 15.45 16.36 14.5 16.05 13.46C16.84 12.14 17.34 10.6 17.34 9C17.34 7.43 16.84 5.95 16 4.68L12 6.8L8 4.68C7.16 5.95 6.66 7.43 6.66 9C6.66 10.6 7.16 12.14 7.95 13.46C7.64 14.5 7.1 15.45 6.35 16.17C5.5 14.65 5 12.92 5 11.22V6.3L12 3.18Z"/> <circle cx="12" cy="8" r="3"/> <path d="M6 17c1.6-2.1 4.14-3 6-3s4.4.9 6 3"/> </svg> </div> <div class="accolade-title">All-Defensive First Team</div> <div class="accolade-desc">Season 3</div> </div>
-            <div class="accolade-card"> <div class="accolade-icon"> <svg viewBox="0 0 24 24"> <path d="M12 1L3 5V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V5L12 1M12 5C13.66 5 15 6.34 15 8C15 9.66 13.66 11 12 11C10.34 11 9 9.66 9 8C9 6.34 10.34 5 12 5M17.13 17C15.92 18.85 14.11 20.24 12 20.92C9.89 20.24 8.08 18.85 6.87 17C6.53 16.5 6.24 16 6 15.47C6 13.82 8.71 12.47 12 12.47C15.29 12.47 18 13.79 18 15.47C17.76 16 17.47 16.5 17.13 17Z"/> <path d="M12 6l1.09 2.95L16 9.24l-2.59 2.27L14.17 15L12 13.27L9.83 15l.76-3.49L8 9.24l2.91-.29L12 6z"/> </svg> </div> <div class="accolade-title">All-Defensive Second Team</div> <div class="accolade-desc">Season 2</div> </div>
-            <div class="accolade-card"> <div class="accolade-icon"> <svg viewBox="0 0 24 24"> <path d="M10,2H14A2,2 0 0,1 16,4V6H20A2,2 0 0,1 22,8V19A2,2 0 0,1 20,21H4C2.89,21 2,20.1 2,19V8C2,6.89 2.89,6 4,6H8V4A2,2 0 0,1 10,2M14,6V4H10V6H14Z"/> </svg> </div> <div class="accolade-title">Franchise Owner of The Year</div> <div class="accolade-desc">Season 3 - Nashville Anthem</div> </div>
-            <div class="accolade-card"> <div class="accolade-icon"> <svg viewBox="0 0 24 24"> <path d="M5 16L3 5l5.5 5l3.5-6l3.5 6L21 5l-2 11H5z"/> <path d="M19 19a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-1h14v1z"/> </svg> </div> <div class="accolade-title">EBA Rebound King</div> <div class="accolade-desc">Season 2</div> </div>
-            <div class="accolade-card"> <div class="accolade-icon"> <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"> <g transform="translate(0,64) scale(0.1,-0.1)" stroke="none"> <path d="M290 598 c1 -48 14 -88 30 -88 12 0 19 11 24 38 9 59 8 62 -24 62 -17 0 -30 -5 -30 -12z"/> <path d="M184 538 c-52 -35 -117 -120 -112 -147 6 -30 33 -23 46 12 16 43 76 103 119 119 21 8 33 18 31 28 -5 26 -33 22 -84 -12z"/> <path d="M377 563 c-15 -14 -5 -30 26 -41 43 -16 103 -76 119 -119 14 -40 45 -42 40 -3 -4 39 -53 102 -106 138 -48 32 -67 38 -79 25z"/> <path d="M286 354 c-31 -30 -9 -84 34 -84 24 0 50 26 50 50 0 24 -26 50 -50 50 -10 0 -26 -7 -34 -16z"/> <path d="M30 320 c0 -32 3 -33 63 -24 26 5 37 12 37 24 0 12 -11 19 -37 24 -60 9 -63 8 -63 -24z"/> <path d="M538 343 c-44 -7 -37 -39 10 -47 59 -9 62 -8 62 24 0 32 -4 33 -72 23z"/> <path d="M74 256 c-18 -48 133 -201 181 -182 26 9 16 31 -18 44 -43 16 -103 76 -119 119 -12 34 -35 44 -44 19z"/> <path d="M522 237 c-16 -43 -76 -103 -119 -119 -40 -14 -42 -45 -3 -40 57 6 176 128 168 171 -6 30 -33 23 -46 -12z"/> <path d="M300 118 c0 -7 -3 -30 -6 -51 -7 -36 -6 -37 26 -37 32 0 33 1 26 37 -3 21 -6 44 -6 51 0 6 -9 12 -20 12 -11 0 -20 -6 -20 -12z"/> </g> </svg> </div> <div class="accolade-title">Ranger</div> <div class="accolade-desc">Season 3 - Highest FG%</div> </div>
-            <div class="accolade-card"> <div class="accolade-icon"> <svg viewBox="0 0 24 24"> <circle cx="7" cy="7" r="3"/> <circle cx="17" cy="7" r="3"/> <path d="M2 22v-2.5C2 16 6.33 15 9 15s7 1 7 4.5V22H2z"/> <path d="M15 22v-2.5c0-1.57-.46-2.64-1.25-3.47a9.55 9.55 0 0 1 3.25.47c2 .67 5 .67 5 3V22h-7z"/> </svg> </div> <div class="accolade-title">Duo Dynasty</div> <div class="accolade-desc">Season 3 - K7YO0</div> </div>
-            <div class="accolade-card"> <div class="accolade-icon"> <svg viewBox="0 0 24 24"> <path d="M5 16L3 5L8.5 10L12 4L15.5 10L21 5L19 16H5z"/> <path d="M12,10L8,4.4L9.6,2H14.4L16,4.4L12,10M15.5,6.8L14.3,8.5C16.5,9.4 18,11.5 18,14A6,6 0 0,1 12,20A6,6 0 0,1 6,14C6,11.5 7.5,9.4 9.7,8.5L8.5,6.8C5.8,8.1 4,10.8 4,14A8,8 0 0,0 12,22A8,8 0 0,0 20,14C20,10.8 18.2,8.1 15.5,6.8Z"/> </svg> </div> <div class="accolade-title">Championships</div> <div class="accolade-desc">Season 2 - Nashville Anthem</div> </div>
-        </div>
-      </div>
 
-      <div id="otherSection" class="accolades-section fade-section hidden">
-        <h2 class="section-title">
-          <svg width="32" height="32" viewBox="0 0 24 24" style="vertical-align: middle; margin-right: 10px; fill: var(--primary);">
-            <path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
-          Other Awards
-        </h2>
-        <div class="accolades-container">
-          <!-- TOP 100 -->
-          <div class="accolade-card">
-            <div class="accolade-icon">
-              <svg viewBox="0 0 24 24"><path d="M6.2 2.44L18.1 14.34L20.22 12.22L21.63 13.63L19.16 16.1L22.34 19.28C22.73 19.67 22.73 20.3 22.34 20.69L21.63 21.4C21.24 21.79 20.61 21.79 20.22 21.4L17.04 18.22L14.56 20.7L13.15 19.29L15.27 17.17L3.37 5.27V2.44H6.2M15.89 10L20.63 5.26V2.44H17.8L13.06 7.18L15.89 10M10.94 15L8.11 12.13L5.9 14.34L3.78 12.22L2.37 13.63L4.84 16.1L1.66 19.29C1.27 19.68 1.27 20.31 1.66 20.7L2.37 21.41C2.76 21.8 3.39 21.8 3.78 21.41L6.96 18.23L9.44 20.71L10.85 19.3L8.73 17.18L10.94 15Z"/></svg>
+        <div class="games-accordion">
+          <button class="accordion-header" aria-expanded="false">
+            <div class="accordion-left">
+              <span class="accordion-logo">
+                <svg width="20" height="20" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <g transform="translate(0,64) scale(0.1,-0.1)" fill="currentColor" stroke="none">
+                    <path d="M250 570 c-39 -11 -83 -36 -104 -59 -19 -21 -19 -21 15 -21 20 0 69
+            -18 123 -45 83 -42 147 -57 160 -36 8 13 -48 96 -85 124 -45 34 -79 45 -109
+            37z"></path>
+                    <path d="M391 542 c24 -22 53 -56 64 -76 11 -20 24 -35 30 -33 15 5 18 53 5
+            76 -12 23 -67 54 -115 65 -28 7 -28 6 16 -32z"></path>
+                    <path d="M117 463 c-23 -6 -46 -52 -53 -107 l-6 -44 73 -12 c73 -12 269 -9
+            317 6 19 5 22 13 20 37 -3 29 -4 30 -63 32 -50 1 -74 9 -148 48 -86 45 -102
+            50 -140 40z"></path>
+                    <path d="M526 447 c-3 -14 -13 -32 -21 -40 -10 -11 -13 -25 -9 -46 7 -35 13
+            -37 54 -16 25 13 28 18 20 43 -4 16 -14 41 -22 57 l-15 28 -7 -26z"></path>
+                    <path d="M540 307 c-32 -15 -40 -26 -40 -57 0 -17 8 -29 25 -37 30 -13 40 0
+            51 66 7 44 3 46 -36 28z"></path>
+                    <path d="M69 252 c13 -42 30 -73 59 -104 37 -40 84 -37 180 11 42 21 96 44
+            120 51 37 12 42 17 42 42 0 28 -1 28 -42 21 -56 -10 -260 -10 -320 0 l-47 8
+            8 -29z"></path>
+                    <path d="M479 163 c-6 -16 -18 -36 -26 -46 -9 -9 -14 -20 -10 -23 10 -10 91
+            72 83 84 -13 21 -36 13 -47 -15z"></path>
+                    <path d="M331 135 c-45 -25 -90 -45 -99 -45 -36 0 7 -21 55 -27 76 -9 100 1
+            133 54 17 26 30 51 30 55 0 18 -39 5 -119 -37z"></path>
+                  </g>
+                </svg>
+              </span>
+              <span>Hoop Journey</span>
             </div>
-            <div class="accolade-title">#11 | Tier 7 - Custom Duels</div>
-            <div class="accolade-desc">Eleventh Player Globally To Obtain (2018)</div>
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="accordion-content">
+            <div class="accolades-container">
+              <!-- Hoop accolades cards -->
+              <div class="accolade-card"> <div class="accolade-icon"> <svg viewBox="0 0 100 100" width="32" height="32" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"> <g transform="translate(0,100) scale(0.1,-0.1)" stroke="none"> <path d="M449 706 c-80 -30 -212 -82 -292 -116 -129 -55 -147 -66 -147 -86 0 -16 14 -33 48 -56 26 -17 107 -77 180 -131 l133 -99 102 47 c395 186 528 255 525 272 -2 9 -30 32 -63 51 -112 63 -322 172 -331 172 -5 -1 -75 -25 -155 -54z m191 19 c37 -19 37 -23 0 -37 -17 -5 -29 -15 -27 -21 1 -5 37 -29 79 -53 l77 -44 45 17 c44 17 46 16 95 -7 28 -13 51 -26 51 -30 0 -3 -57 -32 -127 -64 l-128 -58 -52 28 c-56 30 -59 34 -42 51 17 17 6 57 -21 70 -14 7 -56 13 -94 13 -57 0 -77 5 -115 27 -25 14 -41 28 -36 30 6 2 66 23 135 48 69 24 126 44 128 44 2 1 16 -6 32 -14z m125 -67 c36 -18 65 -35 65 -38 0 -3 -13 -11 -29 -17 -25 -9 -36 -7 -82 19 -72 39 -77 45 -48 57 13 5 25 10 26 10 2 1 32 -13 68 -31z m-402 -54 c45 -25 46 -25 26 -45 -23 -23 -24 -33 -4 -52 25 -26 83 -39 138 -33 46 5 57 3 101 -25 27 -17 45 -34 40 -38 -5 -4 -69 -34 -141 -67 -95 -42 -133 -64 -133 -76 0 -9 -4 -20 -10 -23 -6 -3 -10 4 -10 18 0 16 -12 32 -36 50 l-36 25 41 21 c22 12 41 24 41 26 0 3 -39 30 -86 60 l-85 55 -44 -19 -43 -19 -41 28 -42 27 128 56 c70 31 133 56 139 56 6 1 32 -10 57 -25z m222 -48 c20 -15 15 -46 -8 -46 -15 0 -107 48 -107 56 0 10 98 2 115 -10z m-100 -23 c25 -16 45 -31 45 -35 0 -13 -69 -9 -105 6 -37 16 -42 25 -23 44 18 18 32 15 83 -15z m-206 -100 c33 -21 60 -41 61 -45 0 -4 -13 -14 -29 -22 -27 -15 -30 -14 -92 30 -71 49 -79 60 -52 67 38 10 54 6 112 -30z"/> </g> </svg> </div> <div class="accolade-title">2x Finals Appearances</div> <div class="accolade-desc">Season 2 - Season 3</div> </div>
+              <div class="accolade-card"> <div class="accolade-icon"> <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 50 50" preserveAspectRatio="xMidYMid meet"> <g transform="translate(0.000000,50.000000) scale(0.100000,-0.100000)" stroke="none"> <path d="M20 460 c0 -6 30 -10 70 -10 l70 0 0 -60 0 -60 -70 0 c-40 0 -70 -4 -70 -10 0 -6 33 -10 80 -10 l80 0 0 35 0 35 70 0 70 0 0 -130 0 -130 -70 0 -70 0 0 35 0 35 -80 0 c-47 0 -80 -4 -80 -10 0 -6 30 -10 70 -10 l70 0 0 -60 0 -60 -70 0 c-40 0 -70 -4 -70 -10 0 -6 33 -10 80 -10 l80 0 0 35 0 35 80 0 80 0 0 70 0 70 70 0 c40 0 70 4 70 10 0 6 -30 10 -70 10 l-70 0 0 70 0 70 -80 0 -80 0 0 35 0 35 -80 0 c-47 0 -80 -4 -80 -10z"/> </g> </svg> </div> <div class="accolade-title">2x Conference-Finals Contender</div> <div class="accolade-desc">Season 2 - Season 3</div> </div>
+              <div class="accolade-card"> <div class="accolade-icon"> <svg viewBox="0 0 64 64" width="32" height="32" xmlns="http://www.w3.org/2000/svg"> <g transform="translate(0,64) scale(0.1,-0.1)" stroke="none"> <path d="M155 508 c52 -84 60 -108 47 -126 -26 -36 -52 -98 -52 -128 0 -51 40 -115 90 -141 55 -29 105 -29 160 0 50 26 90 90 90 141 0 30 -26 92 -52 128 -13 18 -5 42 47 126 l26 42 -40 0 c-38 0 -42 -3 -73 -55 -18 -30 -36 -55 -41 -55 -5 0 6 25 23 55 l31 55 -29 0 c-19 0 -35 -8 -45 -22 l-16 -23 -19 23 c-14 18 -26 23 -55 20 l-36 -3 30 -49 c17 -26 27 -51 23 -55 -4 -3 -8 -1 -11 4 -2 6 -17 31 -33 58 -25 39 -35 47 -61 47 l-30 0 26 -42z m185 -248 c0 -47 -3 -60 -15 -60 -11 0 -15 11 -15 40 0 35 -3 40 -22 40 l-23 1 24 19 c41 35 51 27 51 -40z"/> </g> </svg> </div> <div class="accolade-title">2x All-EBA First Team</div> <div class="accolade-desc">Season 2 - Season 3</div> </div>
+              <div class="accolade-card"> <div class="accolade-icon"> <svg viewBox="0 0 24 24"> <path d="M12,2L9.19,8.63L2,9.24L7.46,13.97L5.82,21L12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.63L12,2M12,4.74L13.71,8.42L17.77,8.74L14.59,11.51L15.48,15.43L12,13.31L8.52,15.43L9.41,11.51L6.23,8.74L10.29,8.42L12,4.74Z"/> </svg> </div> <div class="accolade-title">2x All-Star Starter</div> <div class="accolade-desc">Season 2 - Season 3</div> </div>
+              <div class="accolade-card"> <div class="accolade-icon"> <svg viewBox="0 0 24 24"> <path d="M21,9H15L13,3H11L9,9H3L7,2H5L1,9V11H7L9,18H11V22H13V18H15L17,11H23V9H21M9.5,9.5A1,1 0 0,1 8.5,10.5A1,1 0 0,1 7.5,9.5A1,1 0 0,1 8.5,8.5A1,1 0 0,1 9.5,9.5M16.5,9.5A1,1 0 0,1 15.5,10.5A1,1 0 0,1 14.5,9.5A1,1 0 0,1 15.5,8.5A1,1 0 0,1 16.5,9.5Z"/> </svg> </div> <div class="accolade-title">2x Center of the Year</div> <div class="accolade-desc">Season 2 - Season 3</div> </div>
+              <div class="accolade-card"> <div class="accolade-icon"> <svg viewBox="0 0 24 24"> <path d="M12 1L3 5V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V5L12 1M12 3.18L19 6.3V11.22C19 12.92 18.5 14.65 17.65 16.17C16.9 15.45 16.36 14.5 16.05 13.46C16.84 12.14 17.34 10.6 17.34 9C17.34 7.43 16.84 5.95 16 4.68L12 6.8L8 4.68C7.16 5.95 6.66 7.43 6.66 9C6.66 10.6 7.16 12.14 7.95 13.46C7.64 14.5 7.1 15.45 6.35 16.17C5.5 14.65 5 12.92 5 11.22V6.3L12 3.18Z"/> <circle cx="12" cy="8" r="3"/> <path d="M6 17c1.6-2.1 4.14-3 6-3s4.4.9 6 3"/> </svg> </div> <div class="accolade-title">All-Defensive First Team</div> <div class="accolade-desc">Season 3</div> </div>
+              <div class="accolade-card"> <div class="accolade-icon"> <svg viewBox="0 0 24 24"> <path d="M12 1L3 5V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V5L12 1M12 5C13.66 5 15 6.34 15 8C15 9.66 13.66 11 12 11C10.34 11 9 9.66 9 8C9 6.34 10.34 5 12 5M17.13 17C15.92 18.85 14.11 20.24 12 20.92C9.89 20.24 8.08 18.85 6.87 17C6.53 16.5 6.24 16 6 15.47C6 13.82 8.71 12.47 12 12.47C15.29 12.47 18 13.79 18 15.47C17.76 16 17.47 16.5 17.13 17Z"/> <path d="M12 6l1.09 2.95L16 9.24l-2.59 2.27L14.17 15L12 13.27L9.83 15l.76-3.49L8 9.24l2.91-.29L12 6z"/> </svg> </div> <div class="accolade-title">All-Defensive Second Team</div> <div class="accolade-desc">Season 2</div> </div>
+              <div class="accolade-card"> <div class="accolade-icon"> <svg viewBox="0 0 24 24"> <path d="M10,2H14A2,2 0 0,1 16,4V6H20A2,2 0 0,1 22,8V19A2,2 0 0,1 20,21H4C2.89,21 2,20.1 2,19V8C2,6.89 2.89,6 4,6H8V4A2,2 0 0,1 10,2M14,6V4H10V6H14Z"/> </svg> </div> <div class="accolade-title">Franchise Owner of The Year</div> <div class="accolade-desc">Season 3 - Nashville Anthem</div> </div>
+              <div class="accolade-card"> <div class="accolade-icon"> <svg viewBox="0 0 24 24"> <path d="M5 16L3 5l5.5 5l3.5-6l3.5 6L21 5l-2 11H5z"/> <path d="M19 19a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-1h14v1z"/> </svg> </div> <div class="accolade-title">EBA Rebound King</div> <div class="accolade-desc">Season 2</div> </div>
+              <div class="accolade-card"> <div class="accolade-icon"> <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"> <g transform="translate(0,64) scale(0.1,-0.1)" stroke="none"> <path d="M290 598 c1 -48 14 -88 30 -88 12 0 19 11 24 38 9 59 8 62 -24 62 -17 0 -30 -5 -30 -12z"/> <path d="M184 538 c-52 -35 -117 -120 -112 -147 6 -30 33 -23 46 12 16 43 76 103 119 119 21 8 33 18 31 28 -5 26 -33 22 -84 -12z"/> <path d="M377 563 c-15 -14 -5 -30 26 -41 43 -16 103 -76 119 -119 14 -40 45 -42 40 -3 -4 39 -53 102 -106 138 -48 32 -67 38 -79 25z"/> <path d="M286 354 c-31 -30 -9 -84 34 -84 24 0 50 26 50 50 0 24 -26 50 -50 50 -10 0 -26 -7 -34 -16z"/> <path d="M30 320 c0 -32 3 -33 63 -24 26 5 37 12 37 24 0 12 -11 19 -37 24 -60 9 -63 8 -63 -24z"/> <path d="M538 343 c-44 -7 -37 -39 10 -47 59 -9 62 -8 62 24 0 32 -4 33 -72 23z"/> <path d="M74 256 c-18 -48 133 -201 181 -182 26 9 16 31 -18 44 -43 16 -103 76 -119 119 -12 34 -35 44 -44 19z"/> <path d="M522 237 c-16 -43 -76 -103 -119 -119 -40 -14 -42 -45 -3 -40 57 6 176 128 168 171 -6 30 -33 23 -46 -12z"/> <path d="M300 118 c0 -7 -3 -30 -6 -51 -7 -36 -6 -37 26 -37 32 0 33 1 26 37 -3 21 -6 44 -6 51 0 6 -9 12 -20 12 -11 0 -20 -6 -20 -12z"/> </g> </svg> </div> <div class="accolade-title">Ranger</div> <div class="accolade-desc">Season 3 - Highest FG%</div> </div>
+              <div class="accolade-card"> <div class="accolade-icon"> <svg viewBox="0 0 24 24"> <circle cx="7" cy="7" r="3"/> <circle cx="17" cy="7" r="3"/> <path d="M2 22v-2.5C2 16 6.33 15 9 15s7 1 7 4.5V22H2z"/> <path d="M15 22v-2.5c0-1.57-.46-2.64-1.25-3.47a9.55 9.55 0 0 1 3.25.47c2 .67 5 .67 5 3V22h-7z"/> </svg> </div> <div class="accolade-title">Duo Dynasty</div> <div class="accolade-desc">Season 3 - K7YO0</div> </div>
+              <div class="accolade-card"> <div class="accolade-icon"> <svg viewBox="0 0 24 24"> <path d="M5 16L3 5L8.5 10L12 4L15.5 10L21 5L19 16H5z"/> <path d="M12,10L8,4.4L9.6,2H14.4L16,4.4L12,10M15.5,6.8L14.3,8.5C16.5,9.4 18,11.5 18,14A6,6 0 0,1 12,20A6,6 0 0,1 6,14C6,11.5 7.5,9.4 9.7,8.5L8.5,6.8C5.8,8.1 4,10.8 4,14A8,8 0 0,0 12,22A8,8 0 0,0 20,14C20,10.8 18.2,8.1 15.5,6.8Z"/> </svg> </div> <div class="accolade-title">Championships</div> <div class="accolade-desc">Season 2 - Nashville Anthem</div> </div>
+            </div>
           </div>
 
-          <!-- LUA MASTER -->
-          <div class="accolade-card">
-            <div class="accolade-icon">
-              <svg viewBox="0 0 24 24"><path d="M14.5 11L16.5 13L18.5 11L16.5 9M9 3V5.5C9 7.5 7.5 9 5.5 9C7.5 9 9 10.5 9 12.5V15C9 16.79 10 18.21 11.38 19H5V21H19V19H16C16.82 18.78 17.5 18.23 17.9 17.5C16.83 17.65 15.94 17.12 15.5 16.37C14.8 16.72 14 17 13 17C10.79 17 9 15.21 9 13V11C9 8.79 7.21 7 5 7V5C7.21 5 9 3.21 9 1H11C11 2.5 11.95 3.75 13.2 4.29C13.48 3.82 13.86 3.42 14.31 3.13C13.13 2.91 12.23 1.97 12.05 .78C12.5 .28 13.15 0 13.84 0C15.03 0 16 .97 16 2.16C16 2.96 15.7 3.7 15.17 4.27L17.22 6.31L15.5 8L13.5 6L11.5 8L13.5 10L15.5 8L17.92 10.42C19.03 9.89 20 8.76 20 7C20 5.5 19.18 4.26 18 3.64V3C18 1.34 16.66 0 15 0H14.84C14.4 0 14 .19 13.61 .36L13.6 .37L13.59 .37C13.21 .19 12.81 0 12.37 0C11.17 0 10.18 .97 10.18 2.16C10.18 2.75 10.37 3.3 10.69 3.75C10.26 3.27 10 2.67 10 2C10 .9 10.9 0 12 0H9C9 1.33 8.33 2 7 2S5 1.33 5 0H1V2H3C3 3.67 3.67 4.33 5 4.33S7 3.67 7 2C7 3.1 6.1 4 5 4C3.35 4 2 2.65 2 1H0V5C0 6.66 1.34 8 3 8H5C7.21 8 9 6.21 9 4V3Z"/></svg>
+          <button class="accordion-header" aria-expanded="false" style="margin-top: 16px;">
+            <div class="accordion-left">
+              <span class="accordion-logo">
+                <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+              </span>
+              <span>Other Games</span>
             </div>
-            <div class="accolade-title">to be decided</div>
-            <div class="accolade-desc">idk</div>
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="accordion-content">
+            <div class="accolades-container">
+              <!-- Other games/awards cards -->
+              <div class="accolade-card">
+                <div class="accolade-icon">
+                  <svg viewBox="0 0 24 24"><path d="M6.2 2.44L18.1 14.34L20.22 12.22L21.63 13.63L19.16 16.1L22.34 19.28C22.73 19.67 22.73 20.3 22.34 20.69L21.63 21.4C21.24 21.79 20.61 21.79 20.22 21.4L17.04 18.22L14.56 20.7L13.15 19.29L15.27 17.17L3.37 5.27V2.44H6.2M15.89 10L20.63 5.26V2.44H17.8L13.06 7.18L15.89 10M10.94 15L8.11 12.13L5.9 14.34L3.78 12.22L2.37 13.63L4.84 16.1L1.66 19.29C1.27 19.68 1.27 20.31 1.66 20.7L2.37 21.41C2.76 21.8 3.39 21.8 3.78 21.41L6.96 18.23L9.44 20.71L10.85 19.3L8.73 17.18L10.94 15Z"/></svg>
+                </div>
+                <div class="accolade-title">#11 | Tier 7 - Custom Duels</div>
+                <div class="accolade-desc">Eleventh Player Globally To Obtain (2018)</div>
+              </div>
+
+              <div class="accolade-card">
+                <div class="accolade-icon">
+                  <svg viewBox="0 0 24 24"><path d="M14.5 11L16.5 13L18.5 11L16.5 9M9 3V5.5C9 7.5 7.5 9 5.5 9C7.5 9 9 10.5 9 12.5V15C9 16.79 10 18.21 11.38 19H5V21H19V19H16C16.82 18.78 17.5 18.23 17.9 17.5C16.83 17.65 15.94 17.12 15.5 16.37C14.8 16.72 14 17 13 17C10.79 17 9 15.21 9 13V11C9 8.79 7.21 7 5 7V5C7.21 5 9 3.21 9 1H11C11 2.5 11.95 3.75 13.2 4.29C13.48 3.82 13.86 3.42 14.31 3.13C13.13 2.91 12.23 1.97 12.05 .78C12.5 .28 13.15 0 13.84 0C15.03 0 16 .97 16 2.16C16 2.96 15.7 3.7 15.17 4.27L17.22 6.31L15.5 8L13.5 6L11.5 8L13.5 10L15.5 8L17.92 10.42C19.03 9.89 20 8.76 20 7C20 5.5 19.18 4.26 18 3.64V3C18 1.34 16.66 0 15 0H14.84C14.4 0 14 .19 13.61 .36L13.6 .37L13.59 .37C13.21 .19 12.81 0 12.37 0C11.17 0 10.18 .97 10.18 2.16C10.18 2.75 10.37 3.3 10.69 3.75C10.26 3.27 10 2.67 10 2C10 .9 10.9 0 12 0H9C9 1.33 8.33 2 7 2S5 1.33 5 0H1V2H3C3 3.67 3.67 4.33 5 4.33S7 3.67 7 2C7 3.1 6.1 4 5 4C3.35 4 2 2.65 2 1H0V5C0 6.66 1.34 8 3 8H5C7.21 8 9 6.21 9 4V3Z"/></svg>
+                </div>
+                <div class="accolade-title">to be decided</div>
+                <div class="accolade-desc">idk</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -2558,6 +2621,8 @@
           loadComments();
         } else if (catId === 'schedule') {
           loadAndRenderSchedule();
+        } else if (catId === 'games') {
+          // nothing dynamic for now
         } else if (catId === 'home') {
           setTimeout(() => {
             nextVisible.querySelectorAll('.social-card').forEach((c, i) => {
@@ -2627,6 +2692,82 @@
         btn.addEventListener('click', function() {
           const catId = this.getAttribute('data-category');
           showCategory(catId, this);
+        });
+      });
+
+      // Games accordion behavior
+      document.querySelectorAll('.accordion-header').forEach(header => {
+        header.addEventListener('click', () => {
+          const expanded = header.getAttribute('aria-expanded') === 'true';
+          header.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+          const content = header.nextElementSibling;
+          if (content) {
+            if (!expanded) {
+              // Opening
+              content.classList.remove('closing');
+              content.classList.add('open');
+              // Stagger cards
+              const cards = content.querySelectorAll('.accolade-card');
+              cards.forEach((card, i) => {
+                card.style.animationDelay = `${Math.min(i * 0.05, 0.4)}s`;
+              });
+              content.style.maxHeight = content.scrollHeight + 'px';
+            } else {
+              // Closing: fade cards first, then collapse height
+              const cards = content.querySelectorAll('.accolade-card');
+
+              // Freeze current height and force reflow
+              content.style.maxHeight = content.scrollHeight + 'px';
+              void content.offsetHeight;
+
+              // Prepare each card to transition from visible to hidden with stagger
+              cards.forEach((card, i) => {
+                // Cancel any running entrance animation and lock current visible state
+                card.style.animation = 'none';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+                card.style.transition = 'opacity .22s ease, transform .22s ease';
+                // Reverse stagger so it goes bottom-to-top
+                const reverseIndex = (cards.length - 1 - i);
+                card.style.transitionDelay = `${Math.min(reverseIndex * 0.05, 0.25)}s`;
+              });
+
+              // Next frame, start the fade/translate out
+              requestAnimationFrame(() => {
+                cards.forEach(card => {
+                  card.style.opacity = '0';
+                  card.style.transform = 'translateY(10px)';
+                });
+              });
+
+              // After fade duration + max stagger, collapse the container
+              const fadeMs = 220;
+              const maxStaggerMs = Math.min((cards.length - 1) * 50, 250);
+              const totalDelay = fadeMs + maxStaggerMs + 20;
+              setTimeout(() => {
+                content.style.maxHeight = '0px';
+              }, totalDelay);
+
+              // Cleanup after collapse completes
+              const onTransitionEnd = (e) => {
+                if (e.propertyName === 'max-height') {
+                  content.classList.remove('open');
+                  content.classList.remove('closing');
+                  content.style.maxHeight = '';
+                  cards.forEach(card => {
+                    card.style.transition = '';
+                    card.style.transitionDelay = '';
+                    card.style.animation = '';
+                    card.style.animationDelay = '';
+                    card.style.opacity = '';
+                    card.style.transform = '';
+                  });
+                  content.removeEventListener('transitionend', onTransitionEnd);
+                }
+              };
+              content.addEventListener('transitionend', onTransitionEnd);
+            }
+          }
         });
       });
 
