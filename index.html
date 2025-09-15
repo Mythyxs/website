@@ -1499,6 +1499,10 @@
         <svg width="24" height="24" viewBox="0 0 24 24"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
         Games
       </button>
+      <button class="tab-button" data-category="gfx">
+        <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21 19V5c0-1.1-.9-2-2-2H5C3.89 3 3 3.9 3 5v14c0 1.11.89 2 2 2h14c1.1 0 2-.89 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5zM7 8c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2z"/></svg>
+        GFX
+      </button>
     </div>
     <div class="tab-sections-wrapper" id="tabSectionsWrapper">
       <!-- ───────────  HOME  ─────────── -->
@@ -1732,6 +1736,72 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- ───────────  GFX  ─────────── -->
+      <div id="gfxSection" class="accolades-section fade-section hidden">
+        <h2 class="section-title">
+          <svg width="32" height="32" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:10px;fill:var(--primary);"><path d="M21 19V5c0-1.1-.9-2-2-2H5C3.89 3 3 3.9 3 5v14c0 1.11.89 2 2 2h14c1.1 0 2-.89 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5zM7 8c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2z"/></svg>
+          GFX Gallery
+        </h2>
+        <div class="anime-faq" style="text-align:center;color:var(--accent);margin-bottom:18px;font-size:1.05rem;max-width:600px;margin-left:auto;margin-right:auto;">
+          All GFXs I've created over the years, from newest to oldest. (you'll be able to tell anyways)
+        </div>
+
+        <style>
+          /* Scoped GFX gallery effects */
+          #gfxSection .gfx-item { transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease; }
+          #gfxSection .gfx-item:hover { transform: translateY(-4px); box-shadow: 0 10px 24px rgba(0,0,0,0.35); border-color: var(--primary); }
+          #gfxSection .gfx-img { display:block; width:100%; height:auto; transform: scale(1); transition: transform 0.35s ease; }
+          #gfxSection .gfx-item:hover .gfx-img { transform: scale(1.03); }
+        </style>
+
+        <div class="gfx-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;align-items:start;">
+          <figure class="gfx-item" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.25);">
+            <img class="gfx-img" src="https://i.ibb.co/TJRKbQb/nashville-35.png" alt="EBA Season 3 Final Four graphic" style="object-fit:cover;" loading="lazy">
+            <figcaption style="padding:10px 12px;color:var(--text-secondary);font-size:0.9rem;line-height:1.4;">
+              Poster for Undisputed Combat MMA Fighter, Ken Kaneki.
+            </figcaption>
+          </figure>
+
+          <figure class="gfx-item" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.25);">
+            <img class="gfx-img" src="https://i.ibb.co/KpBsy0g9/Lockset-DTOTY.png" alt="Gen 5 graphic" style="object-fit:cover;" loading="lazy">
+            <figcaption style="padding:10px 12px;color:var(--text-secondary);font-size:0.9rem;line-height:1.4;">
+              Media for Roblox Football League Athlete - Defensive Tackle, Lockset.
+            </figcaption>
+          </figure>
+
+          <!-- Placeholders to be replaced -->
+          <figure class="gfx-item" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.25);">
+            <img class="gfx-img" src=https://i.ibb.co/V0PFbvGD/nashville-27.png" alt="GFX placeholder" style="object-fit:cover;" loading="lazy">
+            <figcaption style="padding:10px 12px;color:var(--text-secondary);font-size:0.9rem;line-height:1.4;">Itoshi Rin being interviewed by Touch Lock on the Blue Lock VS U-20 Match.</figcaption>
+          </figure>
+
+          <figure class="gfx-item" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.25);">
+            <img class="gfx-img" src="https://i.ibb.co/HTG8VZLF/nashville-17.png" alt="GFX placeholder" style="object-fit:cover;" loading="lazy">
+            <figcaption style="padding:10px 12px;color:var(--text-secondary);font-size:0.9rem;line-height:1.4;">Itoshi Sae attending the 'Touch Lock Opening Ceremony' event on April '25.</figcaption>
+          </figure>
+
+          <figure class="gfx-item" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.25);">
+            <img class="gfx-img" src="https://i.ibb.co/zVzYshr1/nashville-10.png" alt="GFX placeholder" style="object-fit:cover;" loading="lazy">
+            <figcaption style="padding:10px 12px;color:var(--text-secondary);font-size:0.9rem;line-height:1.4;">Touch Lock Official Game Thumbnail</figcaption>
+          </figure>
+
+          <figure class="gfx-item" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.25);">
+            <img class="gfx-img" src="https://i.ibb.co/Y7DMPs8d/nashville-36.png" alt="GFX placeholder" style="object-fit:cover;" loading="lazy">
+            <figcaption style="padding:10px 12px;color:var(--text-secondary);font-size:0.9rem;line-height:1.4;">CEBA Virginia Cavaliers Franchise Owner - m8ntal </figcaption>
+          </figure>
+
+          <figure class="gfx-item" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.25);">
+            <img class="gfx-img" src="https://i.ibb.co/PvPzmcgr/EHSGFX-17.png" alt="GFX placeholder" style="object-fit:cover;" loading="lazy">
+            <figcaption style="padding:10px 12px;color:var(--text-secondary);font-size:0.9rem;line-height:1.4;">SPIKED Volleyball Team Media Day - Lethal</figcaption>
+          </figure>
+
+          <figure class="gfx-item" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.25);">
+            <img class="gfx-img" src="https://i.ibb.co/ymy4jfJK/nashville-28.png" alt="GFX placeholder" style="object-fit:cover;" loading="lazy">
+            <figcaption style="padding:10px 12px;color:var(--text-secondary);font-size:0.9rem;line-height:1.4;">Poster of Volleyball Legends Setter - pythusiast</figcaption>
+          </figure>
         </div>
       </div>
     </div>
