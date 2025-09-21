@@ -695,16 +695,17 @@
       .anime-card-rating { justify-content: flex-start; }
       /* Schedule mobile */
       .schedule-item {
-        padding: 14px;
-        gap: 12px;
-        flex-direction: column; 
-        align-items: center; 
-        text-align:center;
+        padding: 12px !important;
+        gap: 12px !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        text-align: left !important;
       }
       .schedule-item-cover { 
-        margin-bottom: 10px;
-        width: 60px;
-        height: 85px;
+        margin-bottom: 0 !important;
+        width: 70px;
+        height: 100px;
+        flex-shrink: 0;
       }
       .schedule-item-title {
         font-size: 1rem;
@@ -1768,8 +1769,9 @@
         </style>
 
         <div class="gfx-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;align-items:start;">
-          <figure class="gfx-item" style="--card-index: 1; background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.25);">
+          <figure class="gfx-item" style="--card-index: 1; background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.25);position:relative;">
             <img class="gfx-img" src="https://i.ibb.co/TJRKbQb/nashville-35.png" alt="EBA Season 3 Final Four graphic" style="object-fit:cover;">
+            <div style="position:absolute;top:8px;right:8px;background:linear-gradient(135deg, #898686, #473e3b);color:white;padding:4px 8px;border-radius:6px;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;box-shadow:0 2px 8px rgba(0,0,0,0.3);">Newest</div>
             <figcaption style="padding:10px 12px;color:var(--text-secondary);font-size:0.9rem;line-height:1.4;">
               Poster for Undisputed Combat MMA Fighter, Ken Kaneki.
             </figcaption>
