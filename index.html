@@ -1751,55 +1751,65 @@
 
         <style>
           /* Scoped GFX gallery effects */
-          #gfxSection .gfx-item { transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease; }
+          #gfxSection .gfx-item { 
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+            opacity: 0;
+            transform: translateY(20px) scale(0.95);
+            animation: fadeInUp 0.6s cubic-bezier(0.4,0,0.2,1) forwards;
+          }
           #gfxSection .gfx-item:hover { transform: translateY(-4px); box-shadow: 0 10px 24px rgba(0,0,0,0.35); border-color: var(--primary); }
           #gfxSection .gfx-img { display:block; width:100%; height:auto; transform: scale(1); transition: transform 0.35s ease; }
           #gfxSection .gfx-item:hover .gfx-img { transform: scale(1.03); }
+          
+          /* Staggered animation for GFX items */
+          #gfxSection .gfx-item:nth-child(n) {
+            animation-delay: calc(0.05s * var(--card-index, 1));
+          }
         </style>
 
         <div class="gfx-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;align-items:start;">
-          <figure class="gfx-item" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.25);">
-            <img class="gfx-img" src="https://i.ibb.co/TJRKbQb/nashville-35.png" alt="EBA Season 3 Final Four graphic" style="object-fit:cover;" loading="lazy">
+          <figure class="gfx-item" style="--card-index: 1; background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.25);">
+            <img class="gfx-img" src="https://i.ibb.co/TJRKbQb/nashville-35.png" alt="EBA Season 3 Final Four graphic" style="object-fit:cover;">
             <figcaption style="padding:10px 12px;color:var(--text-secondary);font-size:0.9rem;line-height:1.4;">
               Poster for Undisputed Combat MMA Fighter, Ken Kaneki.
             </figcaption>
           </figure>
 
-          <figure class="gfx-item" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.25);">
-            <img class="gfx-img" src="https://i.ibb.co/KpBsy0g9/Lockset-DTOTY.png" alt="Gen 5 graphic" style="object-fit:cover;" loading="lazy">
+          <figure class="gfx-item" style="--card-index: 2; background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.25);">
+            <img class="gfx-img" src="https://i.ibb.co/KpBsy0g9/Lockset-DTOTY.png" alt="Gen 5 graphic" style="object-fit:cover;">
             <figcaption style="padding:10px 12px;color:var(--text-secondary);font-size:0.9rem;line-height:1.4;">
               Media for Roblox Football League Athlete - Defensive Tackle, Lockset.
             </figcaption>
           </figure>
 
           <!-- Placeholders to be replaced -->
-          <figure class="gfx-item" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.25);">
-            <img class="gfx-img" src=https://i.ibb.co/V0PFbvGD/nashville-27.png" alt="GFX placeholder" style="object-fit:cover;" loading="lazy">
+          <figure class="gfx-item" style="--card-index: 3; background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.25);">
+            <img class="gfx-img" src="https://i.ibb.co/V0PFbvGD/nashville-27.png" alt="GFX placeholder" style="object-fit:cover;">
             <figcaption style="padding:10px 12px;color:var(--text-secondary);font-size:0.9rem;line-height:1.4;">Itoshi Rin being interviewed by Touch Lock on the Blue Lock VS U-20 Match.</figcaption>
           </figure>
 
-          <figure class="gfx-item" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.25);">
-            <img class="gfx-img" src="https://i.ibb.co/HTG8VZLF/nashville-17.png" alt="GFX placeholder" style="object-fit:cover;" loading="lazy">
+          <figure class="gfx-item" style="--card-index: 4; background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.25);">
+            <img class="gfx-img" src="https://i.ibb.co/HTG8VZLF/nashville-17.png" alt="GFX placeholder" style="object-fit:cover;">
             <figcaption style="padding:10px 12px;color:var(--text-secondary);font-size:0.9rem;line-height:1.4;">Itoshi Sae attending the 'Touch Lock Opening Ceremony' event on April '25.</figcaption>
           </figure>
 
-          <figure class="gfx-item" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.25);">
-            <img class="gfx-img" src="https://i.ibb.co/zVzYshr1/nashville-10.png" alt="GFX placeholder" style="object-fit:cover;" loading="lazy">
+          <figure class="gfx-item" style="--card-index: 5; background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.25);">
+            <img class="gfx-img" src="https://i.ibb.co/zVzYshr1/nashville-10.png" alt="GFX placeholder" style="object-fit:cover;">
             <figcaption style="padding:10px 12px;color:var(--text-secondary);font-size:0.9rem;line-height:1.4;">Touch Lock Official Game Thumbnail</figcaption>
           </figure>
 
-          <figure class="gfx-item" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.25);">
-            <img class="gfx-img" src="https://i.ibb.co/Y7DMPs8d/nashville-36.png" alt="GFX placeholder" style="object-fit:cover;" loading="lazy">
+          <figure class="gfx-item" style="--card-index: 6; background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.25);">
+            <img class="gfx-img" src="https://i.ibb.co/Y7DMPs8d/nashville-36.png" alt="GFX placeholder" style="object-fit:cover;">
             <figcaption style="padding:10px 12px;color:var(--text-secondary);font-size:0.9rem;line-height:1.4;">CEBA Virginia Cavaliers Franchise Owner - m8ntal </figcaption>
           </figure>
 
-          <figure class="gfx-item" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.25);">
-            <img class="gfx-img" src="https://i.ibb.co/PvPzmcgr/EHSGFX-17.png" alt="GFX placeholder" style="object-fit:cover;" loading="lazy">
+          <figure class="gfx-item" style="--card-index: 7; background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.25);">
+            <img class="gfx-img" src="https://i.ibb.co/PvPzmcgr/EHSGFX-17.png" alt="GFX placeholder" style="object-fit:cover;">
             <figcaption style="padding:10px 12px;color:var(--text-secondary);font-size:0.9rem;line-height:1.4;">SPIKED Volleyball Team Media Day - Lethal</figcaption>
           </figure>
 
-          <figure class="gfx-item" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.25);">
-            <img class="gfx-img" src="https://i.ibb.co/ymy4jfJK/nashville-28.png" alt="GFX placeholder" style="object-fit:cover;" loading="lazy">
+          <figure class="gfx-item" style="--card-index: 8; background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.25);">
+            <img class="gfx-img" src="https://i.ibb.co/ymy4jfJK/nashville-28.png" alt="GFX placeholder" style="object-fit:cover;">
             <figcaption style="padding:10px 12px;color:var(--text-secondary);font-size:0.9rem;line-height:1.4;">Poster of Volleyball Legends Setter - pythusiast</figcaption>
           </figure>
         </div>
@@ -2653,6 +2663,28 @@
 
         // Step 1: Fade out current
         if (currentVisible) {
+          // Handle GFX cards fade-out animation
+          if (prevCategory === 'gfx') {
+            const gfxItems = currentVisible.querySelectorAll('.gfx-item');
+            gfxItems.forEach((item, i) => {
+              item.style.animation = 'none';
+              item.style.opacity = '1';
+              item.style.transform = 'translateY(0)';
+              item.style.transition = 'opacity .22s ease, transform .22s ease';
+              // Reverse stagger so it goes bottom-to-top
+              const reverseIndex = (gfxItems.length - 1 - i);
+              item.style.transitionDelay = `${Math.min(reverseIndex * 0.05, 0.25)}s`;
+            });
+            
+            // Next frame, start the fade/translate out
+            requestAnimationFrame(() => {
+              gfxItems.forEach(item => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(10px)';
+              });
+            });
+          }
+          
           currentVisible.classList.remove('show');
           if (prevCategory === 'home' && heroHome) heroHome.classList.remove('show');
         }
@@ -2693,6 +2725,13 @@
           loadAndRenderSchedule();
         } else if (catId === 'games') {
           // nothing dynamic for now
+        } else if (catId === 'gfx') {
+          setTimeout(() => {
+            nextVisible.querySelectorAll('.gfx-item').forEach((item, i) => {
+              item.style.animation = 'none';
+              setTimeout(() => item.style.animation = `fadeInUp 0.6s cubic-bezier(0.4,0,0.2,1) ${i * 0.05}s forwards`, 10);
+            });
+          }, 650);
         } else if (catId === 'home') {
           setTimeout(() => {
             nextVisible.querySelectorAll('.social-card').forEach((c, i) => {
@@ -2713,6 +2752,29 @@
     setTimeout(initVisitorCounter,3200);
 
     document.addEventListener('DOMContentLoaded', () => {
+      // GFX Image Preloading
+      const gfxImageUrls = [
+        'https://i.ibb.co/TJRKbQb/nashville-35.png',
+        'https://i.ibb.co/KpBsy0g9/Lockset-DTOTY.png',
+        'https://i.ibb.co/V0PFbvGD/nashville-27.png',
+        'https://i.ibb.co/HTG8VZLF/nashville-17.png',
+        'https://i.ibb.co/zVzYshr1/nashville-10.png',
+        'https://i.ibb.co/Y7DMPs8d/nashville-36.png',
+        'https://i.ibb.co/PvPzmcgr/EHSGFX-17.png',
+        'https://i.ibb.co/ymy4jfJK/nashville-28.png'
+      ];
+
+      // Preload GFX images in the background
+      function preloadGFXImages() {
+        gfxImageUrls.forEach(url => {
+          const img = new Image();
+          img.src = url;
+        });
+      }
+
+      // Start preloading immediately
+      preloadGFXImages();
+
       // Show heroHomeWrapper if Home is active on load
       const heroHome = document.getElementById('heroHomeWrapper');
       const isHome = currentCategory === 'home';
