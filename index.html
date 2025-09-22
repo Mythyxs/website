@@ -1869,6 +1869,39 @@
 
     /* tabs */
     let currentCategory = 'home';
+    // --- Lightweight client-side routing (path <-> category) ---
+    const routePaths = {
+      home: '/',
+      animeList: '/animelist',
+      schedule: '/schedule',
+      games: '/games',
+      gfx: '/gfx'
+    };
+    function getCategoryFromPath(pathname){
+      const p = (pathname || '/').toLowerCase().replace(/\/+$/,'');
+      if (p === '' || p === '/') return 'home';
+      const seg = p.startsWith('/') ? p.slice(1) : p;
+      if (seg === 'animelist') return 'animeList';
+      if (seg === 'schedule') return 'schedule';
+      if (seg === 'games') return 'games';
+      if (seg === 'gfx') return 'gfx';
+      return 'home';
+    }
+    function getPathForCategory(cat){
+      return routePaths[cat] || '/';
+    }
+    function updateDocumentTitle(cat){
+      const titles = { home: 'shemxz.com', animeList: 'shemxz.com • Anime List', schedule: 'shemxz.com • Schedule', games: 'shemxz.com • Games', gfx: 'shemxz.com • GFX' };
+      document.title = titles[cat] || 'shemxz.com';
+    }
+    function navigateTo(catId, replace=false){
+      const path = getPathForCategory(catId);
+      const state = { cat: catId };
+      try { replace ? history.replaceState(state, '', path) : history.pushState(state, '', path); } catch(_) {}
+      updateDocumentTitle(catId);
+      const btn = document.querySelector(`.tab-button[data-category="${catId}"]`);
+      showCategory(catId, btn);
+    }
     const animeDataCache = {
         all: [],
         categories: new Set(),
@@ -2795,6 +2828,12 @@
     setTimeout(initVisitorCounter,3200);
 
     document.addEventListener('DOMContentLoaded', () => {
+      // Initialize route from URL
+      const initialCat = getCategoryFromPath(location.pathname);
+      currentCategory = initialCat;
+      try { history.replaceState({ cat: initialCat }, '', getPathForCategory(initialCat)); } catch(_) {}
+      updateDocumentTitle(initialCat);
+
       // GFX Image Preloading
       const gfxImageUrls = [
         'https://i.ibb.co/TJRKbQb/nashville-35.png',
@@ -2862,11 +2901,17 @@
       ,"there is not a single bad music/band anime in existence"
       ,"table expected, got nil 😢"],shuffled=phrases.slice().sort(()=>Math.random()-.5);let idx=0,ch=0;const tEl=document.getElementById("typing");if(tEl){function type(){if(ch<=shuffled[idx].length){tEl.textContent=shuffled[idx].slice(0,ch++);setTimeout(type,100);}else{setTimeout(()=>del(),2000);}}function del(){if(ch>0){tEl.textContent=shuffled[idx].slice(0,--ch);setTimeout(del,50);}else{idx=(idx+1)%shuffled.length;setTimeout(type,500);}}type();}
 
-      // Tab button event listeners
+      // Set initial active tab button based on currentCategory
+      document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+      const initialBtn = document.querySelector(`.tab-button[data-category="${currentCategory}"]`);
+      if (initialBtn) initialBtn.classList.add('active');
+
+      // Tab button event listeners with History API
       document.querySelectorAll('.tab-button').forEach(btn => {
-        btn.addEventListener('click', function() {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
           const catId = this.getAttribute('data-category');
-          showCategory(catId, this);
+          if (catId) navigateTo(catId, false);
         });
       });
 
@@ -2963,6 +3008,14 @@
       });
       document.getElementById('refreshScheduleBtn').addEventListener('click', () => loadAndRenderSchedule(true)); 
       document.getElementById('commentForm').addEventListener('submit', handleCommentSubmit);
+      // Back/forward navigation
+      window.addEventListener('popstate', (e) => {
+        const cat = (e.state && e.state.cat) || getCategoryFromPath(location.pathname);
+        updateDocumentTitle(cat);
+        const btn = document.querySelector(`.tab-button[data-category="${cat}"]`);
+        showCategory(cat, btn);
+      });
+
     });
 
   </script>
