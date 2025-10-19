@@ -2199,9 +2199,25 @@
             console.log("Schedule:", data);
             const nowSec = Math.floor(Date.now() / 1000);
             animeDataCache.scheduleData = Array.isArray(data) ? data.map(anime => {
-                const airingSec = anime.nextEpisode && anime.nextEpisode.airingAt;
-                const recentlyAired = airingSec && (nowSec - airingSec) < 24 * 60 * 60 && (nowSec - airingSec) > 0;
-                return { ...anime, recentlyAired };
+                // Some backends clear nextEpisode right after airing.
+                // Try to find a fallback last aired timestamp if present.
+                const nextAiringSec = anime.nextEpisode && anime.nextEpisode.airingAt;
+                const fallbackLastAiredSec = (anime.lastEpisode && anime.lastEpisode.airingAt)
+                  || (anime.previousEpisode && anime.previousEpisode.airingAt)
+                  || null;
+
+                // recentlyAired if the most recent known airing (next that just passed, or explicit last/previous) is within 24h
+                let recentlyAired = false;
+                let lastAiredAt = null;
+                if (typeof nextAiringSec === 'number' && (nowSec - nextAiringSec) > 0 && (nowSec - nextAiringSec) < 24 * 60 * 60) {
+                  recentlyAired = true;
+                  lastAiredAt = nextAiringSec;
+                } else if (typeof fallbackLastAiredSec === 'number' && (nowSec - fallbackLastAiredSec) > 0 && (nowSec - fallbackLastAiredSec) < 24 * 60 * 60) {
+                  recentlyAired = true;
+                  lastAiredAt = fallbackLastAiredSec;
+                }
+
+                return { ...anime, recentlyAired, lastAiredAt };
             }) : [];
             animeDataCache.scheduleData.sort((a, b) => {
                 const aTime = a.nextEpisode && a.nextEpisode.airingAt ? a.nextEpisode.airingAt : 0;
@@ -2213,7 +2229,7 @@
                 }
                 if (aRecent && !bRecent) return -1;
                 if (!aRecent && bRecent) return 1;
-                return aTime - bTime; 
+                return aTime - bTime;
             });
             animeDataCache.scheduleLastFetched = new Date();
         } catch (error) {
@@ -2261,8 +2277,11 @@
             const coverUrl = anime.coverImage || 'placeholder.png';
             const totalEpisodes = anime.totalEpisodes;
 
-            const formattedTime = nextEp && nextEp.airingAt ? formatAiringTimeLocal(nextEp.airingAt) : 'N/A';
-            const airingMs = nextEp && nextEp.airingAt ? nextEp.airingAt * 1000 : null;
+            const lastAiredSec = typeof anime.lastAiredAt === 'number' ? anime.lastAiredAt : null;
+            const formattedTime = (nextEp && nextEp.airingAt)
+                ? formatAiringTimeLocal(nextEp.airingAt)
+                : (lastAiredSec ? formatAiringTimeLocal(lastAiredSec) : 'N/A');
+            const airingMs = nextEp && nextEp.airingAt ? nextEp.airingAt * 1000 : (lastAiredSec ? lastAiredSec * 1000 : null);
             const nowMs = Date.now();
 
             let statusText = "";
@@ -2270,7 +2289,7 @@
             let countdownId = null;
             let showCountdown = false;
 
-            if (anime.recentlyAired) {
+            if (anime.recentlyAired && airingMs) {
                 const diff = nowMs - airingMs;
                 const diffMins = Math.floor(diff / 60000);
                 if (diffMins < 60) {
