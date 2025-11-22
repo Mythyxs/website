@@ -373,42 +373,19 @@
     .social-desc{font-size:.95rem;color:#ddd;opacity:.8;}
 
     /* ─── Visitor counter ─── */
-    .visitor-counter{text-align:center;margin-top:40px;padding:20px;background:var(--primary-rgba-05);border-radius:15px;border:1px solid var(--primary-rgba-20);opacity:0;transform:translateY(20px);animation:fadeInUp .6s ease .3s forwards;position:relative;overflow:hidden;transition:all .3s ease;}
-    .visitor-counter::before{content:'';position:absolute;inset:0;left:-100%;background:linear-gradient(90deg,transparent,var(--primary-rgba-20),transparent);transition:left .6s;pointer-events:none;}
-    .visitor-counter:hover::before{left:100%;}
-    .visitor-counter:hover{
-      transform:translateY(-5px);
-      border-color:var(--primary);
-      box-shadow:0 5px 5px var(--primary-rgba-30);
-    }
+    .visitor-counter{text-align:center;margin-top:40px;padding:20px;background:var(--primary-rgba-05);border-radius:15px;border:1px solid var(--primary-rgba-20);opacity:0;transform:translateY(20px);animation:fadeInUp .6s ease .3s forwards;}
     
     .visitor-count {
       font-size: 2.5rem;
       font-weight: 300;
-      background: var(--text-gradient);
+      background: linear-gradient(45deg, #ffffff, #e0e0e0, #ffffff);
       background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 20px var(--primary-rgba-30);
-      transition: background 0.6s ease, transform 0.4s ease, filter 0.4s ease;
-    }
-
-    .visitor-counter:hover .visitor-count {
-      background: linear-gradient(45deg, var(--primary), var(--accent), var(--accent-bright));
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 0 5px var(--accent)) drop-shadow(0 0 5px var(--accent-bright));
-      transform: scale(1.05);
+      text-shadow: 0 0 20px rgba(255,255,255,0.3);
     }
     
     .visitor-label{font-size:.9rem;color:#fff;opacity:0.9;margin-bottom:10px;text-transform:uppercase;letter-spacing:2px;}
-    /* .visitor-count defined above with hover */
-    .visitor-counter:hover .visitor-count { /* This one seems more specific, keeping for now */
-      transform: scale(1.05);
-      filter: drop-shadow(0 0 5px var(--accent-bright));
-      transition: transform 0.3s ease, filter 0.3s ease;
-    }
 
     /* visitor pop anim */#visitorCount{font-size:2rem;font-weight:bold;color:#00f0ff;animation:popFade .5s ease-in;}
     @keyframes popFade{0%{opacity:0;transform:scale(.8);}100%{opacity:1;transform:scale(1);}}
@@ -1665,7 +1642,14 @@
           <a href="http://discordapp.com/users/1236388693510721568" target="_blank" class="social-card">
             <div class="social-icon">
               <svg viewBox="0 0 24 24">
-                <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z"/>
+                <defs>
+                  <linearGradient id="discordPurpleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="var(--primary-dark)"/>
+                    <stop offset="50%" stop-color="var(--primary)"/>
+                    <stop offset="100%" stop-color="var(--accent)"/>
+                  </linearGradient>
+                </defs>
+                <path fill="url(#discordPurpleGradient)" d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z"/>
               </svg>
             </div>
             <div class="social-info">
@@ -1678,7 +1662,14 @@
           <a href="https://open.spotify.com/user/31wgn7lokowcfeo2mzvysdxavcoe" target="_blank" class="social-card">
             <div class="social-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="36" height="36">
-                <path d="M25.009,1.982C12.322,1.982,2,12.304,2,24.991S12.322,48,25.009,48s23.009-10.321,23.009-23.009S37.696,1.982,25.009,1.982z M34.748,35.333c-0.289,0.434-0.765,0.668-1.25,0.668c-0.286,0-0.575-0.081-0.831-0.252C30.194,34.1,26,33,22.5,33.001 c-3.714,0.002-6.498,0.914-6.526,0.923c-0.784,0.266-1.635-0.162-1.897-0.948s0.163-1.636,0.949-1.897 c0.132-0.044,3.279-1.075,7.474-1.077C26,30,30.868,30.944,34.332,33.253C35.022,33.713,35.208,34.644,34.748,35.333z M37.74,29.193 c-0.325,0.522-0.886,0.809-1.459,0.809c-0.31,0-0.624-0.083-0.906-0.26c-4.484-2.794-9.092-3.385-13.062-3.35 c-4.482,0.04-8.066,0.895-8.127,0.913c-0.907,0.258-1.861-0.272-2.12-1.183c-0.259-0.913,0.272-1.862,1.184-2.12 c0.277-0.079,3.854-0.959,8.751-1c4.465-0.037,10.029,0.61,15.191,3.826C37.995,27.328,38.242,28.388,37.74,29.193z M40.725,22.013 C40.352,22.647,39.684,23,38.998,23c-0.344,0-0.692-0.089-1.011-0.275c-5.226-3.068-11.58-3.719-15.99-3.725 c-0.021,0-0.042,0-0.063,0c-5.333,0-9.44,0.938-9.481,0.948c-1.078,0.247-2.151-0.419-2.401-1.495 c-0.25-1.075,0.417-2.149,1.492-2.4C11.729,16.01,16.117,15,21.934,15c0.023,0,0.046,0,0.069,0 c4.905,0.007,12.011,0.753,18.01,4.275C40.965,19.835,41.284,21.061,40.725,22.013z"/>
+                <defs>
+                  <linearGradient id="spotifyPurpleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="var(--primary-dark)"/>
+                    <stop offset="50%" stop-color="var(--primary)"/>
+                    <stop offset="100%" stop-color="var(--accent)"/>
+                  </linearGradient>
+                </defs>
+                <path fill="url(#spotifyPurpleGradient)" d="M25.009,1.982C12.322,1.982,2,12.304,2,24.991S12.322,48,25.009,48s23.009-10.321,23.009-23.009S37.696,1.982,25.009,1.982z M34.748,35.333c-0.289,0.434-0.765,0.668-1.25,0.668c-0.286,0-0.575-0.081-0.831-0.252C30.194,34.1,26,33,22.5,33.001 c-3.714,0.002-6.498,0.914-6.526,0.923c-0.784,0.266-1.635-0.162-1.897-0.948s0.163-1.636,0.949-1.897 c0.132-0.044,3.279-1.075,7.474-1.077C26,30,30.868,30.944,34.332,33.253C35.022,33.713,35.208,34.644,34.748,35.333z M37.74,29.193 c-0.325,0.522-0.886,0.809-1.459,0.809c-0.31,0-0.624-0.083-0.906-0.26c-4.484-2.794-9.092-3.385-13.062-3.35 c-4.482,0.04-8.066,0.895-8.127,0.913c-0.907,0.258-1.861-0.272-2.12-1.183c-0.259-0.913,0.272-1.862,1.184-2.12 c0.277-0.079,3.854-0.959,8.751-1c4.465-0.037,10.029,0.61,15.191,3.826C37.995,27.328,38.242,28.388,37.74,29.193z M40.725,22.013 C40.352,22.647,39.684,23,38.998,23c-0.344,0-0.692-0.089-1.011-0.275c-5.226-3.068-11.58-3.719-15.99-3.725 c-0.021,0-0.042,0-0.063,0c-5.333,0-9.44,0.938-9.481,0.948c-1.078,0.247-2.151-0.419-2.401-1.495 c-0.25-1.075,0.417-2.149,1.492-2.4C11.729,16.01,16.117,15,21.934,15c0.023,0,0.046,0,0.069,0 c4.905,0.007,12.011,0.753,18.01,4.275C40.965,19.835,41.284,21.061,40.725,22.013z"/>
               </svg>
             </div>
             <div class="social-info">
