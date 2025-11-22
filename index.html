@@ -75,13 +75,13 @@
     @keyframes introFadeIn{from{opacity:0;transform:scale(.8) translateY(30px);}to{opacity:1;transform:scale(1) translateY(0);}}
 
     .intro-logo{width:120px;height:120px;margin:0 auto 30px;position:relative;}
-    .intro-logo svg{width:100%;height:100%;filter:drop-shadow(0 0 30px var(--primary));animation:fadeInScale 1s ease-out;}
+    .intro-logo svg{width:100%;height:100%;filter:drop-shadow(0 0 30px rgba(255,255,255,0.5));animation:fadeInScale 1s ease-out;}
     @keyframes fadeInScale{from{opacity:0;transform:scale(.5);}to{opacity:1;transform:scale(1);}}
 
-    .intro-text{font-size:3rem;font-weight:300;letter-spacing:5px;margin-bottom:30px;background:var(--text-gradient);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;opacity:0;animation:fadeInUp .8s ease-out .3s forwards;}
+    .intro-text{font-size:3rem;font-weight:300;letter-spacing:5px;margin-bottom:30px;background:linear-gradient(45deg,#ffffff,#e0e0e0,#ffffff);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;opacity:0;animation:fadeInUp .8s ease-out .3s forwards;}
 
-    .loading-bar{width:200px;height:4px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden;margin:0 auto;opacity:0;animation:fadeIn .5s ease-out .6s forwards;}
-    .loading-progress{height:100%;background:linear-gradient(90deg,var(--primary-dark),var(--primary));width:0%;border-radius:2px;animation:loadProgress 2s ease-out .8s forwards;}
+    .loading-bar{width:200px;height:4px;background:rgba(255,255,255,.2);border-radius:2px;overflow:hidden;margin:0 auto;opacity:0;animation:fadeIn .5s ease-out .6s forwards;}
+    .loading-progress{height:100%;background:linear-gradient(90deg,#ffffff,#e0e0e0);width:0%;border-radius:2px;animation:loadProgress 2s ease-out .8s forwards;}
 
     @keyframes loadProgress{to{width:100%;}}@keyframes fadeIn{to{opacity:1;}}@keyframes fadeInUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
 
@@ -108,7 +108,7 @@
       background:var(--text-gradient);
       background-clip:text;
       -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent;
+      -webkit-text-fill-color:#ffffff09;
       text-shadow:0 0 30px #00000063;
       position:relative;
       display:inline-block;
@@ -118,7 +118,7 @@
       position:absolute;
       inset:0;
       background:linear-gradient(
-        90deg,
+        75deg,
         transparent 0%,
         transparent 40%,
         rgba(255,255,255,0.9) 50%,
@@ -233,7 +233,7 @@
     .accolade-card:hover, .anime-card:hover {transform:translateY(-5px) scale(1.02);border-color:var(--primary);box-shadow:0 15px 30px var(--primary-rgba-25);}
     
     .accolade-icon{width:50px;height:50px;margin:0 auto 15px;display:block;animation:pulse 2s ease-in-out infinite;}
-    .accolade-icon svg{width:100%;height:100%;fill:var(--primary);filter:drop-shadow(0 0 10px var(--primary-rgba-50));transition:all .3s ease;}
+    .accolade-icon svg{width:100%;height:100%;fill:#fff;filter:drop-shadow(0 0 10px var(--primary-rgba-50));transition:all .3s ease;}
     .accolade-card:hover .accolade-icon svg{fill:var(--accent);transform:scale(1.1);filter:drop-shadow(0 0 20px var(--accent-rgba-40));}
     @keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.1);}}
 
@@ -402,7 +402,7 @@
       transform: scale(1.05);
     }
     
-    .visitor-label{font-size:.9rem;color:var(--accent);margin-bottom:10px;text-transform:uppercase;letter-spacing:2px;}
+    .visitor-label{font-size:.9rem;color:#fff;opacity:0.9;margin-bottom:10px;text-transform:uppercase;letter-spacing:2px;}
     /* .visitor-count defined above with hover */
     .visitor-counter:hover .visitor-count { /* This one seems more specific, keeping for now */
       transform: scale(1.05);
@@ -1585,9 +1585,9 @@
         <svg viewBox="0 0 100 100">
           <defs>
             <linearGradient id="purpleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="var(--primary-dark)" />
-              <stop offset="50%" stop-color="var(--primary)" />
-              <stop offset="100%" stop-color="var(--accent)" />
+              <stop offset="0%" stop-color="#ffffff" />
+              <stop offset="50%" stop-color="#e0e0e0" />
+              <stop offset="100%" stop-color="#ffffff" />
             </linearGradient>
           </defs>
           <text x="50" y="70" font-family="Arial, sans-serif" font-size="60" font-weight="bold" text-anchor="middle" fill="url(#purpleGradient)">S</text>
