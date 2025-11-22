@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>shemxz.com</title>
   <link rel="icon" type="image/x-icon" href="favicon3.png">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;700&display=swap" rel="stylesheet">
 
   <style>
     /* ─────────────  COLOR SYSTEM  ───────────── */
@@ -239,91 +240,116 @@
     .accolade-title{font-size:1.1rem;font-weight:600;color:var(--accent);margin-bottom:8px;text-align:center;}
     .accolade-desc{font-size:.9rem;color:#ddd;opacity:.8;text-align:center;}
 
-    /* ─────────────  SECTION TITLES (Modern, Clean Design)  ───────────── */
-    .section-title {
-      opacity: 0;
-      transform: translateY(20px);
-      display: inline-flex;
-      align-items: center;
-      gap: 16px;
-      font-size: 2.5rem;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      color: #ffffff;
-      text-rendering: optimizeLegibility;
-      -webkit-font-smoothing: antialiased;
-      position: relative;
-      margin: 0 auto 40px auto;
-      animation: fadeInUp 0.6s cubic-bezier(0.4,0,0.2,1) 0.1s forwards;
-      line-height: 1.2;
-    }
-    
-    /* Ensure parent context allows centering */
-    .accolades-section, .fade-section {
-      text-align: center;
-    }
-    
-    .section-title svg {
-      width: 40px;
-      height: 40px;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-      border-radius: 12px;
-      padding: 8px;
-      box-shadow: 0 4px 20px var(--primary-rgba-30);
-      flex-shrink: 0;
-      transition: all 0.3s ease;
-    }
-    
-    .section-title svg path {
-      fill: #ffffff;
-    }
-    
-    .section-title::before {
-      content: "";
-      position: absolute;
-      left: 50%;
-      bottom: -8px;
-      transform: translateX(-50%);
-      width: 80px;
-      height: 3px;
-      background: linear-gradient(90deg, transparent 0%, var(--primary) 50%, transparent 100%);
-      border-radius: 2px;
-      opacity: 0.6;
-    }
-    
-    .section-title:hover svg {
-      transform: translateY(-2px) scale(1.05);
-      box-shadow: 0 6px 25px var(--primary-rgba-40);
-    }
-    
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-      .section-title {
-        font-size: 2rem;
-        gap: 12px;
-        margin-bottom: 30px;
-      }
-      
-      .section-title svg {
-        width: 36px;
-        height: 36px;
-        padding: 6px;
-      }
-    }
-    
-    @media (max-width: 480px) {
-      .section-title {
-        font-size: 1.8rem;
-        gap: 10px;
-        margin-bottom: 25px;
-      }
-      
-      .section-title svg {
-        width: 32px;
-        height: 32px;
-        padding: 5px;
-      }
-    }
+/* ─────────────  TOKYO GHOUL GRAFFITI SECTION TITLES  ───────────── */
+.section-title {
+  opacity: 0;
+  transform: translateY(20px);
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  font-size: 2.7rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #fff;
+  font-family: "Bebas Neue", "Oswald", sans-serif; /* graffiti style */
+  text-shadow:
+    0 0 6px rgba(255, 0, 0, 0.3),
+    0 0 18px rgba(255, 0, 0, 0.15);
+  position: relative;
+  margin: 0 auto 48px auto;
+  animation: fadeInUp 0.7s cubic-bezier(0.4,0,0.2,1) forwards;
+  line-height: 1.1;
+  filter: drop-shadow(0 0 8px rgba(255,0,0,0.22));
+}
+
+/* red glitch underline slash */
+.section-title::before {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  width: 110px;
+  height: 4px;
+  background: linear-gradient(90deg, transparent 0%, #ff2b2b 50%, transparent 100%);
+  filter: drop-shadow(0 0 6px rgba(255,0,0,0.4));
+  opacity: 0.9;
+}
+
+/* subtle drifting distort glitch */
+.section-title::after {
+  content: attr(data-glitch);
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: #ff2b2b;
+  opacity: 0.15;
+  transform: translate(3px, -3px);
+  pointer-events: none;
+  text-shadow: 
+    -1px 0 #ff2b2b,
+    1px 0 #ff2b2b;
+}
+
+/* graffiti icon box */
+.section-title svg {
+  width: 46px;
+  height: 46px;
+  padding: 9px;
+  border-radius: 10px;
+  background: #111;
+  border: 2px solid rgba(255, 0, 0, 0.4);
+  box-shadow:
+    0 0 12px rgba(255, 0, 0, 0.35),
+    inset 0 0 12px rgba(255, 0, 0, 0.25);
+  transition: 0.25s ease;
+}
+
+.section-title svg path {
+  fill: #ff4040;
+}
+
+/* hover = violent glitch pop */
+.section-title:hover {
+  text-shadow:
+    0 0 8px rgba(255, 0, 0, 0.4),
+    0 0 22px rgba(255, 0, 0, 0.25);
+}
+
+.section-title:hover svg {
+  transform: translateY(-3px) scale(1.08) rotate(-2deg);
+  box-shadow:
+    0 0 16px rgba(255,0,0,0.5),
+    inset 0 0 16px rgba(255,0,0,0.3);
+}
+
+/* RESPONSIVE FIXES */
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 2.2rem;
+    gap: 14px;
+    margin-bottom: 36px;
+  }
+  .section-title svg {
+    width: 40px;
+    height: 40px;
+    padding: 7px;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-title {
+    font-size: 1.9rem;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .section-title svg {
+    width: 34px;
+    height: 34px;
+    padding: 6px;
+  }
+}
+
 
     .hidden{display:none!important;}
 
@@ -1671,7 +1697,7 @@
 
       <!-- ───────────  ANIME LIST  ─────────── -->
       <div id="animeListSection" class="accolades-section fade-section hidden">
-        <h2 class="section-title">
+        <h2 class="section-title" data-glitch="My Anime List">
             <svg width="32" height="32" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:10px;fill:var(--primary);"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 10h-2.5v2.5h-3V10H8V7h2.5V4.5h3V7H16v3z"/></svg>
             My Anime List
         </h2>
@@ -1717,7 +1743,7 @@
             </div>
         </div>
         <div class="comments-section">
-          <h3 class="section-title" style="margin-top: 60px; margin-bottom: 30px;">Leave a Comment</h3>
+          <h3 class="section-title" data-glitch="Leave a Comment" style="margin-top: 60px; margin-bottom: 30px;">Leave a Comment</h3>
           <form id="commentForm" class="comment-form">
             <input type="text" id="commentUsername" placeholder="Your username" required>
             <textarea id="commentText" placeholder='"i agree man apothecary diaries is just the best anime"' required></textarea>
@@ -1735,7 +1761,7 @@
 
       <!-- ───────────  SCHEDULE  ─────────── -->
       <div id="scheduleSection" class="accolades-section fade-section hidden">
-        <h2 class="section-title">
+        <h2 class="section-title" data-glitch="Upcoming Episodes">
             <svg width="32" height="32" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:10px;fill:var(--primary);"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
             Upcoming Episodes
         </h2>
@@ -1757,7 +1783,7 @@
 
       <!-- ───────────  GAMES  ─────────── -->
       <div id="gamesSection" class="accolades-section fade-section hidden">
-        <h2 class="section-title">
+        <h2 class="section-title" data-glitch="Game Awards">
           <svg width="32" height="32" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:10px;fill:var(--primary);"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
           Game Awards
         </h2>
@@ -1846,7 +1872,7 @@
 
       <!-- ───────────  GFX  ─────────── -->
       <div id="gfxSection" class="accolades-section fade-section hidden">
-        <h2 class="section-title">
+        <h2 class="section-title" data-glitch="GFX Gallery">
           <svg width="32" height="32" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:10px;fill:var(--primary);"><path d="M21 19V5c0-1.1-.9-2-2-2H5C3.89 3 3 3.9 3 5v14c0 1.11.89 2 2 2h14c1.1 0 2-.89 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5zM7 8c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2z"/></svg>
           GFX Gallery
         </h2>
