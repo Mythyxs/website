@@ -11,8 +11,8 @@
     :root{
   --primary-dark:#000000;
   --primary:#0b0b0c;
-  --accent:#8c0f14; 
-  --accent-bright:#d91921;
+  --accent:#ffffff; 
+  --accent-bright:#ffffff;
 
       /* Anime List Specific Colors */
       --cat-platinum: #00E5FF;
@@ -41,16 +41,16 @@
       --primary-rgba-50: rgba(22,22,24,0.5);
       --primary-rgba-60: rgba(22,22,24,0.6);
       
-      --accent-rgba-03: rgba(179,18,23,0.03);
-      --accent-rgba-04: rgba(179,18,23,0.04);
-      --accent-rgba-05: rgba(179,18,23,0.05);
-      --accent-rgba-06: rgba(179,18,23,0.06);
-      --accent-rgba-08: rgba(179,18,23,0.08);
-      --accent-rgba-10: rgba(179,18,23,0.10);
-      --accent-rgba-12: rgba(179,18,23,0.12);
-      --accent-rgba-14: rgba(179,18,23,0.14);
-      --accent-rgba-25: rgba(179,18,23,0.25);
-      --accent-rgba-40: rgba(179,18,23,0.4);
+      --accent-rgba-03: rgba(255,255,255,0.03);
+      --accent-rgba-04: rgba(255,255,255,0.04);
+      --accent-rgba-05: rgba(255,255,255,0.05);
+      --accent-rgba-06: rgba(255,255,255,0.06);
+      --accent-rgba-08: rgba(255,255,255,0.08);
+      --accent-rgba-10: rgba(255,255,255,0.10);
+      --accent-rgba-12: rgba(255,255,255,0.12);
+      --accent-rgba-14: rgba(255,255,255,0.14);
+      --accent-rgba-25: rgba(255,255,255,0.25);
+      --accent-rgba-40: rgba(255,255,255,0.4);
     }
 
     /* ─────────────  RESET  ───────────── */
@@ -99,8 +99,60 @@
 
     /* ─────────────  HERO  ───────────── */
     .hero-section{text-align:center;margin-bottom:40px;}
-    .name{font-size:clamp(3rem,8vw,5rem);margin:0 0 15px 0;letter-spacing:3px;font-weight:300;background:var(--text-gradient);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shimmer 3s ease-in-out infinite;text-shadow:0 0 30px var(--primary-dark);}
-    @keyframes shimmer{0%,100%{background-position:0% 50%;filter:brightness(1);}50%{background-position:100% 50%;filter:brightness(1.2);}}
+    .name{
+      font-size:clamp(3rem,8vw,5rem);
+      margin:0 0 15px 0;
+      letter-spacing:3px;
+      font-weight:300;
+      background:var(--text-gradient);
+      background-clip:text;
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      text-shadow:0 0 30px #00000063;
+      position:relative;
+      display:inline-block;
+    }
+    .name::before{
+      content:attr(data-text);
+      position:absolute;
+      inset:0;
+      background:linear-gradient(
+        90deg,
+        transparent 0%,
+        transparent 40%,
+        rgba(255,255,255,0.9) 50%,
+        transparent 60%,
+        transparent 100%
+      );
+      background-size:260% 100%;
+      background-position:-160% 0;
+      -webkit-background-clip:text;
+      background-clip:text;
+      -webkit-text-fill-color:transparent;
+      opacity:0;
+      pointer-events:none;
+      /* subtle black glow behind the shimmer */
+      filter:drop-shadow(0 0 10px #00000063);
+      /* near-continuous flowing shimmer */
+      animation:heroNameShimmer 5.5s linear infinite;
+    }
+    @keyframes heroNameShimmer{
+      0%{
+        background-position:-160% 0;
+        opacity:0;
+      }
+      5%{
+        opacity:1;
+      }
+      95%{
+        background-position:160% 0;
+        opacity:1;
+      }
+      100%{
+        background-position:160% 0;
+        opacity:0;
+      }
+    }
 
     .typing{font-size:1.3rem;color:var(--accent);font-family:'Courier New',monospace;margin-bottom:30px;min-height:1.5em;}
     .typing::after{content:'|';animation:blink 1s step-start infinite;color:var(--primary);}
@@ -1526,7 +1578,7 @@
   <div class="container" id="mainContainer">
     <div id="heroHomeWrapper" class="hero-home-wrapper fade-section hidden">
       <div class="hero-section">
-        <h1 class="name">shemxz</h1>
+        <h1 class="name" data-text="shemxz">shemxz</h1>
         <p class="typing" id="typing"></p>
       </div>
     </div>
