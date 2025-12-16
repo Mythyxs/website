@@ -156,17 +156,10 @@
       margin:0 auto 30px;
       position:relative;
       animation:logoFloat 3s ease-in-out infinite;
-      transform-origin:center center;
     }
     @keyframes logoFloat{
       0%,100%{transform:translateY(0) rotate(0deg);}
       50%{transform:translateY(-10px) rotate(2deg);}
-    }
-    
-    /* Stop logo animation during fade-out to keep everything aligned */
-    .intro-overlay.fade-out .intro-logo{
-      animation:none;
-      transform:translateY(0) rotate(0deg);
     }
 
     .intro-logo::before{
@@ -177,18 +170,10 @@
       border-radius:50%;
       animation:pulseGlow 2s ease-in-out infinite;
       z-index:-1;
-      transform-origin:center center;
     }
     @keyframes pulseGlow{
-      0%,100%{opacity:0.3;}
-      50%{opacity:0.6;}
-    }
-    
-    /* When fading out, stop glow animation and keep it aligned */
-    .intro-overlay.fade-out .intro-logo::before{
-      animation:none;
-      opacity:0.3;
-      transform:scale(1);
+      0%,100%{opacity:0.3;transform:scale(1);}
+      50%{opacity:0.6;transform:scale(1.1);}
     }
 
     .intro-logo svg{
