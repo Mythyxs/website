@@ -1989,8 +1989,40 @@
 
   <!-- ───────────  JS  ─────────── -->
   <script>
-    /* intro fade */
-    window.addEventListener('load',()=>{setTimeout(()=>{document.getElementById('introOverlay').classList.add('fade-out');setTimeout(()=>{document.getElementById('mainContainer').classList.add('show');document.getElementById('introOverlay').style.display='none';},1000);},3000);});
+    /* intro fade with safety timeout */
+    (function(){
+      let introUnlocked = false;
+      function unlockIntro(){
+        if(introUnlocked) return;
+        introUnlocked = true;
+        const overlay = document.getElementById('introOverlay');
+        const main = document.getElementById('mainContainer');
+        if(!overlay || !main) return;
+        overlay.classList.add('fade-out');
+        setTimeout(()=>{
+          main.classList.add('show');
+          overlay.style.display='none';
+        },1000);
+      }
+
+      // 1) Normal case: when the page fully loads, allow up to 3s after that
+      window.addEventListener('load',()=>{
+        setTimeout(unlockIntro,3000);
+      });
+
+      // 2) Progress bar based: 3s after the loading bar animation completes
+      document.addEventListener('DOMContentLoaded',()=>{
+        const progressEl = document.querySelector('.loading-progress');
+        if(progressEl){
+          progressEl.addEventListener('animationend',()=>{
+            setTimeout(unlockIntro,3000);
+          },{once:true});
+        }
+      });
+
+      // 3) Hard safety cap: never keep the user longer than ~8s from first paint
+      setTimeout(unlockIntro,8000);
+    })();
 
   
 
