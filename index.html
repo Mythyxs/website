@@ -1792,74 +1792,47 @@
       font-style: italic;
     }
 
-    .anime-total-count {
-      background: transparent;
-      border: none;
-      border-radius: 0;
-      padding: 0;
-      text-align: center;
-      color: #fff;
-      font-size: 1.1rem;
-      margin-bottom: 20px;
-      font-weight: 400;
-      font-family: "Segoe UI", sans-serif;
-      letter-spacing: 0.05em;
+    /* ─── Anime category legend ─── */
+    .anime-category-legend {
       display: flex;
       justify-content: center;
-      gap: 20px;
       align-items: center;
       flex-wrap: wrap;
-      box-shadow: none;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: visible;
-    }
-    .count-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      padding: 8px 12px;
-      border-radius: 0;
-      background: transparent;
-      transition: all 0.3s ease;
-      position: relative;
-    }
-    .count-item:hover {
-      background: transparent;
-      transform: scale(1.05);
-    }
-    .count-label {
-      font-size: 0.75rem;
-      opacity: 0.8;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 0.7rem;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
-      font-weight: 500;
+      letter-spacing: 0.12em;
+      opacity: 0.85;
     }
-    .count-number {
-      font-size: 1.4rem;
-      font-weight: 0;
-      text-shadow: 0 0 2.5px currentColor;
-      font-style: normal;
+    .anime-category-pill {
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--primary-rgba-25);
+      background: radial-gradient(circle at 0 0, rgba(255,255,255,0.08), transparent 60%);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.02);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+      overflow: hidden;
     }
-    .count-total { color: #fff; }
-    .count-platinum { color: var(--cat-platinum); }
-    .count-overaverage { color: var(--cat-overaverage); }
-    .count-average { color: var(--cat-average); }
-    .count-unfinished { color: var(--cat-unfinished); }
-    .count-planned { color: var(--cat-planned); }
-    @media (max-width: 768px) {
-      .anime-total-count {
-        padding: 20px;
-        gap: 12px;
-      }
-      .count-item {
-        padding: 6px 8px;
-      }
-      .count-number {
-        font-size: 1.2rem;
-      }
+    .anime-category-pill::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 6px currentColor;
+      flex-shrink: 0;
     }
+    .anime-category-pill.platinum { color: var(--cat-platinum); }
+    .anime-category-pill.overaverage { color: var(--cat-overaverage); }
+    .anime-category-pill.average { color: var(--cat-average); }
+    .anime-category-pill.unfinished { color: var(--cat-unfinished); }
+    .anime-category-pill.planned { color: var(--cat-planned); }
 
     .tab-sections-wrapper {
       position: relative;
@@ -2333,8 +2306,13 @@
         <div class="anime-faq" style="text-align:center;color:var(--accent);margin-bottom:18px;font-size:1.05rem;max-width:600px;margin-left:auto;margin-right:auto;">
           A catalog of every anime I've watched, with my personal ratings and the categories
         </div>
-        <div id="animeTotalCount" class="anime-total-count" style="text-align:center;color:var(--accent-bright);font-size:0.85rem;margin-bottom:12px;font-style:italic;opacity:0.85;">
-          Total Anime: ...
+        <div class="anime-category-legend">
+          <span class="anime-category-pill total">Total - ...</span>
+          <span class="anime-category-pill platinum" data-category-name="Platinum Masterpiece">Platinum - ...</span>
+          <span class="anime-category-pill overaverage" data-category-name="Overaveragely Enjoyable">Over Average - ...</span>
+          <span class="anime-category-pill average" data-category-name="Average Enjoyability">Average - ...</span>
+          <span class="anime-category-pill unfinished" data-category-name="Unfinished / Disinterested">Unfinished - ...</span>
+          <span class="anime-category-pill planned" data-category-name="Planned to Watch">Planned - ...</span>
         </div>
         <div class="anime-controls">
             <div>
@@ -3336,29 +3314,30 @@
     function updateAnimeTotalCount() {
         const total = animeDataCache.all.length;
         const categories = [
-            { name: 'Platinum Masterpiece', class: 'count-platinum', label: 'Platinum' },
-            { name: 'Overaveragely Enjoyable', class: 'count-overaverage', label: 'Over Average' },
-            { name: 'Average Enjoyability', class: 'count-average', label: 'Average' },
-            { name: 'Unfinished / Disinterested', class: 'count-unfinished', label: 'Unfinished' },
-            { name: 'Planned to Watch', class: 'count-planned', label: 'Planned' }
+            { name: 'Platinum Masterpiece', selectorClass: 'platinum', label: 'PLATINUM' },
+            { name: 'Overaveragely Enjoyable', selectorClass: 'overaverage', label: 'OVER AVERAGE' },
+            { name: 'Average Enjoyability', selectorClass: 'average', label: 'AVERAGE' },
+            { name: 'Unfinished / Disinterested', selectorClass: 'unfinished', label: 'UNFINISHED' },
+            { name: 'Planned to Watch', selectorClass: 'planned', label: 'PLANNED' }
         ];
-        const counts = {};
-        categories.forEach(cat => {
-            counts[cat.name] = animeDataCache.all.filter(anime => anime.category === cat.name).length;
-        });
-        const el = document.getElementById('animeTotalCount');
-        if (el) {
-            el.innerHTML =
-                `<div class="count-item count-total">
-                    <span class="count-label">Total</span>
-                    <span class="count-number">${total}</span>
-                </div>` +
-                categories.map(cat => `
-                    <div class="count-item ${cat.class}">
-                        <span class="count-label">${cat.label}</span>
-                        <span class="count-number">${counts[cat.name]}</span>
-                    </div>`).join('');
+
+        const legend = document.querySelector('.anime-category-legend');
+        if (!legend) return;
+
+        // Update total pill
+        const totalPill = legend.querySelector('.anime-category-pill.total');
+        if (totalPill) {
+            totalPill.textContent = `TOTAL - ${total}`;
         }
+
+        // Update each category pill text
+        categories.forEach(cat => {
+            const count = animeDataCache.all.filter(anime => anime.category === cat.name).length;
+            const pill = legend.querySelector(`.anime-category-pill.${cat.selectorClass}`);
+            if (pill) {
+                pill.textContent = `${cat.label} - ${count}`;
+            }
+        });
     }
 
     // Call this after loading anime data
