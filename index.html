@@ -1313,6 +1313,46 @@
         flex-direction: column;
         gap: 15px;
     }
+    /* --- Schedule Legend --- */
+    .schedule-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+      margin: 4px 0 18px 0;
+      font-size: 0.78rem;
+      color: var(--accent-bright);
+      opacity: 0.9;
+    }
+    .schedule-legend-label {
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.7;
+      margin-right: 4px;
+    }
+    .schedule-legend-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--primary-rgba-30);
+      background: var(--primary-rgba-10);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .schedule-legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 6px currentColor;
+    }
+    .schedule-legend-pill.today    { color: var(--cat-platinum); }
+    .schedule-legend-pill.tomorrow { color: var(--cat-average); }
+    .schedule-legend-pill.soon     { color: var(--cat-overaverage); }
+    .schedule-legend-pill.aired    { color: #8BC34A; }
+    .schedule-legend-pill.past     { color: #757575; }
     /* --- NEW SCHEDULE CARD DESIGN --- */
     .schedule-item {
       background: linear-gradient(135deg, var(--primary-rgba-08) 0%, var(--accent-rgba-04) 100%);
@@ -1385,78 +1425,57 @@
       align-items: center;
       gap: 6px;
     }
-    .schedule-item-time::before {
-      content: "🕐";
-      font-size: 0.9rem;
+    .schedule-time-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: var(--primary-rgba-20);
+      border: 1px solid var(--primary-rgba-40);
+      flex-shrink: 0;
+    }
+    .schedule-time-icon svg {
+      width: 18px;
+      height: 18px;
+      fill: var(--accent);
+      opacity: 0.9;
+    }
+    /* --- EPISODE / STATUS META (Schedule, in-card) --- */
+    .schedule-meta-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 4px;
+      font-size: 0.8rem;
+      color: var(--accent-bright);
+      opacity: 0.9;
+    }
+    .schedule-meta-ep {
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .schedule-meta-separator {
       opacity: 0.6;
     }
-    /* --- STATUS BADGES (Schedule) --- */
-    .schedule-item-status { /* This rule is also used by anime-card-category, shared styles below */
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 3px 10px;
-      border-radius: 999px;
-      font-size: 0.75rem; /* Base size, might be overridden by more specific below */
-      font-weight: 600;
-      border: 1.5px solid; /* Base border, color to be specified */
-      background: transparent; /* Base background, color to be specified */
-      letter-spacing: 0.3px;
-      transition: all 0.2s;
-      width: fit-content;
-      max-width: 100%;
+    .schedule-meta-status {
+      font-weight: 500;
+      opacity: 0.9;
     }
-    .status-aired { /* Specific to schedule */
-      /* border-color: #4CAF50; Will be overridden by .schedule-item-status.status-aired below */
-      /* color: #4CAF50;       Will be overridden */
-      /* background: rgba(76, 175, 80, 0.08); Will be overridden */
-      position: relative;
-      animation: pulse-glow-green 2s ease-in-out infinite;
+    .schedule-meta-status.status-today {
+      color: var(--cat-platinum);
     }
-    .status-today { /* Specific to schedule */
-      /* border-color: var(--cat-platinum); Will be overridden */
-      /* color: var(--cat-platinum);        Will be overridden */
-      /* background: rgba(0, 229, 255, 0.08); Will be overridden */
-      animation: pulse-glow 2s ease-in-out infinite;
+    .schedule-meta-status.status-tomorrow {
+      color: var(--cat-average);
     }
-    .status-tomorrow { /* Specific to schedule */
-      /* border-color: var(--cat-average); Will be overridden */
-      /* color: var(--cat-average);        Will be overridden */
-      /* background: rgba(255, 235, 59, 0.08); Will be overridden */
+    .schedule-meta-status.status-soon {
+      color: var(--cat-overaverage);
     }
-    .status-soon { /* Specific to schedule */
-      /* border-color: var(--cat-overaverage); Will be overridden */
-      /* color: var(--cat-overaverage);        Will be overridden */
-      /* background: rgba(255, 165, 0, 0.08); Will be overridden */
-    }
-    @keyframes pulse-glow {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(0, 229, 255, 0); }
-      50% { box-shadow: 0 0 8px 2px rgba(0, 229, 255, 0.3); }
-    }
-    @keyframes pulse-glow-green {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
-      50% { box-shadow: 0 0 8px 2px rgba(76, 175, 80, 0.25); }
-    }
-    /* --- EPISODE CHIP (Schedule) --- */
-    .schedule-item-ep {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 3px 10px;
-      background: var(--primary-rgba-15);
-      border: 1.5px solid var(--primary-rgba-30);
-      border-radius: 999px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: var(--accent-bright);
-      margin-bottom: 6px;
-      width: fit-content;
-      max-width: 100%;
-    }
-    .schedule-item-ep::before {
-      content: "\25B6";
-      font-size: 0.6rem;
-      color: var(--primary);
+    .schedule-meta-status.status-aired {
+      color: #8BC34A;
     }
     /* --- AIRING TODAY ANIMATION (Schedule) --- */
     .schedule-item.airing-today {
@@ -1497,6 +1516,55 @@
     @keyframes blink-dot {
       0%, 100% { opacity: 1; transform: scale(1); }
       50% { opacity: 0.3; transform: scale(0.8); }
+    }
+    /* --- Schedule meta row + countdown pill + day headers --- */
+    .schedule-meta-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .schedule-countdown {
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--primary-rgba-20);
+      border: 1px solid var(--primary-rgba-40);
+      font-size: 0.76rem;
+      color: var(--accent-bright);
+      letter-spacing: 0.03em;
+    }
+    .schedule-item-status.status-today + .schedule-countdown {
+      background: rgba(0,229,255,0.16);
+      border-color: rgba(0,229,255,0.6);
+    }
+    .schedule-item-status.status-tomorrow + .schedule-countdown {
+      background: rgba(255,235,59,0.16);
+      border-color: rgba(255,235,59,0.6);
+    }
+    .schedule-item-status.status-soon + .schedule-countdown {
+      background: rgba(255,152,0,0.16);
+      border-color: rgba(255,152,0,0.6);
+    }
+    .schedule-day-header {
+      margin-top: 6px;
+      margin-bottom: 2px;
+      font-size: 0.83rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent-bright);
+      opacity: 0.85;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .schedule-day-header::before {
+      content: "";
+      width: 32px;
+      height: 1px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.0), rgba(255,255,255,0.35));
     }
     /* --- MOBILE RESPONSIVENESS (Schedule) --- */
     @media (max-width: 768px) {
@@ -2324,6 +2392,21 @@
                 <svg width="18" height="18" viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
                 Refresh Schedule
             </button>
+        </div>
+        <div class="schedule-legend">
+          <span class="schedule-legend-label">Statuses</span>
+          <span class="schedule-legend-pill aired">
+            <span class="schedule-legend-dot"></span> Recently Aired
+          </span>
+          <span class="schedule-legend-pill today">
+            <span class="schedule-legend-dot"></span> Airs Today
+          </span>
+          <span class="schedule-legend-pill tomorrow">
+            <span class="schedule-legend-dot"></span> Tomorrow
+          </span>
+          <span class="schedule-legend-pill soon">
+            <span class="schedule-legend-dot"></span> Coming Up (2+ days)
+          </span>
         </div>
         <div id="scheduleItemsContainer">
             <!-- Schedule items will be injected here -->
@@ -3450,6 +3533,8 @@
             return;
         }
 
+        let lastGroupLabel = '';
+
         animeDataCache.scheduleData.forEach((anime, idx) => {
             const scheduleDiv = document.createElement('div');
             const nextEp = anime.nextEpisode;
@@ -3466,8 +3551,7 @@
 
             let statusText = "";
             let statusClass = "status-past";
-            let countdownId = null;
-            let showCountdown = false;
+            let groupLabel = "Past";
 
             if (anime.recentlyAired && airingMs) {
                 const diff = nowMs - airingMs;
@@ -3479,6 +3563,7 @@
                     statusText = `Aired ${diffHrs} hour${diffHrs !== 1 ? 's' : ''} ago`;
                 }
                 statusClass = 'status-aired';
+                groupLabel = 'Recently Aired';
             } else if (airingMs && airingMs > nowMs) {
                 const airingDate = new Date(airingMs);
                 const now = new Date();
@@ -3488,15 +3573,20 @@
                 if (daysUntil === 0) {
                     statusText = 'Airs Today';
                     statusClass = 'status-today';
+                    groupLabel = 'Today';
                 } else if (daysUntil === 1) {
                     statusText = 'Airs Tomorrow';
                     statusClass = 'status-tomorrow';
+                    groupLabel = 'Tomorrow';
                 } else {
                     statusText = `In ${daysUntil} days`;
                     statusClass = 'status-soon';
+                    groupLabel = airingDate.toLocaleDateString(undefined, {
+                      weekday: 'long',
+                      month: 'short',
+                      day: 'numeric'
+                    });
                 }
-                countdownId = `countdown-${idx}-${nextEp.episode}`;
-                showCountdown = true;
             } else {
                 statusText = "No upcoming episode";
                 statusClass = 'status-past';
@@ -3509,16 +3599,31 @@
             if (statusClass === 'status-aired') scheduleItemClass += ' status-aired'; 
             scheduleDiv.className = scheduleItemClass;
             scheduleDiv.style.setProperty('--card-index', idx % 10); // staggered animation
+
+            // Insert day / group header when label changes
+            if (groupLabel && groupLabel !== lastGroupLabel) {
+                const headerEl = document.createElement('div');
+                headerEl.className = 'schedule-day-header';
+                headerEl.textContent = groupLabel;
+                container.appendChild(headerEl);
+                lastGroupLabel = groupLabel;
+            }
+
             scheduleDiv.innerHTML = `
                 <img src="${coverUrl}" alt="${officialTitle}" class="schedule-item-cover" onerror="this.src='https://via.placeholder.com/70x100/1A1A1A/4A4A4A?text=N/A';">
                 <div class="schedule-item-details">
                     <div class="schedule-item-title">${officialTitle}</div>
-                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-                      ${episodeProgressText ? `<div class=\"schedule-item-ep\">${episodeProgressText}</div>` : ''}
-                      <div class="schedule-item-status ${statusClass}">${statusText}</div>
-                      ${showCountdown ? `<span id="${countdownId}" class="schedule-countdown" style="margin-left:6px;font-size:0.8em;color:var(--accent-bright);"></span>` : ''}
+                    <div class="schedule-meta-row">
+                      ${episodeProgressText ? `<span class=\"schedule-meta-ep\">${episodeProgressText}</span>` : ''}
+                      ${episodeProgressText ? `<span class="schedule-meta-separator">•</span>` : ''}
+                      <span class="schedule-meta-status ${statusClass}">${statusText}</span>
                     </div>
-                    <div class="schedule-item-time">${formattedTime}</div>
+                    <div class="schedule-item-time">
+                      <span class="schedule-time-icon">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4a8 8 0 1 0 8 8a8.009 8.009 0 0 0-8-8m0-2a10 10 0 1 1-10 10A10.011 10.011 0 0 1 12 2m.5 5h-1a1 1 0 0 0-1 1v4.25a1 1 0 0 0 .553.894l3.5 1.75a1 1 0 0 0 .894-1.789L12.5 11.382z"/></svg>
+                      </span>
+                      <span>${formattedTime}</span>
+                    </div>
                 </div>
             `;
             container.appendChild(scheduleDiv);
@@ -3527,35 +3632,6 @@
             scheduleDiv.style.opacity = '0';
             scheduleDiv.style.animation = `cardEntry 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards`;
             scheduleDiv.style.animationDelay = `calc(0.05s * ${idx % 10})`;
-
-            // Add countdown timer if needed
-            if (showCountdown && countdownId && airingMs) {
-                function updateCountdown() {
-                    const now = Date.now();
-                    let diff = Math.floor((airingMs - now) / 1000);
-                    const el = document.getElementById(countdownId);
-                    if (!el) return;
-                    if (diff > 0) {
-                        const d = Math.floor(diff / 86400);
-                        diff %= 86400;
-                        const h = Math.floor(diff / 3600);
-                        diff %= 3600;
-                        const m = Math.floor(diff / 60);
-                        const s = diff % 60;
-                        let str = '';
-                        if (d > 0) str += `${d}d `;
-                        if (h > 0 || d > 0) str += `${h}h `;
-                        if (m > 0 || h > 0 || d > 0) str += `${m}m `;
-                        str += `${s}s`;
-                        el.textContent = `(${str})`;
-                    } else {
-                        el.textContent = '';
-                        setTimeout(() => loadAndRenderSchedule(true), 2000); // Refresh schedule after 2s
-                    }
-                }
-                updateCountdown();
-                setInterval(updateCountdown, 1000);
-            }
         });
     }
     
