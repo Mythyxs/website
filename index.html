@@ -827,7 +827,7 @@
       color: var(--accent);
       margin-right: 8px;
     }
-    .anime-controls select, .anime-controls button, .anime-controls input[type="text"] {
+    .anime-controls button, .anime-controls input[type="text"] {
       padding: 10px 16px;
       background: linear-gradient(135deg, var(--primary-rgba-15), var(--primary-rgba-08));
       border: 1px solid var(--primary-rgba-30);
@@ -843,13 +843,13 @@
     .anime-controls input[type="text"] {
         cursor: text;
     }
-    .anime-controls select:focus, .anime-controls input[type="text"]:focus {
+    .anime-controls input[type="text"]:focus {
       outline: none;
       border-color: var(--primary);
       box-shadow: 0 0 0 3px var(--primary-rgba-20), 0 4px 12px rgba(0,0,0,0.2);
       background: linear-gradient(135deg, var(--primary-rgba-20), var(--primary-rgba-12));
     }
-    .anime-controls select:hover, .anime-controls button:hover, .anime-controls input[type="text"]:hover {
+    .anime-controls button:hover, .anime-controls input[type="text"]:hover {
       background: linear-gradient(135deg, var(--primary-rgba-25), var(--primary-rgba-15));
       border-color: var(--primary);
       transform: translateY(-2px);
@@ -869,6 +869,171 @@
     }
     .anime-controls button:hover svg {
         fill: var(--accent);
+    }
+
+    /* ─── Custom Dropdown Styles ─── */
+    .custom-dropdown {
+      position: relative;
+      display: inline-block;
+      min-width: 200px;
+    }
+    .custom-dropdown-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+      background: linear-gradient(135deg, var(--primary-rgba-08) 0%, var(--accent-rgba-05) 100%);
+      border: 1px solid var(--primary-rgba-28);
+      border-radius: 10px;
+      color: #fff;
+      cursor: pointer;
+      transition: all .25s ease;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,.04);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      font-size: 0.9rem;
+    }
+    .custom-dropdown-header::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 10px;
+      padding: 1px;
+      background: linear-gradient(45deg, var(--primary-rgba-60), var(--accent-rgba-40));
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: .35;
+      pointer-events: none;
+      transition: opacity .25s ease;
+    }
+    .custom-dropdown-header::after {
+      content: "";
+      position: absolute;
+      top: -120%;
+      left: -40%;
+      width: 60%;
+      height: 340%;
+      background: radial-gradient(ellipse at center, rgba(255,255,255,.08), transparent 60%);
+      transform: rotate(25deg);
+      opacity: 0;
+      transition: opacity .3s ease, transform .3s ease;
+      pointer-events: none;
+    }
+    .custom-dropdown-header:hover {
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transform: translateY(-1px);
+    }
+    .custom-dropdown-header:hover::after {
+      opacity: 1;
+      transform: rotate(25deg) translateX(12px);
+    }
+    .custom-dropdown-header.active {
+      border-color: var(--primary);
+      background: linear-gradient(135deg, var(--primary-rgba-12) 0%, var(--accent-rgba-06) 100%);
+      box-shadow: 0 6px 16px var(--primary-rgba-30), 0 0 0 1px var(--primary-rgba-14) inset;
+    }
+    .custom-dropdown-header.active::before {
+      opacity: .6;
+    }
+    .custom-dropdown-header .dropdown-text {
+      flex: 1;
+      text-align: left;
+      color: var(--accent-bright);
+      font-weight: 500;
+    }
+    .custom-dropdown-header .dropdown-arrow {
+      transition: transform .3s ease;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+    }
+    .custom-dropdown-header.active .dropdown-arrow {
+      transform: rotate(180deg);
+      color: var(--accent-bright);
+    }
+    .custom-dropdown-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      right: 0;
+      background: linear-gradient(135deg, var(--primary-rgba-12) 0%, var(--accent-rgba-06) 100%);
+      border: 1px solid var(--primary-rgba-30);
+      border-radius: 10px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,.05);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: opacity .25s ease, transform .25s ease, visibility .25s ease;
+      z-index: 1000;
+      max-height: 300px;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    .custom-dropdown-menu::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-dropdown-menu::-webkit-scrollbar-track {
+      background: var(--primary-rgba-10);
+      border-radius: 10px;
+    }
+    .custom-dropdown-menu::-webkit-scrollbar-thumb {
+      background: var(--primary-rgba-40);
+      border-radius: 10px;
+    }
+    .custom-dropdown-menu::-webkit-scrollbar-thumb:hover {
+      background: var(--primary-rgba-60);
+    }
+    .custom-dropdown-menu.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    .custom-dropdown-option {
+      padding: 12px 16px;
+      color: var(--accent-bright);
+      cursor: pointer;
+      transition: all .2s ease;
+      font-size: 0.9rem;
+      border-bottom: 1px solid var(--primary-rgba-20);
+      position: relative;
+    }
+    .custom-dropdown-option:last-child {
+      border-bottom: none;
+    }
+    .custom-dropdown-option::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: linear-gradient(180deg, var(--primary), var(--accent));
+      opacity: 0;
+      transition: opacity .2s ease;
+    }
+    .custom-dropdown-option:hover {
+      background: linear-gradient(135deg, var(--primary-rgba-20) 0%, var(--accent-rgba-10) 100%);
+      color: #fff;
+      padding-left: 20px;
+    }
+    .custom-dropdown-option:hover::before {
+      opacity: 1;
+    }
+    .custom-dropdown-option.selected {
+      background: linear-gradient(135deg, var(--primary-rgba-15) 0%, var(--accent-rgba-08) 100%);
+      color: #fff;
+      font-weight: 600;
+    }
+    .custom-dropdown-option.selected::before {
+      opacity: 1;
     }
 
 
@@ -989,6 +1154,143 @@
         color: var(--accent-bright);
         opacity: .8;
         margin-top: 2px; /* From compact layout */
+    }
+
+    /* ─── Anime Vote Buttons ─── */
+    .anime-vote-buttons {
+        position: absolute;
+        left: 16px;
+        top: 120px; /* Position under the image (16px padding + 100px image height) */
+        display: flex;
+        gap: 4px;
+        align-items: center;
+        z-index: 10;
+    }
+
+    .anime-vote-btn {
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(4px);
+        border: 1px solid var(--primary-rgba-30);
+        color: var(--accent);
+        padding: 3px 6px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 0.65rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 3px;
+        flex: 0 0 auto;
+        min-width: auto;
+    }
+
+    /* Mobile: position in bottom-right */
+    @media (max-width: 768px) {
+        .anime-vote-buttons {
+            left: auto;
+            top: auto;
+            bottom: 8px;
+            right: 8px;
+        }
+    }
+
+    .anime-vote-btn:hover:not(:disabled) {
+        background: var(--primary-rgba-40);
+        border-color: var(--primary);
+        color: #fff;
+        transform: scale(1.05);
+    }
+
+    .anime-vote-btn:disabled {
+        pointer-events: none;
+        opacity: 0.7;
+    }
+
+    .anime-vote-btn.liked {
+        background: var(--primary-rgba-60);
+        border-color: var(--primary);
+        color: #fff;
+    }
+
+    .anime-vote-btn.disliked {
+        background: var(--primary-rgba-60);
+        border-color: var(--primary);
+        color: #fff;
+    }
+
+    .anime-vote-btn svg {
+        width: 11px;
+        height: 11px;
+        fill: currentColor;
+    }
+
+    .anime-vote-btn span {
+        font-size: 0.65rem;
+        min-width: 10px;
+        text-align: center;
+    }
+
+    /* Vote success/fail particle-like effects */
+    .anime-vote-btn {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .anime-vote-btn.vote-success::after,
+    .anime-vote-btn.vote-fail::after {
+        content: '';
+        position: absolute;
+        inset: -4px;
+        border-radius: inherit;
+        pointer-events: none;
+        opacity: 0;
+    }
+
+    .anime-vote-btn.vote-success::after {
+        background:
+          radial-gradient(circle at 20% 20%, rgba(0,255,140,0.7) 0, transparent 40%),
+          radial-gradient(circle at 80% 30%, rgba(0,255,200,0.6) 0, transparent 45%),
+          radial-gradient(circle at 30% 80%, rgba(0,200,120,0.5) 0, transparent 45%);
+        animation: vote-success-burst 0.6s ease-out forwards;
+    }
+
+    .anime-vote-btn.vote-fail::after {
+        background:
+          radial-gradient(circle at 20% 20%, rgba(255,80,80,0.7) 0, transparent 40%),
+          radial-gradient(circle at 80% 30%, rgba(255,120,120,0.6) 0, transparent 45%),
+          radial-gradient(circle at 30% 80%, rgba(255,60,60,0.5) 0, transparent 45%);
+        animation: vote-fail-burst 0.6s ease-out forwards;
+    }
+
+    @keyframes vote-success-burst {
+        0% {
+            opacity: 0;
+            transform: scale(0.6);
+        }
+        30% {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+        100% {
+            opacity: 0;
+            transform: scale(1.4);
+        }
+    }
+
+    @keyframes vote-fail-burst {
+        0% {
+            opacity: 0;
+            transform: scale(0.6);
+        }
+        30% {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+        100% {
+            opacity: 0;
+            transform: scale(1.4);
+        }
     }
 
     /* Schedule Page Styles */
@@ -1307,215 +1609,6 @@
     .schedule-item-status.status-aired { background: rgba(139,195,74,0.13); border-color: #8BC34A; color: #fff; font-size: 0.75rem; }
     .schedule-item-status.status-past { background: rgba(117,117,117,0.13); border-color: #757575; color: #fff; font-size: 0.75rem; }
 
-    /* ─── Comments Section ─── */
-    .comments-section {
-      margin-top: 40px;
-      padding-top: 30px;
-      border-top: 1px solid var(--glass-border);
-    }
-
-    .comment-form {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      max-width: 700px;
-      margin: 0 auto 40px auto;
-    }
-
-    .comment-form input,
-    .comment-form textarea {
-      padding: 12px 16px;
-      background-color: rgba(36, 26, 49, 0.7); /* Darker, more opaque */
-      border: 1px solid var(--primary-dark);
-      color: #fff;
-      border-radius: 8px;
-      font-size: 0.95rem;
-      transition: all .3s ease;
-      font-family: "Segoe UI", sans-serif;
-    }
-
-    .comment-form textarea {
-      min-height: 100px;
-      resize: vertical;
-    }
-
-    .comment-form input:focus,
-    .comment-form textarea:focus {
-      outline: none;
-      border-color: var(--primary);
-      background-color: rgba(22, 22, 24, 0.8);
-      box-shadow: 0 0 8px var(--primary-rgba-40);
-    }
-
-    .comment-form button {
-      padding: 12px 24px;
-      border-radius: 8px;
-      border: none;
-      background: linear-gradient(to right, var(--primary), var(--primary-dark));
-      color: #fff;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      align-self: flex-end; /* Pushes button to the right */
-    }
-
-    .comment-form button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 12px var(--primary-rgba-30);
-    }
-
-    .comment-form button:disabled {
-        background: #555;
-        cursor: not-allowed;
-        opacity: 0.7;
-    }
-
-    .comments-container {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    .comment-card {
-      background: linear-gradient(135deg, var(--primary-rgba-08) 0%, var(--accent-rgba-04) 100%);
-      border: 1px solid var(--primary-rgba-20);
-      border-radius: 12px;
-      padding: 20px;
-      animation: cardEntry 0.5s ease forwards;
-      opacity: 0;
-    }
-
-    .comment-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .comment-author {
-      font-weight: 700;
-      color: var(--accent);
-      font-size: 1.1rem;
-    }
-
-    .comment-author .shem-username {
-        background: linear-gradient(90deg, #FFD700, #FDB813, #FFD700);
-        background-size: 200% auto;
-        animation: shimmer-gold 3s linear infinite;
-        background-clip: text;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-weight: 700; /* Ensure the font weight is bold */
-    }
-
-    @keyframes shimmer-gold {
-        to {
-            background-position: -200% center;
-        }
-    }
-
-    .comment-author .crown-icon {
-        width: 16px;
-        height: 16px;
-        vertical-align: -3px;
-        margin-left: 4px;
-        filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.7));
-    }
-
-    .comment-date {
-      font-size: 0.8rem;
-      color: var(--accent);
-      opacity: 0.7;
-    }
-
-    .comment-body {
-      color: var(--accent-bright);
-      line-height: 1.6;
-      text-align: left;
-      white-space: pre-wrap; /* Preserve line breaks */
-      word-wrap: break-word;
-    }
-    
-    .comment-actions {
-        display: flex;
-        gap: 15px;
-        align-items: center;
-        margin-top: 15px;
-        flex-wrap: wrap;
-    }
-
-    .comment-actions button {
-        background: none;
-        border: 1px solid var(--primary-dark);
-        color: var(--accent);
-        padding: 5px 12px;
-        border-radius: 20px;
-        cursor: pointer;
-        font-size: 0.8rem;
-        font-weight: 500;
-        transition: all .3s ease;
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
-    }
-
-    .comment-actions button:hover {
-        background: var(--primary);
-        border-color: var(--primary);
-        color: #fff;
-    }
-    .comment-actions button:disabled {
-        pointer-events: none;
-        opacity: 0.7;
-    }
-    .comment-actions button.liked, .comment-actions button.disliked {
-        background: var(--primary);
-        color: #fff;
-    }
-
-
-    .replies-container {
-        margin-top: 20px;
-        padding-left: 25px;
-        border-left: 2px solid var(--glass-border);
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-    }
-
-    .reply-form-container {
-        margin-top: 15px;
-    }
-
-    .comment-form.reply-form {
-        max-width: 100%;
-        margin: 0;
-        padding: 15px;
-        background: rgba(0,0,0,.15);
-        border-radius: 8px;
-        border: 1px solid var(--glass-border);
-    }
-
-    .comment-form.reply-form textarea {
-        min-height: 70px;
-        font-size: 0.9rem;
-    }
-
-    .reply-form-actions {
-        display: flex;
-        justify-content: flex-end;
-        gap: 10px;
-        align-self: stretch; /* Override parent form's align-self */
-    }
-
-    .reply-form-actions button {
-        align-self: auto; /* Reset */
-    }
-    
     /* ─── Anime Card Compact Layout ─── */
     .anime-card {
       padding: 14px 16px;
@@ -2162,30 +2255,36 @@
         </div>
         <div class="anime-controls">
             <div>
-                <label for="categoryFilter">Filter:</label>
-                <select id="categoryFilter">
-                    <option value="All">All Categories</option>
-                    <!-- Options will be populated by JS -->
-                </select>
+                <label>Filter:</label>
+                <div class="custom-dropdown" id="categoryFilterDropdown">
+                    <div class="custom-dropdown-header" id="categoryFilterHeader" data-value="All">
+                        <span class="dropdown-text">All Categories</span>
+                        <svg class="dropdown-arrow" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
+                    </div>
+                    <div class="custom-dropdown-menu" id="categoryFilterMenu">
+                        <div class="custom-dropdown-option selected" data-value="All">All Categories</div>
+                        <!-- Options will be populated by JS -->
+                    </div>
+                </div>
             </div>
             <div>
                 <label for="searchBar">Search:</label>
                 <input type="text" id="searchBar" placeholder="Type to search...">
             </div>
             <div>
-                <label for="sortOrder">Sort:</label>
-                <select id="sortOrder">
-                    <option value="rating_desc">Rating (High to Low)</option>
-                    <option value="az">Title (A-Z)</option>
-                    <option value="za">Title (Z-A)</option>
-                    <option value="rating_asc">Rating (Low to High)</option>
-                </select>
-            </div>
-            <div style="margin-left: auto;">
-                <button id="scrollToCommentsBtn">
-                    <svg width="18" height="18" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
-                    View Comments
-                </button>
+                <label>Sort:</label>
+                <div class="custom-dropdown" id="sortOrderDropdown">
+                    <div class="custom-dropdown-header" id="sortOrderHeader" data-value="rating_desc">
+                        <span class="dropdown-text">Rating (High to Low)</span>
+                        <svg class="dropdown-arrow" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
+                    </div>
+                    <div class="custom-dropdown-menu" id="sortOrderMenu">
+                        <div class="custom-dropdown-option selected" data-value="rating_desc">Rating (High to Low)</div>
+                        <div class="custom-dropdown-option" data-value="az">Title (A-Z)</div>
+                        <div class="custom-dropdown-option" data-value="za">Title (Z-A)</div>
+                        <div class="custom-dropdown-option" data-value="rating_asc">Rating (Low to High)</div>
+                    </div>
+                </div>
             </div>
         </div>
         <div id="animeGridContainer" class="anime-grid-container">
@@ -2194,21 +2293,6 @@
                 <svg viewBox="0 0 50 50"><circle cx="25" cy="25" r="20" fill="none" stroke-width="5" stroke="currentColor" stroke-linecap="round" pathLength="1" stroke-dasharray="0.5 0.5"></circle></svg>
                 Loading Anime List...
             </div>
-        </div>
-        <div class="comments-section">
-          <h3 class="section-title" data-glitch="Leave a Comment" style="margin-top: 60px; margin-bottom: 30px;">Leave a Comment</h3>
-          <form id="commentForm" class="comment-form">
-            <input type="text" id="commentUsername" placeholder="Your username" required>
-            <textarea id="commentText" placeholder='"i agree man apothecary diaries is just the best anime"' required></textarea>
-            <button type="submit" id="submitCommentBtn">Post Comment</button>
-          </form>
-          <div id="commentsContainer" class="comments-container">
-            <!-- Comments will be loaded here -->
-            <div class="loading-indicator" id="commentsLoading">
-                <svg viewBox="0 0 50 50"><circle cx="25" cy="25" r="20" fill="none" stroke-width="5" stroke="currentColor" stroke-linecap="round" pathLength="1" stroke-dasharray="0.5 0.5"></circle></svg>
-                Loading comments...
-            </div>
-          </div>
         </div>
       </div>
 
@@ -2921,9 +3005,9 @@
         scheduleLastFetched: null
     };
     const ANIME_JSON_PATH = 'https://raw.githubusercontent.com/Mythyxs/website/refs/heads/main/anime_backup.json';
-    const COMMENTS_BIN_ID = '6844d32e8960c979a5a675ff';
-    const COMMENTS_API_KEY = '$2a$10$NwYMNtIZx5ag/xokwHWN4.1u.yOLzNxLLroIP/IBcjJBEi0YiB81e';
-    const COMMENTS_URL = `https://api.jsonbin.io/v3/b/${COMMENTS_BIN_ID}`;
+    const ANIME_VOTES_BIN_ID = '6844d32e8960c979a5a675ff';
+    const ANIME_VOTES_API_KEY = '$2a$10$NwYMNtIZx5ag/xokwHWN4.1u.yOLzNxLLroIP/IBcjJBEi0YiB81e';
+    const ANIME_VOTES_URL = `https://api.jsonbin.io/v3/b/${ANIME_VOTES_BIN_ID}`;
 
 
     const categoryColors = {
@@ -2956,9 +3040,10 @@
         `;
     }
     
-    function createAnimeCard(anime) {
+    function createAnimeCard(anime, votes = {}) {
         const card = document.createElement('div');
         card.className = 'anime-card';
+        card.dataset.animeTitle = anime.title;
         
         /* ---------------- utilities ---------------- */
         const categoryClass =
@@ -2982,6 +3067,16 @@
                <span>${episodeLabel}</span>
              </div>`
           : '';
+
+        // Get vote counts for this anime
+        const voteData = votes[anime.title] || { likes: 0, dislikes: 0 };
+        const votedAnime = JSON.parse(localStorage.getItem('votedAnime') || '{}');
+        const voteStatus = votedAnime[anime.title];
+        
+        const likeBtnClass = voteStatus === 'like' ? 'anime-vote-btn like-btn liked' : 'anime-vote-btn like-btn';
+        const dislikeBtnClass = voteStatus === 'dislike' ? 'anime-vote-btn dislike-btn disliked' : 'anime-vote-btn dislike-btn';
+        const likeBtnDisabled = voteStatus ? 'disabled' : '';
+        const dislikeBtnDisabled = voteStatus ? 'disabled' : '';
 
         /* ---------------- markup ---------------- */
         card.innerHTML = `
@@ -3008,14 +3103,35 @@
                 : ''}
             </div>
           </div>
+          <div class="anime-vote-buttons">
+            <button class="${likeBtnClass}" ${likeBtnDisabled} title="Like this anime">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23,10C23,8.89 22.1,8 21,8H14.68L15.64,3.43C15.66,3.33 15.67,3.22 15.67,3.11C15.67,2.7 15.5,2.32 15.23,2.05L14.17,1L7.59,7.58C7.22,7.95 7,8.45 7,9V19A2,2 0 0,0 9,21H18C18.83,21 19.54,20.5 19.84,19.78L22.86,12.73C22.95,12.5 23,12.26 23,12V10M1,21H5V9H1V21Z"></path></svg>
+              <span>${voteData.likes || 0}</span>
+            </button>
+            <button class="${dislikeBtnClass}" ${dislikeBtnDisabled} title="Dislike this anime">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19,15H23V3H19M15,3H6C5.17,3 4.46,3.5 4.16,4.22L1.14,11.27C1.05,11.5 1,11.74 1,12V14A2,2 0 0,0 3,16H9.32L8.36,20.57C8.34,20.67 8.33,20.78 8.33,20.89C8.33,21.3 8.5,21.68 8.77,21.95L9.83,23L16.41,16.42C16.78,16.05 17,15.55 17,15V5C17,3.89 16.1,3 15,3Z"></path></svg>
+              <span>${voteData.dislikes || 0}</span>
+            </button>
+          </div>
         `;
+
+        // Add event listeners for vote buttons
+        const likeBtn = card.querySelector('.like-btn');
+        const dislikeBtn = card.querySelector('.dislike-btn');
+        if (likeBtn) {
+            likeBtn.addEventListener('click', () => handleAnimeVote(anime.title, 'like'));
+        }
+        if (dislikeBtn) {
+            dislikeBtn.addEventListener('click', () => handleAnimeVote(anime.title, 'dislike'));
+        }
+
         return card;
     }
 
-    function renderAnimeList() {
+    async function renderAnimeList(skipAnimation = false) {
         const container = document.getElementById('animeGridContainer');
-        const filterValue = document.getElementById('categoryFilter').value;
-        const sortValue = document.getElementById('sortOrder').value;
+        const filterValue = document.getElementById('categoryFilterHeader').dataset.value || 'All';
+        const sortValue = document.getElementById('sortOrderHeader').dataset.value || 'rating_desc';
         const searchValue = document.getElementById('searchBar').value.toLowerCase();
         const loadingIndicator = document.getElementById('animeListLoading');
 
@@ -3025,7 +3141,11 @@
         }
         if (loadingIndicator) loadingIndicator.style.display = 'none';
 
-        container.innerHTML = ''; // Clear previous items
+        // Load votes before rendering
+        const votes = await loadAnimeVotes();
+
+        // Clear previous items (after async work to avoid overlapping renders duplicating cards)
+        container.innerHTML = '';
 
         let filteredList = animeDataCache.all.slice();
 
@@ -3062,10 +3182,10 @@
         };
         
         if (filteredList.length === 0) {
-            container.innerHTML = `<div class="empty-state">No anime found for the selected criteria.</div>`;
+            container.innerHTML = `<div class="empty-state">I don't think I've watched that anime, sorry bro.</div>`;
         } else {
             filteredList.forEach((anime, index) => { 
-              const card = createAnimeCard(anime);
+              const card = createAnimeCard(anime, votes);
               
               // Add ranking class if applicable
               if (anime.rating) {
@@ -3076,6 +3196,11 @@
                   } else if (anime.rating === topScores.bronze) {
                       card.classList.add('rank-bronze');
                   }
+              }
+
+              if (skipAnimation) {
+                  card.style.animation = 'none';
+                  card.style.opacity = '1';
               }
 
               card.style.setProperty('--card-index', index % 10); 
@@ -3126,13 +3251,17 @@
 
             animeDataCache.all.forEach(anime => animeDataCache.categories.add(anime.category));
             
-            const categoryFilter = document.getElementById('categoryFilter');
-            animeDataCache.categories.forEach(cat => {
-                const option = document.createElement('option');
-                option.value = cat;
-                option.textContent = cat;
-                categoryFilter.appendChild(option);
-            });
+            const categoryFilterMenu = document.getElementById('categoryFilterMenu');
+            if (categoryFilterMenu) {
+                // Remove the default "All Categories" option (keep it, but add others after)
+                animeDataCache.categories.forEach(cat => {
+                    const option = document.createElement('div');
+                    option.className = 'custom-dropdown-option';
+                    option.dataset.value = cat;
+                    option.textContent = cat;
+                    categoryFilterMenu.appendChild(option);
+                });
+            }
 
             animeDataCache.scheduleRelevant = animeDataCache.all.filter(entry =>
                 entry.title && entry.title.trim().length > 0 &&
@@ -3389,348 +3518,203 @@
         });
     }
     
-    // New comment functions
-    function findCommentById(comments, id) {
-        for (const comment of comments) {
-            if (comment.id === id) return comment;
-            if (comment.replies && comment.replies.length > 0) {
-                const found = findCommentById(comment.replies, id);
-                if (found) return found;
-            }
+
+    // ─── Anime Voting Functions ───
+    async function loadAnimeVotes() {
+        try {
+            const response = await fetch(`${ANIME_VOTES_URL}/latest`, { 
+                headers: { 'X-Master-Key': ANIME_VOTES_API_KEY }
+            });
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            
+            const data = await response.json();
+            const votesData = data.record.data || [];
+            
+            // Convert array to map for easy lookup
+            const votesMap = {};
+            votesData.forEach(item => {
+                votesMap[item.title] = {
+                    likes: item.likes || 0,
+                    dislikes: item.dislikes || 0
+                };
+            });
+            
+            return votesMap;
+        } catch (error) {
+            console.error('Failed to load anime votes:', error);
+            return {};
         }
-        return null;
     }
 
-    function createCommentCard(comment, isReply = false) {
-        const card = document.createElement('div');
-        card.className = isReply ? 'comment-card reply-card' : 'comment-card';
-        card.dataset.commentId = comment.id;
-
-        const date = new Date(comment.date);
-        const formattedDate = date.toLocaleString(undefined, {
-            year: 'numeric', month: 'long', day: 'numeric',
-            hour: 'numeric', minute: '2-digit'
-        });
-
-        const sanitizedText = (comment.text || '').replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        const sanitizedUsername = (comment.username || '').replace(/</g, "&lt;").replace(/>/g, "&gt;");
-
-        let authorHTML = sanitizedUsername;
-        if (sanitizedUsername.toLowerCase().includes('shem')) {
-            const crownIconHTML = ` <svg class="crown-icon" style="vertical-align:1px; margin-left:-2.5px;" viewBox="0 0 24 24"><defs><linearGradient id="crown-gradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#FFD700"/><stop offset="50%" stop-color="#FDB813"/><stop offset="100%" stop-color="#FFD700"/></linearGradient></defs><path d="M5 16L3 5l5.5 5l3.5-6l3.5 6L21 5l-2 11H5z" fill="url(#crown-gradient)"></path><path d="M19 19a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-1h14v1z" fill="url(#crown-gradient)"></path></svg>`;
-            authorHTML = `<span class="shem-username">${sanitizedUsername}</span>${crownIconHTML}`;
-        }
-
-        card.innerHTML = `
-            <div class="comment-header">
-                <span class="comment-author">${authorHTML}</span>
-                <span class="comment-date">${formattedDate}</span>
-            </div>
-            <p class="comment-body">${sanitizedText.replace(/\n/g, '<br>')}</p>
-            <div class="comment-actions">
-                <button class="like-btn" title="Like">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M23,10C23,8.89 22.1,8 21,8H14.68L15.64,3.43C15.66,3.33 15.67,3.22 15.67,3.11C15.67,2.7 15.5,2.32 15.23,2.05L14.17,1L7.59,7.58C7.22,7.95 7,8.45 7,9V19A2,2 0 0,0 9,21H18C18.83,21 19.54,20.5 19.84,19.78L22.86,12.73C22.95,12.5 23,12.26 23,12V10M1,21H5V9H1V21Z"></path></svg>
-                    <span>${comment.likes || 0}</span>
-                </button>
-                <button class="dislike-btn" title="Dislike">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19,15H23V3H19M15,3H6C5.17,3 4.46,3.5 4.16,4.22L1.14,11.27C1.05,11.5 1,11.74 1,12V14A2,2 0 0,0 3,16H9.32L8.36,20.57C8.34,20.67 8.33,20.78 8.33,20.89C8.33,21.3 8.5,21.68 8.77,21.95L9.83,23L16.41,16.42C16.78,16.05 17,15.55 17,15V5C17,3.89 16.1,3 15,3Z"></path></svg>
-                    <span>${comment.dislikes || 0}</span>
-                </button>
-                <button class="reply-btn">Reply</button>
-            </div>
-            <div class="reply-form-container" style="display: none;"></div>
-            <div class="replies-container"></div>
-        `;
-
-        // Add event listeners
-        card.querySelector('.like-btn').addEventListener('click', () => handleVote(comment.id, 'like'));
-        card.querySelector('.dislike-btn').addEventListener('click', () => handleVote(comment.id, 'dislike'));
-        card.querySelector('.reply-btn').addEventListener('click', () => showReplyForm(comment.id));
-
-        // Render replies
-        const repliesContainer = card.querySelector('.replies-container');
-        if (comment.replies && comment.replies.length > 0) {
-            comment.replies
-                .sort((a, b) => new Date(a.date) - new Date(b.date)) // Oldest replies first
-                .forEach(reply => {
-                    const replyCard = createCommentCard(reply, true);
-                    repliesContainer.appendChild(replyCard);
-                });
-        }
-
-        // Check local storage for vote status
-        const votedComments = JSON.parse(localStorage.getItem('votedComments') || '{}');
-        const voteStatus = votedComments[comment.id];
-        if (voteStatus) {
-            const likeBtn = card.querySelector('.like-btn');
-            const dislikeBtn = card.querySelector('.dislike-btn');
-            if(likeBtn) likeBtn.disabled = true;
-            if(dislikeBtn) dislikeBtn.disabled = true;
-            if (voteStatus === 'like' && likeBtn) {
-                likeBtn.classList.add('liked');
-            } else if (voteStatus === 'dislike' && dislikeBtn) {
-                dislikeBtn.classList.add('disliked');
-            }
-        }
-
-        return card;
-    }
-
-    async function handleVote(commentId, voteType) {
-        const votedComments = JSON.parse(localStorage.getItem('votedComments') || '{}');
-        const existingVote = votedComments[commentId];
+    async function handleAnimeVote(animeTitle, voteType) {
+        const votedAnime = JSON.parse(localStorage.getItem('votedAnime') || '{}');
+        const existingVote = votedAnime[animeTitle];
 
         // Disable buttons on the specific card immediately to prevent double-clicks
-        const card = document.querySelector(`.comment-card[data-comment-id="${commentId}"]`);
+        const card = document.querySelector(`.anime-card[data-anime-title="${animeTitle}"]`);
         if (card) {
-            card.querySelectorAll('.comment-actions button').forEach(b => b.disabled = true);
+            card.querySelectorAll('.anime-vote-btn').forEach(b => b.disabled = true);
         }
 
         try {
             // 1. Get the latest data
-            const getResponse = await fetch(`${COMMENTS_URL}/latest`, { headers: { 'X-Master-Key': COMMENTS_API_KEY } });
-            if (!getResponse.ok) throw new Error('Failed to fetch latest comments for voting.');
+            const getResponse = await fetch(`${ANIME_VOTES_URL}/latest`, { 
+                headers: { 'X-Master-Key': ANIME_VOTES_API_KEY } 
+            });
+            if (!getResponse.ok) throw new Error('Failed to fetch latest votes for voting.');
             const binData = await getResponse.json();
-            let allComments = binData.record.comments || [];
+            let votesData = binData.record.data || [];
 
-            const commentToUpdate = findCommentById(allComments, commentId);
-            if (!commentToUpdate) throw new Error("Comment not found");
+            // 2. Find or create entry for this anime
+            let animeEntry = votesData.find(item => item.title === animeTitle);
+            if (!animeEntry) {
+                animeEntry = { title: animeTitle, likes: 0, dislikes: 0 };
+                votesData.push(animeEntry);
+            }
 
-            // 2. Determine the new vote state
+            // 3. Determine the new vote state
             const isRevoke = existingVote === voteType;
             const isChange = existingVote && existingVote !== voteType;
 
             if (isRevoke) {
                 // User is revoking their vote
-                commentToUpdate[voteType + 's'] = (commentToUpdate[voteType + 's'] || 1) - 1;
-                delete votedComments[commentId];
+                animeEntry[voteType + 's'] = Math.max(0, (animeEntry[voteType + 's'] || 0) - 1);
+                delete votedAnime[animeTitle];
             } else {
                 if (isChange) {
                     // User is changing their vote (e.g., from like to dislike)
-                    commentToUpdate[existingVote + 's'] = (commentToUpdate[existingVote + 's'] || 1) - 1;
+                    animeEntry[existingVote + 's'] = Math.max(0, (animeEntry[existingVote + 's'] || 0) - 1);
                 }
                 // Apply the new vote
-                commentToUpdate[voteType + 's'] = (commentToUpdate[voteType + 's'] || 0) + 1;
-                votedComments[commentId] = voteType;
+                animeEntry[voteType + 's'] = (animeEntry[voteType + 's'] || 0) + 1;
+                votedAnime[animeTitle] = voteType;
             }
 
-            // 3. Update local storage with the new vote status
-            localStorage.setItem('votedComments', JSON.stringify(votedComments));
+            // 4. Update local storage with the new vote status
+            localStorage.setItem('votedAnime', JSON.stringify(votedAnime));
 
-            // 4. PUT the updated data back to the server
-            const putResponse = await fetch(COMMENTS_URL, {
+            // 5. PUT the updated data back to the server
+            const putResponse = await fetch(ANIME_VOTES_URL, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json', 'X-Master-Key': COMMENTS_API_KEY },
-                body: JSON.stringify({ comments: allComments })
+                headers: { 'Content-Type': 'application/json', 'X-Master-Key': ANIME_VOTES_API_KEY },
+                body: JSON.stringify({ data: votesData })
             });
             if (!putResponse.ok) throw new Error('Failed to save vote to server.');
 
-            // 5. Refresh the entire comments section from the server's single source of truth
-            await loadComments();
+            // 6. Update only the specific card instead of re-rendering everything
+            if (card) {
+                const likeBtn = card.querySelector('.like-btn');
+                const dislikeBtn = card.querySelector('.dislike-btn');
+                
+                if (likeBtn) {
+                    likeBtn.querySelector('span').textContent = animeEntry.likes || 0;
+                }
+                if (dislikeBtn) {
+                    dislikeBtn.querySelector('span').textContent = animeEntry.dislikes || 0;
+                }
+
+                // Update button states
+                if (isRevoke) {
+                    // Vote was revoked - re-enable both buttons
+                    if (likeBtn) {
+                        likeBtn.disabled = false;
+                        likeBtn.classList.remove('liked');
+                    }
+                    if (dislikeBtn) {
+                        dislikeBtn.disabled = false;
+                        dislikeBtn.classList.remove('disliked');
+                    }
+                } else {
+                    // Vote was applied - disable both buttons and highlight the selected one
+                    if (likeBtn) {
+                        likeBtn.disabled = true;
+                        if (voteType === 'like') {
+                            likeBtn.classList.add('liked');
+                        } else {
+                            likeBtn.classList.remove('liked');
+                        }
+                    }
+                    if (dislikeBtn) {
+                        dislikeBtn.disabled = true;
+                        if (voteType === 'dislike') {
+                            dislikeBtn.classList.add('disliked');
+                        } else {
+                            dislikeBtn.classList.remove('disliked');
+                        }
+                    }
+                }
+
+                // 7. Trigger a particle-like effect on successful vote (only on apply/change, not revoke)
+                if (!isRevoke) {
+                    const effectBtn = voteType === 'like' ? likeBtn : dislikeBtn;
+                    if (effectBtn) {
+                        const effectClass = voteType === 'like' ? 'vote-success' : 'vote-fail';
+                        effectBtn.classList.remove('vote-success', 'vote-fail');
+                        // Force a reflow so re-adding the class retriggers the animation
+                        void effectBtn.offsetWidth;
+                        effectBtn.classList.add(effectClass);
+                        setTimeout(() => {
+                            effectBtn.classList.remove(effectClass);
+                        }, 650);
+                    }
+                }
+            }
 
         } catch (error) {
             console.error('Error handling vote:', error);
             alert('Could not save your vote due to a server error. Please try again.');
-            // On failure, re-enable buttons by reloading the comments section
-            await loadComments();
-        }
-    }
-
-    function showReplyForm(commentId) {
-        const targetCard = document.querySelector(`.comment-card[data-comment-id="${commentId}"]`);
-        if (!targetCard) return;
-
-        const existingForms = document.querySelectorAll('.reply-form-container');
-        existingForms.forEach(container => {
-            container.innerHTML = '';
-            container.style.display = 'none';
-        });
-
-        const container = targetCard.querySelector('.reply-form-container');
-        container.style.display = 'block';
-        container.innerHTML = `
-            <form class="comment-form reply-form">
-                <input type="text" placeholder="Your username" required>
-                <textarea placeholder="Write a reply..." required></textarea>
-                <div class="reply-form-actions">
-                    <button type="submit">Post Reply</button>
-                    <button type="button" class="cancel-reply-btn">Cancel</button>
-                </div>
-            </form>
-        `;
-
-        const form = container.querySelector('form');
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            handleCommentSubmit(e, commentId);
-        });
-
-        container.querySelector('.cancel-reply-btn').addEventListener('click', () => {
-            container.innerHTML = '';
-            container.style.display = 'none';
-        });
-
-        form.querySelector('textarea').focus();
-    }
-
-    function ensureCommentIds(comments) {
-        let changed = false;
-        function traverse(items) {
-            for (const item of items) {
-                if (!item.id) {
-                    // Assign a new ID if missing
-                    item.id = `c_${Date.now()}_${Math.random().toString(36).substr(2, 9)}_${items.indexOf(item)}`;
-                    changed = true;
-                }
-                // Ensure vote counts and replies array exist
-                if (typeof item.likes !== 'number') item.likes = 0;
-                if (typeof item.dislikes !== 'number') item.dislikes = 0;
-                if (!Array.isArray(item.replies)) item.replies = [];
-
-                if (item.replies.length > 0) {
-                    traverse(item.replies);
-                }
+            // On failure, re-enable buttons on the specific card
+            if (card) {
+                card.querySelectorAll('.anime-vote-btn').forEach(b => b.disabled = false);
             }
         }
-        traverse(comments);
-        return changed;
     }
 
-    async function loadComments() {
-        const container = document.getElementById('commentsContainer');
-        const loadingIndicator = document.getElementById('commentsLoading');
-        if (loadingIndicator) loadingIndicator.style.display = 'block';
-        
-        try {
-            const response = await fetch(`${COMMENTS_URL}/latest`, { 
-                headers: { 'X-Master-Key': COMMENTS_API_KEY }
-            });
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-            
-            const data = await response.json();
-            const comments = data.record.comments || [];
+    function updateAnimeCardVotes(card, votes) {
+        const animeTitle = card.dataset.animeTitle;
+        if (!animeTitle || !votes[animeTitle]) return;
 
-            // --- MIGRATION & DATA INTEGRITY CHECK ---
-            const wasChanged = ensureCommentIds(comments);
-            if (wasChanged) {
-                console.log("Applying data structure updates to comments on the server...");
-                await fetch(COMMENTS_URL, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json', 'X-Master-Key': COMMENTS_API_KEY },
-                    body: JSON.stringify({ comments: comments })
-                });
-            }
-            // --- END MIGRATION ---
-            
-            if (loadingIndicator) loadingIndicator.style.display = 'none';
-            container.innerHTML = ''; // Clear container
+        const voteData = votes[animeTitle];
+        const likeBtn = card.querySelector('.anime-vote-btn.like-btn');
+        const dislikeBtn = card.querySelector('.anime-vote-btn.dislike-btn');
 
-            if (comments.length === 0) {
-                container.innerHTML = `<div class="empty-state">No comments yet. Be the first!</div>`;
-                return;
-            }
-
-            comments.sort((a, b) => new Date(b.date) - new Date(a.date)); // Newest first
-
-            comments.forEach((comment, index) => {
-                const card = createCommentCard(comment);
-                card.style.setProperty('--card-index', index);
-                container.appendChild(card);
-            });
-
-        } catch (error) {
-            console.error('Failed to load comments:', error);
-            if (loadingIndicator) loadingIndicator.style.display = 'none';
-            if (container) container.innerHTML = `<div class="empty-state">Error loading comments. Please try again later.</div>`;
+        if (likeBtn) {
+            likeBtn.querySelector('span').textContent = voteData.likes || 0;
         }
-    }
-
-    async function handleCommentSubmit(event, parentId = null) {
-        event.preventDefault();
-        const form = event.target; // Use the form that triggered the event directly
-
-        const usernameInput = form.querySelector('input[type="text"]');
-        const textInput = form.querySelector('textarea');
-        const submitBtn = form.querySelector('button[type="submit"]');
-        
-        const username = usernameInput.value.trim();
-        const text = textInput.value.trim();
-
-        if (username.toLowerCase().includes('shem')) {
-            alert("stop trying to impersonate me loser");
-            usernameInput.focus();
-            return;
+        if (dislikeBtn) {
+            dislikeBtn.querySelector('span').textContent = voteData.dislikes || 0;
         }
 
-        if (!username || !text) {
-            alert('Please fill in both username and comment fields.');
-            return;
-        }
+        // Check local storage for vote status
+        const votedAnime = JSON.parse(localStorage.getItem('votedAnime') || '{}');
+        const voteStatus = votedAnime[animeTitle];
         
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Posting...';
-
-        try {
-            // 1. GET the latest version of the bin
-            const getResponse = await fetch(`${COMMENTS_URL}/latest`, { 
-                headers: { 'X-Master-Key': COMMENTS_API_KEY }
-            });
-            if (!getResponse.ok) throw new Error('Failed to fetch latest comments before posting.');
-            const binData = await getResponse.json();
-            
-            let existingComments = binData.record.comments || [];
-
-            // 2. Add the new comment
-            const newComment = {
-                id: `c_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-                username: username,
-                text: text,
-                date: new Date().toISOString(),
-                likes: 0,
-                dislikes: 0,
-                replies: []
-            };
-
-            if (parentId) {
-                const parentComment = findCommentById(existingComments, parentId);
-                if (parentComment) {
-                    if (!parentComment.replies) parentComment.replies = [];
-                    parentComment.replies.push(newComment);
+        if (voteStatus) {
+            if (likeBtn) {
+                likeBtn.disabled = true;
+                if (voteStatus === 'like') {
+                    likeBtn.classList.add('liked');
                 } else {
-                    throw new Error("Parent comment not found.");
+                    likeBtn.classList.remove('liked');
                 }
-            } else {
-                existingComments.push(newComment);
             }
-            
-            // 3. PUT the updated data back
-            const putResponse = await fetch(COMMENTS_URL, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Master-Key': COMMENTS_API_KEY
-                },
-                body: JSON.stringify({ comments: existingComments })
-            });
-
-            if (!putResponse.ok) {
-                const errorBody = await putResponse.text();
-                throw new Error(`Failed to post comment. Server responded with: ${errorBody}`);
+            if (dislikeBtn) {
+                dislikeBtn.disabled = true;
+                if (voteStatus === 'dislike') {
+                    dislikeBtn.classList.add('disliked');
+                } else {
+                    dislikeBtn.classList.remove('disliked');
+                }
             }
-
-            // 4. Success
-            if (!parentId) { // only clear main form
-                usernameInput.value = '';
-                textInput.value = '';
+        } else {
+            if (likeBtn) {
+                likeBtn.disabled = false;
+                likeBtn.classList.remove('liked');
             }
-            await loadComments(); // Refresh comments list
-
-        } catch (error) {
-            console.error('Error posting comment:', error);
-            alert('There was an error posting your comment. Please try again.');
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.textContent = parentId ? 'Post Reply' : 'Post Comment';
+            if (dislikeBtn) {
+                dislikeBtn.disabled = false;
+                dislikeBtn.classList.remove('disliked');
+            }
         }
     }
 
@@ -3825,7 +3809,6 @@
         // Trigger tab-specific logic
         if (catId === 'animeList') {
           animeDataCache.all.length === 0 ? loadAndPrepareAnimeData() : renderAnimeList();
-          loadComments();
         } else if (catId === 'schedule') {
           loadAndRenderSchedule();
         } else if (catId === 'games') {
@@ -3855,6 +3838,111 @@
     /* visitor counter */
     function initVisitorCounter(){const binId='683f4c3f8561e97a501f44c4',apiKey='$2a$10$NwYMNtIZx5ag/xokwHWN4.1u.yOLzNxLLroIP/IBcjJBEi0YiB81e',url=`https://api.jsonbin.io/v3/b/${binId}`,headers={'Content-Type':'application/json','X-Master-Key':apiKey};fetch(url,{headers}).then(r=>r.json()).then(d=>{const real=d.record.visits+1,total=real+146;fetch(url,{method:'PUT',headers,body:JSON.stringify({visits:real})});const el=document.getElementById('visitorCount'),dur=2000,start=performance.now();function anim(t){const p=Math.min((t-start)/dur,1),ease=1-Math.pow(1-p,3);el.textContent=Math.floor(total*ease).toLocaleString();if(p<1)requestAnimationFrame(anim);}requestAnimationFrame(anim);}).catch(()=>document.getElementById('visitorCount').textContent='N/A');}
     setTimeout(initVisitorCounter,3200);
+
+    // Custom dropdown initialization
+    function initCustomDropdowns() {
+      // Initialize category filter dropdown
+      const categoryDropdown = document.getElementById('categoryFilterDropdown');
+      const categoryHeader = document.getElementById('categoryFilterHeader');
+      const categoryMenu = document.getElementById('categoryFilterMenu');
+      
+      // Initialize sort dropdown
+      const sortDropdown = document.getElementById('sortOrderDropdown');
+      const sortHeader = document.getElementById('sortOrderHeader');
+      const sortMenu = document.getElementById('sortOrderMenu');
+      
+      // Function to close all dropdowns
+      function closeAllDropdowns() {
+        categoryMenu.classList.remove('active');
+        categoryHeader.classList.remove('active');
+        sortMenu.classList.remove('active');
+        sortHeader.classList.remove('active');
+      }
+      
+      // Category dropdown handlers
+      categoryHeader.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isActive = categoryMenu.classList.contains('active');
+        closeAllDropdowns();
+        if (!isActive) {
+          categoryMenu.classList.add('active');
+          categoryHeader.classList.add('active');
+        }
+      });
+      
+      // Use event delegation for category options (works with dynamically added options)
+      categoryMenu.addEventListener('click', (e) => {
+        const option = e.target.closest('.custom-dropdown-option');
+        if (!option) return;
+        
+        e.stopPropagation();
+        const value = option.dataset.value;
+        const text = option.textContent;
+        
+        // Update selected state
+        categoryMenu.querySelectorAll('.custom-dropdown-option').forEach(opt => opt.classList.remove('selected'));
+        option.classList.add('selected');
+        
+        // Update header
+        categoryHeader.querySelector('.dropdown-text').textContent = text;
+        categoryHeader.dataset.value = value;
+        
+        // Close dropdown
+        closeAllDropdowns();
+        
+        // Trigger render
+        renderAnimeList();
+      });
+      
+      // Sort dropdown handlers
+      sortHeader.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isActive = sortMenu.classList.contains('active');
+        closeAllDropdowns();
+        if (!isActive) {
+          sortMenu.classList.add('active');
+          sortHeader.classList.add('active');
+        }
+      });
+      
+      // Sort options (static, but using delegation for consistency)
+      sortMenu.addEventListener('click', (e) => {
+        const option = e.target.closest('.custom-dropdown-option');
+        if (!option) return;
+        
+        e.stopPropagation();
+        const value = option.dataset.value;
+        const text = option.textContent;
+        
+        // Update selected state
+        sortMenu.querySelectorAll('.custom-dropdown-option').forEach(opt => opt.classList.remove('selected'));
+        option.classList.add('selected');
+        
+        // Update header
+        sortHeader.querySelector('.dropdown-text').textContent = text;
+        sortHeader.dataset.value = value;
+        
+        // Close dropdown
+        closeAllDropdowns();
+        
+        // Trigger render
+        renderAnimeList();
+      });
+      
+      // Close dropdowns when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!categoryDropdown.contains(e.target) && !sortDropdown.contains(e.target)) {
+          closeAllDropdowns();
+        }
+      });
+      
+      // Close dropdowns on escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          closeAllDropdowns();
+        }
+      });
+    }
 
     document.addEventListener('DOMContentLoaded', () => {
       // GFX Image Preloading
@@ -4137,14 +4225,21 @@
         loadAndCacheScheduleData(); 
       });
 
-      document.getElementById('categoryFilter').addEventListener('change', renderAnimeList);
-      document.getElementById('sortOrder').addEventListener('change', renderAnimeList);
-      document.getElementById('searchBar').addEventListener('input', renderAnimeList);
-      document.getElementById('scrollToCommentsBtn').addEventListener('click', () => {
-        document.querySelector('.comments-section').scrollIntoView({ behavior: 'smooth' });
-      });
-      document.getElementById('refreshScheduleBtn').addEventListener('click', () => loadAndRenderSchedule(true)); 
-      document.getElementById('commentForm').addEventListener('submit', handleCommentSubmit);
+      // Initialize custom dropdowns
+      initCustomDropdowns();
+
+      // Debounced search so we don't re-render on every keystroke
+      function debounce(fn, delay) {
+        let timeout;
+        return (...args) => {
+          clearTimeout(timeout);
+          timeout = setTimeout(() => fn(...args), delay);
+        };
+      }
+
+      const debouncedSearchRender = debounce(() => renderAnimeList(), 180);
+      document.getElementById('searchBar').addEventListener('input', debouncedSearchRender);
+      document.getElementById('refreshScheduleBtn').addEventListener('click', () => loadAndRenderSchedule(true));
     });
 
   </script>
