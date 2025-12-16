@@ -801,6 +801,20 @@
       z-index:1;
     }
 
+    .visitor-message{
+      margin-top:10px;
+      font-size:.9rem;
+      color:#fff;
+      opacity:0;
+      transform:translateY(6px);
+      letter-spacing:1px;
+      transition:opacity .5s ease,transform .5s ease;
+    }
+    .visitor-message.show{
+      opacity:1;
+      transform:translateY(0);
+    }
+
     /* visitor pop anim */
     #visitorCount{
       font-size:3rem;
@@ -2238,6 +2252,7 @@
         <div class="visitor-counter">
           <div class="visitor-label">Total Visitors</div>
           <div class="visitor-count" id="visitorCount">0</div>
+          <div class="visitor-message" id="visitorMessage">6k soon right guys</div>
         </div>
       </div>
 
@@ -2283,6 +2298,8 @@
                         <div class="custom-dropdown-option" data-value="az">Title (A-Z)</div>
                         <div class="custom-dropdown-option" data-value="za">Title (Z-A)</div>
                         <div class="custom-dropdown-option" data-value="rating_asc">Rating (Low to High)</div>
+                        <div class="custom-dropdown-option" data-value="peoples_choice">People's Choice (Most Liked)</div>
+                        <div class="custom-dropdown-option" data-value="peoples_disliked">People's Choice (Most Disliked)</div>
                     </div>
                 </div>
             </div>
@@ -3170,6 +3187,30 @@
             case 'rating_asc':
                 filteredList.sort((a, b) => (a.rating || 0) - (b.rating || 0) || a.title.localeCompare(b.title));
                 break;
+            case 'peoples_choice': {
+                // Sort by likes (from votes), highest to lowest, then by rating, then title
+                filteredList.sort((a, b) => {
+                    const aLikes = (votes[a.title]?.likes || 0);
+                    const bLikes = (votes[b.title]?.likes || 0);
+                    if (bLikes !== aLikes) return bLikes - aLikes;
+                    const ratingDiff = (b.rating || 0) - (a.rating || 0);
+                    if (ratingDiff !== 0) return ratingDiff;
+                    return a.title.localeCompare(b.title);
+                });
+                break;
+            }
+            case 'peoples_disliked': {
+                // Sort by dislikes (from votes), highest to lowest, then by rating (ascending), then title
+                filteredList.sort((a, b) => {
+                    const aDislikes = (votes[a.title]?.dislikes || 0);
+                    const bDislikes = (votes[b.title]?.dislikes || 0);
+                    if (bDislikes !== aDislikes) return bDislikes - aDislikes;
+                    const ratingDiff = (a.rating || 0) - (b.rating || 0);
+                    if (ratingDiff !== 0) return ratingDiff;
+                    return a.title.localeCompare(b.title);
+                });
+                break;
+            }
         }
         
         // Determine top 3 ranked anime from the entire list
@@ -3836,7 +3877,45 @@
     }
 
     /* visitor counter */
-    function initVisitorCounter(){const binId='683f4c3f8561e97a501f44c4',apiKey='$2a$10$NwYMNtIZx5ag/xokwHWN4.1u.yOLzNxLLroIP/IBcjJBEi0YiB81e',url=`https://api.jsonbin.io/v3/b/${binId}`,headers={'Content-Type':'application/json','X-Master-Key':apiKey};fetch(url,{headers}).then(r=>r.json()).then(d=>{const real=d.record.visits+1,total=real+146;fetch(url,{method:'PUT',headers,body:JSON.stringify({visits:real})});const el=document.getElementById('visitorCount'),dur=2000,start=performance.now();function anim(t){const p=Math.min((t-start)/dur,1),ease=1-Math.pow(1-p,3);el.textContent=Math.floor(total*ease).toLocaleString();if(p<1)requestAnimationFrame(anim);}requestAnimationFrame(anim);}).catch(()=>document.getElementById('visitorCount').textContent='N/A');}
+    function initVisitorCounter(){
+      const binId='683f4c3f8561e97a501f44c4',
+            apiKey='$2a$10$NwYMNtIZx5ag/xokwHWN4.1u.yOLzNxLLroIP/IBcjJBEi0YiB81e',
+            url=`https://api.jsonbin.io/v3/b/${binId}`,
+            headers={'Content-Type':'application/json','X-Master-Key':apiKey};
+      
+      fetch(url,{headers})
+        .then(r=>r.json())
+        .then(d=>{
+          const real=d.record.visits+1,
+                total=real+146;
+          
+          fetch(url,{method:'PUT',headers,body:JSON.stringify({visits:real})});
+          
+          const el=document.getElementById('visitorCount'),
+                msgEl=document.getElementById('visitorMessage'),
+                dur=2000,
+                start=performance.now();
+          
+          function anim(t){
+            const p=Math.min((t-start)/dur,1),
+                  ease=1-Math.pow(1-p,3);
+            el.textContent=Math.floor(total*ease).toLocaleString();
+            if(p<1){
+              requestAnimationFrame(anim);
+            }else{
+              el.textContent=total.toLocaleString();
+              if(msgEl){
+                msgEl.classList.add('show');
+              }
+            }
+          }
+          requestAnimationFrame(anim);
+        })
+        .catch(()=>{
+          const el=document.getElementById('visitorCount');
+          if(el) el.textContent='N/A';
+        });
+    }
     setTimeout(initVisitorCounter,3200);
 
     // Custom dropdown initialization
