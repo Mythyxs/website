@@ -2797,6 +2797,24 @@
               font-size: 18px;
             }
           }
+          /* GFX vote buttons (overlay, do not affect card height) */
+          .gfx-vote-buttons{
+            position:absolute;
+            right:3px;
+            bottom:0px;
+            display:flex;
+            gap:6px;
+            justify-content:flex-end;
+            align-items:center;
+            z-index:4;
+            pointer-events:auto;
+          }
+          .gfx-vote-buttons .anime-vote-btn{
+            background:rgba(0,0,0,0.65);
+            border-radius:999px;
+            padding:3px 8px;
+            font-size:0.7rem;
+          }
         </style>
   
         <div class="gfx-grid">
@@ -3115,6 +3133,8 @@
     const ANIME_VOTES_BIN_ID = '6844d32e8960c979a5a675ff';
     const ANIME_VOTES_API_KEY = '$2a$10$NwYMNtIZx5ag/xokwHWN4.1u.yOLzNxLLroIP/IBcjJBEi0YiB81e';
     const ANIME_VOTES_URL = `https://api.jsonbin.io/v3/b/${ANIME_VOTES_BIN_ID}`;
+  const GFX_VOTES_BIN_ID = '6942812343b1c97be9f42b9c';
+  const GFX_VOTES_URL = `https://api.jsonbin.io/v3/b/${GFX_VOTES_BIN_ID}`;
 
 
     const categoryColors = {
@@ -3795,53 +3815,246 @@
         }
     }
 
-    function updateAnimeCardVotes(card, votes) {
-        const animeTitle = card.dataset.animeTitle;
-        if (!animeTitle || !votes[animeTitle]) return;
+  function updateAnimeCardVotes(card, votes) {
+      const animeTitle = card.dataset.animeTitle;
+      if (!animeTitle || !votes[animeTitle]) return;
 
-        const voteData = votes[animeTitle];
-        const likeBtn = card.querySelector('.anime-vote-btn.like-btn');
-        const dislikeBtn = card.querySelector('.anime-vote-btn.dislike-btn');
+      const voteData = votes[animeTitle];
+      const likeBtn = card.querySelector('.anime-vote-btn.like-btn');
+      const dislikeBtn = card.querySelector('.anime-vote-btn.dislike-btn');
 
-        if (likeBtn) {
-            likeBtn.querySelector('span').textContent = voteData.likes || 0;
-        }
-        if (dislikeBtn) {
-            dislikeBtn.querySelector('span').textContent = voteData.dislikes || 0;
-        }
+      if (likeBtn) {
+          likeBtn.querySelector('span').textContent = voteData.likes || 0;
+      }
+      if (dislikeBtn) {
+          dislikeBtn.querySelector('span').textContent = voteData.dislikes || 0;
+      }
 
-        // Check local storage for vote status
-        const votedAnime = JSON.parse(localStorage.getItem('votedAnime') || '{}');
-        const voteStatus = votedAnime[animeTitle];
-        
-        if (voteStatus) {
-            if (likeBtn) {
-                likeBtn.disabled = true;
-                if (voteStatus === 'like') {
-                    likeBtn.classList.add('liked');
-                } else {
-                    likeBtn.classList.remove('liked');
-                }
-            }
-            if (dislikeBtn) {
-                dislikeBtn.disabled = true;
-                if (voteStatus === 'dislike') {
-                    dislikeBtn.classList.add('disliked');
-                } else {
-                    dislikeBtn.classList.remove('disliked');
-                }
-            }
-        } else {
-            if (likeBtn) {
-                likeBtn.disabled = false;
-                likeBtn.classList.remove('liked');
-            }
-            if (dislikeBtn) {
-                dislikeBtn.disabled = false;
-                dislikeBtn.classList.remove('disliked');
-            }
-        }
-    }
+      // Check local storage for vote status
+      const votedAnime = JSON.parse(localStorage.getItem('votedAnime') || '{}');
+      const voteStatus = votedAnime[animeTitle];
+      
+      if (voteStatus) {
+          if (likeBtn) {
+              likeBtn.disabled = true;
+              if (voteStatus === 'like') {
+                  likeBtn.classList.add('liked');
+              } else {
+                  likeBtn.classList.remove('liked');
+              }
+          }
+          if (dislikeBtn) {
+              dislikeBtn.disabled = true;
+              if (voteStatus === 'dislike') {
+                  dislikeBtn.classList.add('disliked');
+              } else {
+                  dislikeBtn.classList.remove('disliked');
+              }
+          }
+      } else {
+          if (likeBtn) {
+              likeBtn.disabled = false;
+              likeBtn.classList.remove('liked');
+          }
+          if (dislikeBtn) {
+              dislikeBtn.disabled = false;
+              dislikeBtn.classList.remove('disliked');
+          }
+      }
+  }
+
+  // ─── GFX Voting Functions ───
+  async function loadGfxVotes() {
+      try {
+          const response = await fetch(`${GFX_VOTES_URL}/latest`, {
+              headers: { 'X-Master-Key': ANIME_VOTES_API_KEY }
+          });
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          const data = await response.json();
+          const votesData = data.record.data || [];
+          const votesMap = {};
+          votesData.forEach(item => {
+              votesMap[item.title] = {
+                  likes: item.likes || 0,
+                  dislikes: item.dislikes || 0
+              };
+          });
+          return votesMap;
+      } catch (error) {
+          console.error('Failed to load GFX votes:', error);
+          return {};
+      }
+  }
+
+  async function handleGfxVote(gfxTitle, voteType) {
+      const votedGfx = JSON.parse(localStorage.getItem('votedGfx') || '{}');
+      const existingVote = votedGfx[gfxTitle];
+
+      const card = Array.from(document.querySelectorAll('#gfxSection .gfx-item')).find(fig => {
+          const cap = fig.querySelector('figcaption');
+          return cap && cap.textContent.trim() === gfxTitle;
+      });
+      if (card) {
+          card.querySelectorAll('.anime-vote-btn').forEach(b => b.disabled = true);
+      }
+
+      try {
+          const getResponse = await fetch(`${GFX_VOTES_URL}/latest`, {
+              headers: { 'X-Master-Key': ANIME_VOTES_API_KEY }
+          });
+          if (!getResponse.ok) throw new Error('Failed to fetch latest GFX votes for voting.');
+          const binData = await getResponse.json();
+          let votesData = binData.record.data || [];
+
+          let gfxEntry = votesData.find(item => item.title === gfxTitle);
+          if (!gfxEntry) {
+              gfxEntry = { title: gfxTitle, likes: 0, dislikes: 0 };
+              votesData.push(gfxEntry);
+          }
+
+          const isRevoke = existingVote === voteType;
+          const isChange = existingVote && existingVote !== voteType;
+
+          if (isRevoke) {
+              gfxEntry[voteType + 's'] = Math.max(0, (gfxEntry[voteType + 's'] || 0) - 1);
+              delete votedGfx[gfxTitle];
+          } else {
+              if (isChange) {
+                  gfxEntry[existingVote + 's'] = Math.max(0, (gfxEntry[existingVote + 's'] || 0) - 1);
+              }
+              gfxEntry[voteType + 's'] = (gfxEntry[voteType + 's'] || 0) + 1;
+              votedGfx[gfxTitle] = voteType;
+          }
+
+          localStorage.setItem('votedGfx', JSON.stringify(votedGfx));
+
+          const putResponse = await fetch(GFX_VOTES_URL, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json', 'X-Master-Key': ANIME_VOTES_API_KEY },
+              body: JSON.stringify({ data: votesData })
+          });
+          if (!putResponse.ok) throw new Error('Failed to save GFX vote to server.');
+
+          if (card) {
+              const likeBtn = card.querySelector('.gfx-like-btn');
+              const dislikeBtn = card.querySelector('.gfx-dislike-btn');
+
+              if (likeBtn) likeBtn.querySelector('span').textContent = gfxEntry.likes || 0;
+              if (dislikeBtn) dislikeBtn.querySelector('span').textContent = gfxEntry.dislikes || 0;
+
+              if (isRevoke) {
+                  if (likeBtn) {
+                      likeBtn.disabled = false;
+                      likeBtn.classList.remove('liked');
+                  }
+                  if (dislikeBtn) {
+                      dislikeBtn.disabled = false;
+                      dislikeBtn.classList.remove('disliked');
+                  }
+              } else {
+                  if (likeBtn) {
+                      likeBtn.disabled = true;
+                      if (voteType === 'like') likeBtn.classList.add('liked');
+                      else likeBtn.classList.remove('liked');
+                  }
+                  if (dislikeBtn) {
+                      dislikeBtn.disabled = true;
+                      if (voteType === 'dislike') dislikeBtn.classList.add('disliked');
+                      else dislikeBtn.classList.remove('disliked');
+                  }
+
+                  const effectBtn = voteType === 'like' ? likeBtn : dislikeBtn;
+                  if (effectBtn) {
+                      const effectClass = voteType === 'like' ? 'vote-success' : 'vote-fail';
+                      effectBtn.classList.remove('vote-success', 'vote-fail');
+                      void effectBtn.offsetWidth;
+                      effectBtn.classList.add(effectClass);
+                      setTimeout(() => effectBtn.classList.remove(effectClass), 650);
+                  }
+              }
+          }
+      } catch (error) {
+          console.error('Error handling GFX vote:', error);
+          alert('Could not save your GFX vote due to a server error. Please try again.');
+          if (card) {
+              card.querySelectorAll('.anime-vote-btn').forEach(b => b.disabled = false);
+          }
+      }
+  }
+
+  // Expose GFX votes initializer on window so it’s always reachable from preview iframes
+  window.initGfxVotes = function initGfxVotes() {
+      loadGfxVotes().then(votesMap => {
+          const votedGfx = JSON.parse(localStorage.getItem('votedGfx') || '{}');
+          document.querySelectorAll('#gfxSection .gfx-item').forEach(fig => {
+              const caption = fig.querySelector('figcaption');
+              if (!caption) return;
+              const title = caption.textContent.trim();
+
+              const voteData = votesMap[title] || { likes: 0, dislikes: 0 };
+
+              // Create buttons container if not present
+              let btnContainer = fig.querySelector('.gfx-vote-buttons');
+              if (!btnContainer) {
+                  btnContainer = document.createElement('div');
+                  btnContainer.className = 'gfx-vote-buttons';
+                  btnContainer.innerHTML = `
+                    <button class="anime-vote-btn gfx-like-btn" title="Like this GFX">
+                      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23,10C23,8.89 22.1,8 21,8H14.68L15.64,3.43C15.66,3.33 15.67,3.22 15.67,3.11C15.67,2.7 15.5,2.32 15.23,2.05L14.17,1L7.59,7.58C7.22,7.95 7,8.45 7,9V19A2,2 0 0,0 9,21H18C18.83,21 19.54,20.5 19.84,19.78L22.86,12.73C22.95,12.5 23,12.26 23,12V10M1,21H5V9H1V21Z"></path></svg>
+                      <span>0</span>
+                    </button>
+                    <button class="anime-vote-btn gfx-dislike-btn" title="Dislike this GFX">
+                      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19,15H23V3H19M15,3H6C5.17,3 4.46,3.5 4.16,4.22L1.14,11.27C1.05,11.5 1,11.74 1,12V14A2,2 0 0,0 3,16H9.32L8.36,20.57C8.34,20.67 8.33,20.78 8.33,20.89C8.33,21.3 8.5,21.68 8.77,21.95L9.83,23L16.41,16.42C16.78,16.05 17,15.55 17,15V5C17,3.89 16.1,3 15,3Z"></path></svg>
+                      <span>0</span>
+                    </button>
+                  `;
+                  fig.appendChild(btnContainer);
+              }
+
+              const likeBtn = fig.querySelector('.gfx-like-btn');
+              const dislikeBtn = fig.querySelector('.gfx-dislike-btn');
+
+              if (likeBtn) likeBtn.querySelector('span').textContent = voteData.likes || 0;
+              if (dislikeBtn) dislikeBtn.querySelector('span').textContent = voteData.dislikes || 0;
+
+              const status = votedGfx[title];
+              if (status) {
+                  if (likeBtn) {
+                      likeBtn.disabled = true;
+                      if (status === 'like') likeBtn.classList.add('liked');
+                  }
+                  if (dislikeBtn) {
+                      dislikeBtn.disabled = true;
+                      if (status === 'dislike') dislikeBtn.classList.add('disliked');
+                  }
+              } else {
+                  if (likeBtn) {
+                      likeBtn.disabled = false;
+                      likeBtn.classList.remove('liked');
+                  }
+                  if (dislikeBtn) {
+                      dislikeBtn.disabled = false;
+                      dislikeBtn.classList.remove('disliked');
+                  }
+              }
+
+              if (likeBtn && !likeBtn._gfxBound) {
+                  likeBtn._gfxBound = true;
+                  likeBtn.addEventListener('click', e => {
+                      e.stopPropagation();
+                      handleGfxVote(title, 'like');
+                  });
+              }
+              if (dislikeBtn && !dislikeBtn._gfxBound) {
+                  dislikeBtn._gfxBound = true;
+                  dislikeBtn.addEventListener('click', e => {
+                      e.stopPropagation();
+                      handleGfxVote(title, 'dislike');
+                  });
+              }
+          });
+      });
+  }
 
     function showCategory(catId, buttonElement) {
         if (currentCategory === catId) return;
@@ -4248,8 +4461,15 @@
         }
       }
 
-      // Initialize lightbox when DOM is ready
-      setTimeout(initGfxLightbox, 500);
+      // Initialize lightbox & GFX votes when DOM is ready
+      setTimeout(() => {
+        initGfxLightbox();
+        if (typeof initGfxVotes === 'function') {
+          initGfxVotes();
+        } else {
+          console.warn('initGfxVotes is not available at runtime');
+        }
+      }, 500);
 
       // Show heroHomeWrapper if Home is active on load
       const heroHome = document.getElementById('heroHomeWrapper');
