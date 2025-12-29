@@ -3121,6 +3121,7 @@
 
     /* tabs */
     let currentCategory = 'home';
+    let isLoadingAnimeData = false;
     const animeDataCache = {
         all: [],
         categories: new Set(),
@@ -3262,10 +3263,25 @@
         const searchValue = document.getElementById('searchBar').value.toLowerCase();
         const loadingIndicator = document.getElementById('animeListLoading');
 
-        if (!container || !animeDataCache.all.length) {
-            if (loadingIndicator) loadingIndicator.style.display = 'block';
+        if (!container) return;
+        
+        // If data isn't loaded yet, show loading indicator and wait
+        if (!animeDataCache.all.length) {
+            if (loadingIndicator) {
+                loadingIndicator.style.display = 'block';
+            }
+            // If not already loading, start loading
+            if (!isLoadingAnimeData) {
+                await loadAndPrepareAnimeData();
+                // Retry rendering after data is loaded
+                if (animeDataCache.all.length > 0) {
+                    return renderAnimeList(skipAnimation);
+                }
+            }
             return;
         }
+        
+        // Hide loading indicator once we have data
         if (loadingIndicator) loadingIndicator.style.display = 'none';
 
         // Load votes before rendering
@@ -3391,6 +3407,20 @@
 
     // Call this after loading anime data
     async function loadAndPrepareAnimeData() {
+        // Prevent multiple simultaneous loads
+        if (isLoadingAnimeData) return;
+        if (animeDataCache.all.length > 0) return; // Already loaded
+        
+        isLoadingAnimeData = true;
+        const loadingIndicator = document.getElementById('animeListLoading');
+        const container = document.getElementById('animeGridContainer');
+        
+        // Show loading indicator if we're on the anime list tab
+        if (currentCategory === 'animeList' && loadingIndicator && container) {
+            container.innerHTML = '';
+            loadingIndicator.style.display = 'block';
+        }
+        
         try {
             const response = await fetch(ANIME_JSON_PATH);
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
@@ -3420,18 +3450,23 @@
                 (entry.category === 'Unfinished / Disinterested' || entry.category === 'Planned to Watch')
             );
             
-            // Initial render for anime list if it's the active tab
+            // Hide loading indicator
+            if (loadingIndicator) loadingIndicator.style.display = 'none';
+            
+            // Update counts (render will be handled by showCategory or renderAnimeList)
+            updateAnimeTotalCount();
+            
+            // If we're on the anime list tab, trigger a render
             if (currentCategory === 'animeList') {
                  renderAnimeList();
             }
-            updateAnimeTotalCount(); // <-- Add this line
 
         } catch (error) {
             console.error("Failed to load anime list:", error);
-            const container = document.getElementById('animeGridContainer');
             if (container) container.innerHTML = `<div class="empty-state">Error loading anime list. Please try again later.</div>`;
-            const loadingIndicator = document.getElementById('animeListLoading');
             if (loadingIndicator) loadingIndicator.style.display = 'none';
+        } finally {
+            isLoadingAnimeData = false;
         }
     }
     
@@ -4146,7 +4181,28 @@
 
         // Trigger tab-specific logic
         if (catId === 'animeList') {
-          animeDataCache.all.length === 0 ? loadAndPrepareAnimeData() : renderAnimeList();
+          const container = document.getElementById('animeGridContainer');
+          const loadingIndicator = document.getElementById('animeListLoading');
+          
+          if (animeDataCache.all.length === 0) {
+            // Show loading indicator immediately
+            if (container && loadingIndicator) {
+              container.innerHTML = '';
+              loadingIndicator.style.display = 'block';
+            }
+            // Start loading if not already loading
+            if (!isLoadingAnimeData) {
+              loadAndPrepareAnimeData().then(() => {
+                // Once loaded, render the list
+                if (currentCategory === 'animeList') {
+                  renderAnimeList();
+                }
+              });
+            }
+          } else {
+            // Data is ready, render immediately
+            renderAnimeList();
+          }
         } else if (catId === 'schedule') {
           loadAndRenderSchedule();
         } else if (catId === 'games') {
@@ -4507,13 +4563,13 @@
         }
       });
       // Typing effect
-      const phrases=["i like dick"
-      ,'"life is like a box of chocolates" - me'
-      ,"watch frieren its peak"
-      ,"idk what to put here"
-      ,"bleach clears one piece"
-      ,"there is not a single bad music/band anime in existence"
-      ,"table expected, got nil 😢"],shuffled=phrases.slice().sort(()=>Math.random()-.5);let idx=0,ch=0;const tEl=document.getElementById("typing");if(tEl){function type(){if(ch<=shuffled[idx].length){tEl.textContent=shuffled[idx].slice(0,ch++);setTimeout(type,100);}else{setTimeout(()=>del(),2000);}}function del(){if(ch>0){tEl.textContent=shuffled[idx].slice(0,--ch);setTimeout(del,50);}else{idx=(idx+1)%shuffled.length;setTimeout(type,500);}}type();}
+      const phrases=[
+      '"life is like a box of chocolates" - me',
+      "watch frieren its peak",
+      "idk what to put here",
+      "bleach clears one piece",
+      "there is not a single bad music/band anime in existence",
+      "table expected, got nil 😢"],shuffled=phrases.slice().sort(()=>Math.random()-.5);let idx=0,ch=0;const tEl=document.getElementById("typing");if(tEl){function type(){if(ch<=shuffled[idx].length){tEl.textContent=shuffled[idx].slice(0,ch++);setTimeout(type,100);}else{setTimeout(()=>del(),2000);}}function del(){if(ch>0){tEl.textContent=shuffled[idx].slice(0,--ch);setTimeout(del,50);}else{idx=(idx+1)%shuffled.length;setTimeout(type,500);}}type();}
 
       // Tab button event listeners
       document.querySelectorAll('.tab-button').forEach(btn => {
