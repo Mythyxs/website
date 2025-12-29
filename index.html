@@ -885,6 +885,22 @@
         fill: var(--accent);
     }
 
+    /* ─── Anime results line (Showing X of Y …) ─── */
+    .anime-results-row{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin: -8px 0 14px 0; /* tuck it closer to controls */
+      padding: 0 6px;
+    }
+    .anime-results-count{
+      font-size: 0.85rem;
+      color: var(--accent-bright);
+      opacity: 0.9;
+      letter-spacing: 0.03em;
+      text-align: center;
+    }
+
     /* ─── Custom Dropdown Styles ─── */
     .custom-dropdown {
       position: relative;
@@ -1903,6 +1919,13 @@
       gap: 6px;
       position: relative;
       overflow: hidden;
+      color: var(--accent-bright);
+      /* If this becomes a <button>, strip native styles */
+      appearance: none;
+      -webkit-appearance: none;
+      font-family: inherit;
+      border-width: 1px;
+      cursor: pointer;
     }
     .anime-category-pill::before {
       content: "";
@@ -2391,13 +2414,13 @@
         <div class="anime-faq" style="text-align:center;color:var(--accent);margin-bottom:18px;font-size:1.05rem;max-width:600px;margin-left:auto;margin-right:auto;">
           A catalog of every anime I've watched, with my personal ratings and the categories
         </div>
-        <div class="anime-category-legend">
-          <span class="anime-category-pill total">Total - ...</span>
-          <span class="anime-category-pill platinum" data-category-name="Platinum Masterpiece">Platinum - ...</span>
-          <span class="anime-category-pill overaverage" data-category-name="Overaveragely Enjoyable">Over Average - ...</span>
-          <span class="anime-category-pill average" data-category-name="Average Enjoyability">Average - ...</span>
-          <span class="anime-category-pill unfinished" data-category-name="Unfinished / Disinterested">Unfinished - ...</span>
-          <span class="anime-category-pill planned" data-category-name="Planned to Watch">Planned - ...</span>
+        <div class="anime-category-legend" aria-label="Anime categories">
+          <button class="anime-category-pill total" type="button" data-category-name="All">Total - ...</button>
+          <button class="anime-category-pill platinum" type="button" data-category-name="Platinum Masterpiece">Platinum - ...</button>
+          <button class="anime-category-pill overaverage" type="button" data-category-name="Overaveragely Enjoyable">Over Average - ...</button>
+          <button class="anime-category-pill average" type="button" data-category-name="Average Enjoyability">Average - ...</button>
+          <button class="anime-category-pill unfinished" type="button" data-category-name="Unfinished / Disinterested">Unfinished - ...</button>
+          <button class="anime-category-pill planned" type="button" data-category-name="Planned to Watch">Planned - ...</button>
         </div>
         <div class="anime-controls">
             <div>
@@ -2435,13 +2458,16 @@
                 </div>
             </div>
         </div>
+        <div class="anime-results-row" aria-live="polite">
+          <div class="anime-results-count" id="animeResultsCount">Showing 0</div>
+        </div>
         <div id="animeGridContainer" class="anime-grid-container">
             <!-- Anime cards will be injected here -->
             <div class="loading-indicator" id="animeListLoading">
                 <div class="loader-ring" aria-hidden="true"></div>
                 <div class="loader-title">Loading Anime List</div>
                 <div class="loader-sub">
-                  Fetching data and votes. This can take a moment on first load.
+                  <span class="loader-message-text">Loading your favorite anime...</span>
                   <span class="loader-dots" aria-hidden="true"><i></i><i></i><i></i></span>
                 </div>
             </div>
@@ -3217,7 +3243,9 @@
         scheduleRelevant: [],
         scheduleData: [],
         scheduleCache: {}, // For AniList API responses
-        scheduleLastFetched: null
+        scheduleLastFetched: null,
+        votes: {}, // Cache votes so we don't fetch every render
+        votesLastFetched: null
     };
     const ANIME_JSON_PATH = 'https://raw.githubusercontent.com/Mythyxs/website/refs/heads/main/anime_backup.json';
     const ANIME_VOTES_BIN_ID = '6844d32e8960c979a5a675ff';
@@ -3235,6 +3263,17 @@
       'Planned to Watch': 'var(--cat-planned)',
     };
 
+    // Random loading messages for variety
+    const loadingMessages = [
+        "Fetching data and votes. This can take a moment on first load.",
+        "i love tokyo ghoul i love frieren i love gachiakuta i love anime",
+        "you see i want to add more shit here but im just not creative enough"
+    ];
+
+    function getRandomLoadingMessage() {
+        return loadingMessages[Math.floor(Math.random() * loadingMessages.length)];
+    }
+
     // Ensure the anime list loading indicator always exists *inside* the grid container.
     // (We clear #animeGridContainer in multiple places; that used to delete the loader and leave a blank screen.)
     function getOrCreateAnimeLoadingIndicator(container) {
@@ -3249,7 +3288,7 @@
             <div class="loader-ring" aria-hidden="true"></div>
             <div class="loader-title">Loading Anime List</div>
             <div class="loader-sub">
-              Fetching data and votes. This can take a moment on first load.
+              <span class="loader-message-text">${getRandomLoadingMessage()}</span>
               <span class="loader-dots" aria-hidden="true"><i></i><i></i><i></i></span>
             </div>
         `;
@@ -3262,7 +3301,14 @@
         // Clearing the container is fine, but we MUST re-add the loader so the UI doesn't go blank.
         container.innerHTML = '';
         const loader = getOrCreateAnimeLoadingIndicator(container);
-        if (loader) loader.style.display = 'block';
+        if (loader) {
+            loader.style.display = 'block';
+            // Randomize the message each time the loader is shown
+            const messageSpan = loader.querySelector('.loader-message-text');
+            if (messageSpan) {
+                messageSpan.textContent = getRandomLoadingMessage();
+            }
+        }
     }
 
     function hideAnimeLoading() {
@@ -3384,34 +3430,62 @@
         const container = document.getElementById('animeGridContainer');
         const filterValue = document.getElementById('categoryFilterHeader').dataset.value || 'All';
         const sortValue = document.getElementById('sortOrderHeader').dataset.value || 'rating_desc';
-        const searchValue = document.getElementById('searchBar').value.toLowerCase();
-        const loadingIndicator = getOrCreateAnimeLoadingIndicator(container);
+        const searchRaw = (document.getElementById('searchBar')?.value || '').trim();
+        const searchValue = searchRaw.toLowerCase();
+        const resultsEl = document.getElementById('animeResultsCount');
 
         if (!container) return;
 
-        // Always show a loader immediately when switching into the anime list tab (or when re-rendering).
-        // This prevents a "blank pause" while we wait on async work (votes fetch, etc).
-        // If the caller requested skipAnimation (typically for instant re-renders), we still show the loader
-        // because the user reported a blank wait; this keeps feedback consistent.
-        showAnimeLoading(container);
-        
-        // If data isn't loaded yet, show loading indicator and wait
-        if (!animeDataCache.all.length) {
+        function updateResultsText(filteredCount, totalCount) {
+            if (!resultsEl) return;
+            const totalText = (totalCount || 0).toLocaleString();
+            const filteredText = (filteredCount || 0).toLocaleString();
+            const parts = [`Showing ${filteredText} of ${totalText}`];
+            if (filterValue !== 'All') parts.push(`Category: ${filterValue}`);
+            if (searchValue) parts.push(`Search: "${searchValue}"`);
+            resultsEl.textContent = parts.join(' • ');
+        }
+
+        // Only show loader on FIRST load (when data isn't cached yet)
+        const isFirstLoad = !animeDataCache.all.length;
+        if (isFirstLoad) {
+            if (resultsEl) resultsEl.textContent = 'Loading anime list…';
+            showAnimeLoading(container);
             // If not already loading, start loading
             if (!isLoadingAnimeData) {
                 await loadAndPrepareAnimeData();
-                // Retry rendering after data is loaded
+                // Fetch and cache votes on first load
                 if (animeDataCache.all.length > 0) {
+                    const votes = await loadAnimeVotes();
+                    animeDataCache.votes = votes;
+                    animeDataCache.votesLastFetched = Date.now();
+                    // Retry rendering after data is loaded
                     return renderAnimeList(skipAnimation);
                 }
             }
             return;
         }
         
-        // Load votes before rendering (this can be slow; keep loader visible while it runs)
-        const votes = await loadAnimeVotes();
+        // For subsequent renders (filtering, searching, sorting), render immediately with cached votes
+        // Fetch fresh votes in background if cache is stale (older than 5 minutes)
+        let votes = animeDataCache.votes || {};
+        const now = Date.now();
+        const votesCacheAge = animeDataCache.votesLastFetched ? (now - animeDataCache.votesLastFetched) : Infinity;
+        const VOTES_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+        
+        if (Object.keys(votes).length === 0 || votesCacheAge > VOTES_CACHE_TTL) {
+            // Use cached votes (or empty) for immediate render, fetch fresh ones in background
+            loadAnimeVotes().then(freshVotes => {
+                animeDataCache.votes = freshVotes;
+                animeDataCache.votesLastFetched = now;
+                // Update vote counts on existing cards if they're already rendered
+                document.querySelectorAll('.anime-card').forEach(card => {
+                    updateAnimeCardVotes(card, freshVotes);
+                });
+            }).catch(err => console.error('Failed to refresh votes:', err));
+        }
 
-        // Now that we have everything we need, swap loader -> cards synchronously (no blank gap)
+        // Clear container and render cards immediately (votes are cached, so no async wait needed)
         container.innerHTML = '';
 
         let filteredList = animeDataCache.all.slice();
@@ -3473,8 +3547,10 @@
         };
         
         if (filteredList.length === 0) {
+            updateResultsText(0, animeDataCache.all.length);
             container.innerHTML = `<div class="empty-state">I don't think I've watched that anime, sorry bro.</div>`;
         } else {
+            updateResultsText(filteredList.length, animeDataCache.all.length);
             filteredList.forEach((anime, index) => { 
               const card = createAnimeCard(anime, votes);
               
@@ -3497,6 +3573,30 @@
               card.style.setProperty('--card-index', index % 10); 
               container.appendChild(card);
             });
+        }
+    }
+
+    function setAnimeCategoryFilter(value) {
+        const header = document.getElementById('categoryFilterHeader');
+        const menu = document.getElementById('categoryFilterMenu');
+        if (!header || !menu) return;
+
+        const normalized = (value === 'All' || value === 'All Categories') ? 'All' : value;
+
+        header.dataset.value = normalized;
+        const textEl = header.querySelector('.dropdown-text');
+        if (textEl) textEl.textContent = (normalized === 'All' ? 'All Categories' : normalized);
+
+        // Update selected state in dropdown list
+        menu.querySelectorAll('.custom-dropdown-option').forEach(opt => opt.classList.remove('selected'));
+        const esc = (v) => (window.CSS && typeof CSS.escape === 'function')
+          ? CSS.escape(v)
+          : String(v).replace(/["\\]/g, '\\$&');
+        const selected = menu.querySelector(`.custom-dropdown-option[data-value="${esc(normalized)}"]`);
+        if (selected) selected.classList.add('selected');
+        else {
+            const all = menu.querySelector(`.custom-dropdown-option[data-value="All"]`);
+            if (all) all.classList.add('selected');
         }
     }
 
@@ -4519,6 +4619,15 @@
       // Start preloading immediately
       preloadGFXImages();
 
+      // Randomize initial loader message
+      const initialLoader = document.getElementById('animeListLoading');
+      if (initialLoader) {
+        const messageSpan = initialLoader.querySelector('.loader-message-text');
+        if (messageSpan) {
+          messageSpan.textContent = getRandomLoadingMessage();
+        }
+      }
+
       // Mouse tracking for interactive gradients
       function setupMouseTracking() {
         const interactiveElements = document.querySelectorAll('.social-card, .schedule-item, .accolade-card, .gfx-item');
@@ -4785,6 +4894,16 @@
 
       // Initialize custom dropdowns
       initCustomDropdowns();
+
+      // Anime list: legend quick-filter (click pills to filter)
+      document.querySelectorAll('#animeListSection .anime-category-pill[data-category-name]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const categoryName = btn.getAttribute('data-category-name');
+          if (!categoryName) return;
+          setAnimeCategoryFilter(categoryName === 'All' ? 'All' : categoryName);
+          renderAnimeList(true);
+        });
+      });
 
       // Debounced search so we don't re-render on every keystroke
       function debounce(fn, delay) {
