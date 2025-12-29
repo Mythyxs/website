@@ -1571,18 +1571,103 @@
       /* .schedule-item styles specific to mobile are below, after general mobile tweaks */
     }
 
-    .loading-indicator, .empty-state {
-      text-align: center;
-      padding: 40px;
-      color: var(--accent);
-      font-size: 1.1rem;
+    /* ─── Loading & Empty States ─── */
+    .empty-state{
+      text-align:center;
+      padding:40px;
+      color:var(--accent);
+      font-size:1.05rem;
+      opacity:.95;
     }
-    .loading-indicator svg {
-        width: 50px;
-        height: 50px;
-        fill: var(--primary);
-        animation: spin 1.5s linear infinite;
-        margin-bottom: 15px;
+
+    /* Premium loader card (used inside grids) */
+    .loading-indicator{
+      grid-column: 1 / -1; /* ensure it doesn't look like a tiny single card in the grid */
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:12px;
+      text-align:center;
+      padding:34px 26px;
+      border-radius:18px;
+      color:var(--accent-bright);
+      background:linear-gradient(135deg, var(--primary-rgba-10) 0%, var(--accent-rgba-04) 100%);
+      border:1px solid var(--primary-rgba-25);
+      box-shadow:0 18px 40px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.06);
+      backdrop-filter:blur(12px);
+      -webkit-backdrop-filter:blur(12px);
+      position:relative;
+      overflow:hidden;
+      min-height: 180px;
+    }
+    .loading-indicator::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(255,255,255,0.10), transparent 55%),
+        radial-gradient(circle at 80% 60%, rgba(255,255,255,0.06), transparent 60%),
+        linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.06) 45%, transparent 60%);
+      opacity:.9;
+      transform:translateX(-30%);
+      animation: loaderShimmer 2.2s ease-in-out infinite;
+      pointer-events:none;
+    }
+    @keyframes loaderShimmer{
+      0%,100%{ transform:translateX(-30%); opacity:.75; }
+      50%{ transform:translateX(30%); opacity:1; }
+    }
+    .loading-indicator .loader-ring{
+      width:58px;
+      height:58px;
+      border-radius:999px;
+      border: 2px solid rgba(255,255,255,0.18);
+      border-top-color: rgba(255,255,255,0.85);
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.2) inset, 0 8px 18px rgba(0,0,0,0.25);
+      animation: spin 0.95s linear infinite;
+      position:relative;
+      z-index:1;
+    }
+    .loading-indicator .loader-title{
+      font-family:"Bebas Neue","Oswald",sans-serif;
+      font-size:1.6rem;
+      letter-spacing:0.08em;
+      text-transform:uppercase;
+      color:#fff;
+      position:relative;
+      z-index:1;
+      text-shadow:0 0 18px rgba(255,255,255,0.14);
+    }
+    .loading-indicator .loader-sub{
+      font-size:0.9rem;
+      opacity:.85;
+      max-width: 520px;
+      line-height:1.55;
+      position:relative;
+      z-index:1;
+    }
+    .loading-indicator .loader-dots{
+      display:inline-flex;
+      gap:6px;
+      margin-top:2px;
+      position:relative;
+      z-index:1;
+      opacity:.9;
+    }
+    .loading-indicator .loader-dots i{
+      width:6px;
+      height:6px;
+      border-radius:50%;
+      background:rgba(255,255,255,0.75);
+      box-shadow:0 0 10px rgba(255,255,255,0.18);
+      animation: dotPulse 1.1s ease-in-out infinite;
+    }
+    .loading-indicator .loader-dots i:nth-child(2){ animation-delay:.15s; opacity:.8; }
+    .loading-indicator .loader-dots i:nth-child(3){ animation-delay:.3s; opacity:.7; }
+    @keyframes dotPulse{
+      0%,100%{ transform:translateY(0); opacity:.55; }
+      50%{ transform:translateY(-4px); opacity:1; }
     }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
@@ -2353,8 +2438,12 @@
         <div id="animeGridContainer" class="anime-grid-container">
             <!-- Anime cards will be injected here -->
             <div class="loading-indicator" id="animeListLoading">
-                <svg viewBox="0 0 50 50"><circle cx="25" cy="25" r="20" fill="none" stroke-width="5" stroke="currentColor" stroke-linecap="round" pathLength="1" stroke-dasharray="0.5 0.5"></circle></svg>
-                Loading Anime List...
+                <div class="loader-ring" aria-hidden="true"></div>
+                <div class="loader-title">Loading Anime List</div>
+                <div class="loader-sub">
+                  Fetching data and votes. This can take a moment on first load.
+                  <span class="loader-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                </div>
             </div>
         </div>
       </div>
@@ -3146,6 +3235,41 @@
       'Planned to Watch': 'var(--cat-planned)',
     };
 
+    // Ensure the anime list loading indicator always exists *inside* the grid container.
+    // (We clear #animeGridContainer in multiple places; that used to delete the loader and leave a blank screen.)
+    function getOrCreateAnimeLoadingIndicator(container) {
+        const existing = document.getElementById('animeListLoading');
+        if (existing) return existing;
+        if (!container) return null;
+
+        const loader = document.createElement('div');
+        loader.className = 'loading-indicator';
+        loader.id = 'animeListLoading';
+        loader.innerHTML = `
+            <div class="loader-ring" aria-hidden="true"></div>
+            <div class="loader-title">Loading Anime List</div>
+            <div class="loader-sub">
+              Fetching data and votes. This can take a moment on first load.
+              <span class="loader-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            </div>
+        `;
+        container.appendChild(loader);
+        return loader;
+    }
+
+    function showAnimeLoading(container) {
+        if (!container) return;
+        // Clearing the container is fine, but we MUST re-add the loader so the UI doesn't go blank.
+        container.innerHTML = '';
+        const loader = getOrCreateAnimeLoadingIndicator(container);
+        if (loader) loader.style.display = 'block';
+    }
+
+    function hideAnimeLoading() {
+        const loader = document.getElementById('animeListLoading');
+        if (loader) loader.style.display = 'none';
+    }
+
     function getScoreColorClass(score10) {
         if (score10 === null || score10 === undefined || score10 === 0) return 'score-none';
         if (score10 >= 8.0) return 'score-green';
@@ -3261,15 +3385,18 @@
         const filterValue = document.getElementById('categoryFilterHeader').dataset.value || 'All';
         const sortValue = document.getElementById('sortOrderHeader').dataset.value || 'rating_desc';
         const searchValue = document.getElementById('searchBar').value.toLowerCase();
-        const loadingIndicator = document.getElementById('animeListLoading');
+        const loadingIndicator = getOrCreateAnimeLoadingIndicator(container);
 
         if (!container) return;
+
+        // Always show a loader immediately when switching into the anime list tab (or when re-rendering).
+        // This prevents a "blank pause" while we wait on async work (votes fetch, etc).
+        // If the caller requested skipAnimation (typically for instant re-renders), we still show the loader
+        // because the user reported a blank wait; this keeps feedback consistent.
+        showAnimeLoading(container);
         
         // If data isn't loaded yet, show loading indicator and wait
         if (!animeDataCache.all.length) {
-            if (loadingIndicator) {
-                loadingIndicator.style.display = 'block';
-            }
             // If not already loading, start loading
             if (!isLoadingAnimeData) {
                 await loadAndPrepareAnimeData();
@@ -3281,13 +3408,10 @@
             return;
         }
         
-        // Hide loading indicator once we have data
-        if (loadingIndicator) loadingIndicator.style.display = 'none';
-
-        // Load votes before rendering
+        // Load votes before rendering (this can be slow; keep loader visible while it runs)
         const votes = await loadAnimeVotes();
 
-        // Clear previous items (after async work to avoid overlapping renders duplicating cards)
+        // Now that we have everything we need, swap loader -> cards synchronously (no blank gap)
         container.innerHTML = '';
 
         let filteredList = animeDataCache.all.slice();
@@ -3412,13 +3536,12 @@
         if (animeDataCache.all.length > 0) return; // Already loaded
         
         isLoadingAnimeData = true;
-        const loadingIndicator = document.getElementById('animeListLoading');
         const container = document.getElementById('animeGridContainer');
+        const loadingIndicator = getOrCreateAnimeLoadingIndicator(container);
         
         // Show loading indicator if we're on the anime list tab
-        if (currentCategory === 'animeList' && loadingIndicator && container) {
-            container.innerHTML = '';
-            loadingIndicator.style.display = 'block';
+        if (currentCategory === 'animeList' && container) {
+            showAnimeLoading(container);
         }
         
         try {
@@ -3451,7 +3574,7 @@
             );
             
             // Hide loading indicator
-            if (loadingIndicator) loadingIndicator.style.display = 'none';
+            hideAnimeLoading();
             
             // Update counts (render will be handled by showCategory or renderAnimeList)
             updateAnimeTotalCount();
@@ -3464,7 +3587,7 @@
         } catch (error) {
             console.error("Failed to load anime list:", error);
             if (container) container.innerHTML = `<div class="empty-state">Error loading anime list. Please try again later.</div>`;
-            if (loadingIndicator) loadingIndicator.style.display = 'none';
+            hideAnimeLoading();
         } finally {
             isLoadingAnimeData = false;
         }
@@ -4182,14 +4305,10 @@
         // Trigger tab-specific logic
         if (catId === 'animeList') {
           const container = document.getElementById('animeGridContainer');
-          const loadingIndicator = document.getElementById('animeListLoading');
           
           if (animeDataCache.all.length === 0) {
             // Show loading indicator immediately
-            if (container && loadingIndicator) {
-              container.innerHTML = '';
-              loadingIndicator.style.display = 'block';
-            }
+            if (container) showAnimeLoading(container);
             // Start loading if not already loading
             if (!isLoadingAnimeData) {
               loadAndPrepareAnimeData().then(() => {
