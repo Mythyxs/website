@@ -2401,7 +2401,7 @@
         <div class="visitor-counter">
           <div class="visitor-label">Total Visitors</div>
           <div class="visitor-count" id="visitorCount">0</div>
-          <div class="visitor-message" id="visitorMessage">6k soon right guys</div>
+          <div class="visitor-message" id="visitorMessage">thank you for 6k guys</div>
         </div>
       </div>
 
@@ -4596,21 +4596,15 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      // GFX Image Preloading
-      const gfxImageUrls = [
-        'https://i.ibb.co/TJRKbQb/nashville-35.png',
-        'https://i.ibb.co/KpBsy0g9/Lockset-DTOTY.png',
-        'https://i.ibb.co/V0PFbvGD/nashville-27.png',
-        'https://i.ibb.co/HTG8VZLF/nashville-17.png',
-        'https://i.ibb.co/zVzYshr1/nashville-10.png',
-        'https://i.ibb.co/Y7DMPs8d/nashville-36.png',
-        'https://i.ibb.co/PvPzmcgr/EHSGFX-17.png',
-        'https://i.ibb.co/ymy4jfJK/nashville-28.png'
-      ];
-
-      // Preload GFX images in the background
+      // GFX Image Preloading — collect every grid thumbnail URL from the DOM (no manual list)
       function preloadGFXImages() {
-        gfxImageUrls.forEach(url => {
+        const gfxSection = document.getElementById('gfxSection');
+        if (!gfxSection) return;
+        const seen = new Set();
+        gfxSection.querySelectorAll('img.gfx-img[src]').forEach((el) => {
+          const url = el.getAttribute('src');
+          if (!url || seen.has(url)) return;
+          seen.add(url);
           const img = new Image();
           img.src = url;
         });
