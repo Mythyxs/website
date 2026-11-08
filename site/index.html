@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>shemxz</title>
+  <meta name="description" content="shemxz: every anime I've watched and rated, what's airing next, and Gakuran.">
+  <meta name="theme-color" content="#ff2d3f">
+  <meta property="og:title" content="shemxz">
+  <meta property="og:description" content="Every anime I've watched and rated, what's airing next, and Gakuran.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://shemxz.com/">
+  <meta property="og:image" content="https://shemxz.com/img/gakuran/thumb-5.webp">
+  <link rel="icon" type="image/png" href="img/favicon.png">
+
+  <script>
+    document.documentElement.classList.add('js');
+    try {
+      if (sessionStorage.getItem('intro-seen') || matchMedia('(prefers-reduced-motion: reduce)').matches)
+        document.documentElement.classList.add('no-intro');
+    } catch {}
+    setTimeout(function () {
+      if (!document.documentElement.classList.contains('booted')) document.documentElement.classList.add('failsafe');
+    }, 4000);
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://s4.anilist.co" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&family=JetBrains+Mono:wght@400;600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Yuji+Boku&text=%E5%AD%A6%E4%B9%B1&display=swap">
+
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/home.css">
+  <link rel="stylesheet" href="css/anime.css">
+  <link rel="stylesheet" href="css/schedule.css">
+  <link rel="stylesheet" href="css/gakuran.css">
+  <script type="module" src="js/main.js"></script>
+</head>
+<body data-page="home">
+  <div class="backdrop" aria-hidden="true"></div>
+  <div class="spot" aria-hidden="true"></div>
+  <canvas id="embers" aria-hidden="true"></canvas>
+
+  <div class="intro" id="intro" aria-hidden="true">
+    <div class="intro-panel top"></div>
+    <div class="intro-panel bottom"></div>
+    <div class="intro-mark">
+      <span style="--i:0">S</span><span style="--i:1">H</span><span style="--i:2">E</span><span style="--i:3">M</span><span style="--i:4">X</span><span style="--i:5">Z</span>
+    </div>
+    <div class="intro-line"></div>
+  </div>
+
+  <header class="topbar" id="topbar">
+    <a class="brand" href="#/" aria-label="shemxz home">SHEMXZ</a>
+
+    <nav class="tabs" id="tabs" aria-label="Sections">
+      <span class="tab-ink" aria-hidden="true"></span>
+      <a class="tab" href="#/" data-route="home" data-sfx="none">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.5 12 5l8 6.5V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z"/></svg>
+        <span>Home</span>
+      </a>
+      <a class="tab" href="#/anime" data-route="anime" data-sfx="none">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6H2v14a2 2 0 0 0 2 2h14v-2H4zm16-4H8a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2m-2 10h-2.5v2.5h-3V12H10V9h2.5V6.5h3V9H18z"/></svg>
+        <span>Anime</span>
+      </a>
+      <a class="tab" href="#/schedule" data-route="schedule" data-sfx="none">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2m0 16H5V9h14zM7 11h5v5H7z"/></svg>
+        <span>Schedule</span>
+      </a>
+      <a class="tab" href="#/gakuran" data-route="gakuran" data-sfx="none">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 7H3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2m-11 6H8v2H6v-2H4v-2h2V9h2v2h2zm5.5 1.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m3-2a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/></svg>
+        <span>Gakuran</span>
+      </a>
+    </nav>
+
+    <div class="actions">
+      <button class="icon-btn" id="mute" type="button" aria-pressed="false" aria-label="Mute sounds" data-sfx="none">
+        <svg class="on" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9zm12.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4M14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6"/></svg>
+        <svg class="off" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9zm12.6 3 2.7-2.7-1.4-1.4-2.7 2.7-2.7-2.7-1.4 1.4 2.7 2.7-2.7 2.7 1.4 1.4 2.7-2.7 2.7 2.7 1.4-1.4z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- HOME -->
+    <section class="page" id="page-home" data-route="home" aria-label="Home">
+      <div class="hero">
+        <h1 class="hero-name" data-reveal data-glitch>
+          <span class="hero-word" data-text="SHEMXZ">SHEMXZ</span>
+        </h1>
+        <p class="hero-typed" data-reveal><span class="prompt">&gt;</span> <span id="typed"></span><span class="caret"></span></p>
+      </div>
+
+      <div class="socials">
+        <a class="social card" data-reveal data-tilt href="https://www.roblox.com/users/7208356029/profile" target="_blank" rel="noopener" style="--brand:#e2e2e2">
+          <span class="social-icon"><svg viewBox="0 0 50 50" aria-hidden="true"><path d="M12.1 2a1 1 0 0 0-.9.7L2 37.6a1 1 0 0 0 .7 1.2l34.8 9.2a1 1 0 0 0 1.3-.7L48 12.4a1 1 0 0 0-.7-1.2L12.4 2zm9.4 17 9.5 2.5-2.5 9.5-9.5-2.5z"/></svg></span>
+          <span class="social-text"><b>p3rfectscore</b><small>Main Roblox account</small></span>
+          <svg class="social-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
+        </a>
+        <a class="social card" data-reveal data-tilt href="https://discord.com/users/1236388693510721568" target="_blank" rel="noopener" style="--brand:#5865f2">
+          <span class="social-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.3 4.4A19.8 19.8 0 0 0 15.4 3l-.6 1.2a18.3 18.3 0 0 0-5.5 0L8.7 3a19.7 19.7 0 0 0-4.9 1.5C.5 9-.3 13.6.1 18.1a19.9 19.9 0 0 0 6 3l1.3-2a13 13 0 0 1-1.9-.9l.4-.3a14.2 14.2 0 0 0 12.1 0l.4.3c-.6.4-1.2.7-1.9.9.4.7.8 1.4 1.2 2a19.8 19.8 0 0 0 6-3c.5-5.2-.8-9.7-3.5-13.7M8 15.3c-1.2 0-2.2-1.1-2.2-2.4S6.8 10.5 8 10.5s2.2 1.1 2.2 2.4-1 2.4-2.2 2.4m8 0c-1.2 0-2.2-1.1-2.2-2.4s1-2.4 2.2-2.4 2.2 1.1 2.2 2.4-1 2.4-2.2 2.4"/></svg></span>
+          <span class="social-text"><b>shemxz</b><small>Main Discord account</small></span>
+          <svg class="social-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
+        </a>
+        <a class="social card" data-reveal data-tilt href="https://open.spotify.com/user/31wgn7lokowcfeo2mzvysdxavcoe" target="_blank" rel="noopener" style="--brand:#1ed760">
+          <span class="social-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5a10.5 10.5 0 1 0 0 21 10.5 10.5 0 0 0 0-21m4.8 15.2a.7.7 0 0 1-.9.2c-2.5-1.5-5.6-1.8-9.3-1a.7.7 0 1 1-.3-1.3c4-.9 7.5-.5 10.3 1.2.3.2.4.6.2.9m1.3-2.9a.8.8 0 0 1-1.1.3c-2.8-1.7-7.1-2.2-10.5-1.2a.8.8 0 1 1-.5-1.6c3.8-1.1 8.6-.6 11.8 1.4.4.3.5.7.3 1.1m.1-3c-3.4-2-9-2.2-12.2-1.2a1 1 0 1 1-.6-1.9c3.7-1.1 9.9-.9 13.8 1.4a1 1 0 0 1-1 1.7"/></svg></span>
+          <span class="social-text"><b>bankai</b><small>Music and playlists</small></span>
+          <svg class="social-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
+        </a>
+      </div>
+
+      <a class="gk-teaser card" href="#/gakuran" data-reveal data-tilt id="gkTeaser">
+        <span class="gk-teaser-art" aria-hidden="true"><img src="img/gakuran/thumb-5.webp" alt="" decoding="async"></span>
+        <span class="gk-teaser-body">
+          <span class="kicker">Check out my game</span>
+          <span class="gk-teaser-title"><b>GAKURAN</b><i lang="ja">学乱</i></span>
+          <span class="live"><span class="live-dot"></span><span class="odo" id="gkTeaserPlaying" data-value="">0</span> playing right now</span>
+        </span>
+        <span class="btn btn-primary gk-teaser-cta">Take a look
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </a>
+
+      <div class="home-row">
+        <div class="counter card" data-reveal>
+          <span class="kicker">Total visitors</span>
+          <span class="counter-num odo" id="visits">0</span>
+          <span class="counter-msg" id="visitsMsg">&nbsp;</span>
+        </div>
+        <div class="podium card" data-reveal>
+          <div class="podium-head">
+            <span class="kicker">Top rated</span>
+            <a class="link" href="#/anime">Full list
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+          <ol class="podium-list" id="podium">
+            <li class="skel"></li><li class="skel"></li><li class="skel"></li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ANIME LIST -->
+    <section class="page" id="page-anime" data-route="anime" aria-label="Anime list" hidden>
+      <header class="page-head">
+        <p class="kicker" data-reveal id="animeKicker">Rated and ranked</p>
+        <h2 class="headline" data-reveal data-glitch data-text="MY ANIME LIST">MY ANIME LIST</h2>
+        <p class="lede" data-reveal>A catalog of every anime I've watched, with my personal ratings and the categories. Vote on whether I got it right.</p>
+      </header>
+
+      <div class="toolbar" data-reveal>
+        <label class="search">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.3-4.3M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15"/></svg>
+          <input id="q" type="search" placeholder="Search titles" autocomplete="off" spellcheck="false" aria-label="Search titles">
+          <kbd>/</kbd>
+        </label>
+        <div class="select" id="sort">
+          <button class="select-btn" type="button" aria-haspopup="listbox" aria-expanded="false" data-sfx="none">
+            <span class="select-label">Sort</span>
+            <span class="select-value">Rating, high to low</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <ul class="select-list" role="listbox" tabindex="-1">
+            <li role="option" data-value="rating_desc" aria-selected="true">Rating, high to low</li>
+            <li role="option" data-value="rating_asc">Rating, low to high</li>
+            <li role="option" data-value="liked">Most liked by you guys</li>
+            <li role="option" data-value="disliked">Most disliked by you guys</li>
+            <li role="option" data-value="az">Title, A to Z</li>
+            <li role="option" data-value="za">Title, Z to A</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pills" id="pills" role="radiogroup" aria-label="Category" data-reveal></div>
+      <p class="results" id="results" aria-live="polite">&nbsp;</p>
+      <div class="agrid" id="agrid"></div>
+    </section>
+
+    <!-- SCHEDULE -->
+    <section class="page" id="page-schedule" data-route="schedule" aria-label="Airing schedule" hidden>
+      <header class="page-head">
+        <p class="kicker" data-reveal>In your local time</p>
+        <h2 class="headline" data-reveal data-glitch data-text="AIRING SCHEDULE">AIRING SCHEDULE</h2>
+        <p class="lede" data-reveal>New episodes and new seasons of shows on my list.</p>
+        <button class="btn btn-ghost btn-sm refresh" id="schedRefresh" type="button" data-reveal>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.7M20 4v5h-5"/></svg>
+          Refresh
+        </button>
+      </header>
+      <div id="sched"></div>
+    </section>
+
+    <!-- GAKURAN -->
+    <section class="page" id="page-gakuran" data-route="gakuran" aria-label="Gakuran" hidden>
+      <div class="gk-hero" data-reveal>
+        <div class="gk-slides" id="gkSlides" aria-hidden="true"></div>
+        <div class="gk-shade" aria-hidden="true"></div>
+        <span class="gk-kanji" lang="ja" aria-hidden="true">学乱</span>
+        <div class="gk-hero-body">
+          <p class="kicker"><span>Roblox</span><span class="dim" id="gkGenre">Battlegrounds and fighting</span></p>
+          <h2 class="gk-title" data-glitch data-text="GAKURAN">GAKURAN</h2>
+          <p class="gk-setting" id="gkSetting">May 2007, Japan.</p>
+          <p class="gk-desc" id="gkDesc">An intended slice of life experience (though I guess our community just loves to fight LOL)</p>
+          <div class="gk-actions">
+            <a class="btn btn-primary btn-lg" id="gkPlay" href="https://www.roblox.com/games/128736949265057/Gakuran" target="_blank" rel="noopener" data-sfx="play">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+              Play now
+            </a>
+            <a class="btn btn-ghost btn-lg" id="gkGroup" href="https://www.roblox.com/communities/416091513" target="_blank" rel="noopener">Join the community</a>
+          </div>
+        </div>
+        <div class="gk-dots" id="gkDots"></div>
+      </div>
+
+      <div class="gk-stats">
+        <div class="stat card live-stat" data-reveal>
+          <span class="kicker"><span class="live-dot"></span>Playing now</span>
+          <span class="stat-num odo" id="gkPlaying">0</span>
+          <span class="stat-sub" id="gkPlayingSub">across every server</span>
+        </div>
+        <div class="stat card" data-reveal>
+          <span class="kicker">Visits</span>
+          <span class="stat-num odo" id="gkVisits">0</span>
+          <span class="stat-sub" id="gkVisitsSub">&nbsp;</span>
+        </div>
+        <div class="stat card" data-reveal>
+          <span class="kicker">Favorites</span>
+          <span class="stat-num odo" id="gkFavs">0</span>
+          <span class="stat-sub">people saved it</span>
+        </div>
+        <div class="stat card" data-reveal>
+          <span class="kicker">Rating</span>
+          <span class="stat-num"><span class="odo" id="gkRating">0</span><small>%</small></span>
+          <span class="ratio" aria-hidden="true"><i id="gkRatio"></i></span>
+          <span class="stat-sub" id="gkVotes">&nbsp;</span>
+        </div>
+      </div>
+
+      <div class="gk-facts" data-reveal>
+        <div><span class="kicker">Released</span><b id="gkCreated">Nov 2025</b></div>
+        <div><span class="kicker">Last update</span><b id="gkUpdated">recently</b></div>
+        <div><span class="kicker">Server size</span><b id="gkMax">50 players</b></div>
+        <div><span class="kicker">Status</span><b id="gkStatus" class="ok">Online</b></div>
+      </div>
+
+      <div class="section-head" data-reveal>
+        <h3 class="headline headline-sm" data-glitch data-text="GALLERY">GALLERY</h3>
+      </div>
+      <div class="gallery" id="gkGallery"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>shemxz</span>
+    <span class="dim">Made with way too much free time</span>
+  </footer>
+
+  <div class="slash" id="slash" aria-hidden="true"></div>
+  <canvas id="fx" aria-hidden="true"></canvas>
+  <div class="grain" aria-hidden="true"></div>
+
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer" hidden>
+    <button class="lb-close icon-btn" type="button" aria-label="Close" data-sfx="close">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+    <button class="lb-nav prev icon-btn" type="button" aria-label="Previous image">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg>
+    </button>
+    <figure class="lb-figure"><img alt=""><figcaption></figcaption></figure>
+    <button class="lb-nav next icon-btn" type="button" aria-label="Next image">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+    </button>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

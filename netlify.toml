@@ -1,0 +1,9 @@
+[build]
+  publish = "site"
+  functions = "netlify/functions"
+  # Phone updates only touch anime_backup.json, which the page reads straight from GitHub,
+  # so those commits skip the deploy (each production deploy costs credits on newer plans).
+  ignore = "bash scripts/netlify-ignore.sh"
+
+[functions]
+  node_bundler = "esbuild"

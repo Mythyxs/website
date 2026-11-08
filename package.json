@@ -1,0 +1,12 @@
+{
+  "name": "shemxz",
+  "private": true,
+  "type": "module",
+  "description": "shemxz.com: static site in site/, Netlify Functions in netlify/functions",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^11.1.8"
+  }
+}

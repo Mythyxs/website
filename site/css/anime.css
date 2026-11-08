@@ -1,0 +1,422 @@
+.toolbar {
+  display: flex;
+  gap: 12px;
+  position: relative;
+  z-index: 5;
+}
+
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.pill {
+  --c: #fff;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.03);
+  font: 700 13px/1 var(--font-body);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+  transition: color 0.2s, border-color 0.25s, background 0.25s, box-shadow 0.3s, transform 0.25s var(--ease-spring);
+}
+
+.pill i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--c);
+  box-shadow: 0 0 8px var(--c);
+}
+
+.pill b {
+  font: 600 12px/1 var(--font-mono);
+  color: var(--dim);
+  transition: color 0.2s;
+}
+
+.pill:hover {
+  color: var(--text);
+  border-color: color-mix(in srgb, var(--c) 40%, transparent);
+  transform: translateY(-1px);
+}
+
+.pill:active {
+  transform: scale(0.95);
+}
+
+.pill[aria-checked='true'] {
+  color: #fff;
+  border-color: color-mix(in srgb, var(--c) 70%, transparent);
+  background: color-mix(in srgb, var(--c) 16%, transparent);
+  box-shadow: 0 0 22px -6px color-mix(in srgb, var(--c) 80%, transparent);
+}
+
+.pill[aria-checked='true'] b {
+  color: var(--c);
+}
+
+.results {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 24px;
+  margin: 22px 0 16px;
+  font: 600 12px/1.3 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.results .dim {
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+
+.results button {
+  color: var(--red);
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* grid and cards */
+
+.agrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 16px;
+}
+
+.acard {
+  --cat: #888;
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 16px;
+  padding: 16px;
+  min-height: 176px;
+}
+
+.acard::after {
+  content: '';
+  position: absolute;
+  left: -1px;
+  top: 18px;
+  bottom: 18px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--cat);
+  box-shadow: 0 0 14px var(--cat);
+  opacity: 0.85;
+}
+
+.acard:hover {
+  border-color: color-mix(in srgb, var(--cat) 45%, transparent);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 28px 50px -26px color-mix(in srgb, var(--cat) 55%, transparent);
+}
+
+.acard-cover {
+  position: relative;
+  display: block;
+  width: 96px;
+  height: 136px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #151518;
+  box-shadow: 0 10px 24px -10px rgba(0, 0, 0, 0.9);
+}
+
+.acard-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.4s, transform 0.7s var(--ease-out);
+}
+
+.acard-cover img.ok {
+  opacity: 1;
+}
+
+.acard:hover .acard-cover img {
+  transform: scale(1.07);
+}
+
+.acard-cover .fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font: 400 34px/1 var(--font-display);
+  color: var(--dim);
+}
+
+.acard-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.acard-title {
+  font-size: 17.5px;
+  font-weight: 700;
+  line-height: 1.2;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.acard-title a:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--cat);
+  text-underline-offset: 3px;
+}
+
+.acard-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.cat-tag {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font: 700 11px/1.2 var(--font-body);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cat);
+}
+
+.cat-tag::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  transform: rotate(45deg);
+  background: var(--cat);
+}
+
+.acard-note {
+  font-size: 14px;
+  font-style: italic;
+  font-weight: 500;
+  line-height: 1.4;
+  color: #c4c4cc;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.votes {
+  display: flex;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+.vote {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 11px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--muted);
+  font: 700 13px/1 var(--font-body);
+  font-variant-numeric: tabular-nums;
+  transition: color 0.2s, border-color 0.2s, background 0.2s, box-shadow 0.3s, transform 0.25s var(--ease-spring);
+}
+
+.vote svg {
+  width: 15px;
+  height: 15px;
+  transition: transform 0.35s var(--ease-spring);
+}
+
+.vote:hover {
+  color: var(--text);
+  border-color: var(--line-2);
+  transform: translateY(-1px);
+}
+
+.vote.like:hover svg {
+  transform: rotate(-14deg) scale(1.15);
+}
+
+.vote.dislike:hover svg {
+  transform: rotate(14deg) scale(1.15);
+}
+
+.vote:active {
+  transform: scale(0.9);
+  transition-duration: 0.06s;
+}
+
+.vote.like[aria-pressed='true'] {
+  color: #06140c;
+  background: var(--good);
+  border-color: var(--good);
+  box-shadow: 0 0 20px -4px rgba(61, 220, 132, 0.75);
+}
+
+.vote.dislike[aria-pressed='true'] {
+  color: #fff;
+  background: var(--bad);
+  border-color: var(--bad);
+  box-shadow: 0 0 20px -4px rgba(255, 77, 94, 0.75);
+}
+
+.vote:disabled {
+  cursor: default;
+  opacity: 0.45;
+  transform: none;
+}
+
+.vote b {
+  display: inline-block;
+  min-width: 1ch;
+}
+
+.vote b.bump {
+  animation: bump 0.45s var(--ease-spring);
+}
+
+@keyframes bump {
+  0% { transform: translateY(0) scale(1); }
+  35% { transform: translateY(-5px) scale(1.45); }
+  100% { transform: none; }
+}
+
+.acard.shake {
+  animation: shake 0.4s;
+}
+
+@keyframes shake {
+  20% { translate: -5px 0; }
+  40% { translate: 5px 0; }
+  60% { translate: -3px 0; }
+  80% { translate: 2px 0; }
+}
+
+/* top three: animated medal border */
+
+@property --ang {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.acard.rank-1 { --medal: var(--gold); }
+.acard.rank-2 { --medal: var(--silver); }
+.acard.rank-3 { --medal: var(--bronze); }
+
+.acard[class*='rank-'] {
+  border-color: transparent;
+  background:
+    linear-gradient(180deg, #121214, #0c0c0e) padding-box,
+    conic-gradient(from var(--ang), var(--medal), transparent 30%, color-mix(in srgb, var(--medal) 60%, transparent) 50%, transparent 70%, var(--medal)) border-box;
+  animation: medal 5s linear infinite;
+}
+
+@keyframes medal {
+  to { --ang: 360deg; }
+}
+
+.rank {
+  position: absolute;
+  top: -10px;
+  right: 14px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  height: 24px;
+  padding: 0 10px;
+  border-radius: 6px;
+  background: var(--medal);
+  color: #111;
+  font: 400 17px/1 var(--font-display);
+  letter-spacing: 0.06em;
+  box-shadow: 0 6px 18px -4px color-mix(in srgb, var(--medal) 80%, transparent);
+}
+
+/* loading skeleton cards */
+
+.acard.skeleton {
+  pointer-events: none;
+}
+
+.acard.skeleton .acard-cover {
+  background: none;
+}
+
+.acard.skeleton .skel-line {
+  height: 14px;
+}
+
+@media (max-width: 719px) {
+  .toolbar {
+    flex-direction: column;
+  }
+  .search {
+    flex: none;
+  }
+  .select-btn {
+    width: 100%;
+    min-width: 0;
+  }
+  .select-list {
+    left: 0;
+    transform-origin: top center;
+  }
+  .search kbd {
+    display: none;
+  }
+  .pills {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin: 14px calc(var(--pad) * -1) 0;
+    padding: 2px var(--pad) 4px;
+    scrollbar-width: none;
+    scroll-snap-type: x proximity;
+    mask-image: linear-gradient(90deg, transparent, #000 var(--pad), #000 calc(100% - var(--pad)), transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 var(--pad), #000 calc(100% - var(--pad)), transparent);
+  }
+  .pills::-webkit-scrollbar {
+    display: none;
+  }
+  .pill {
+    scroll-snap-align: start;
+  }
+  .agrid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .acard {
+    grid-template-columns: 84px 1fr;
+    gap: 14px;
+    padding: 14px;
+    min-height: 0;
+  }
+  .acard-cover {
+    width: 84px;
+    height: 120px;
+  }
+  .acard-title {
+    font-size: 16.5px;
+  }
+}
